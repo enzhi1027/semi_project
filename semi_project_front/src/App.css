@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Pretendard";
+  font-weight: normal;
+  color: var(--text1);
+}
+
+:root {
+  --color1: #2f6f4e;
+  --color2: #6ba368;
+  --color3: #a3bfa8;
+  --color4: #f4f7f5;
+  --color5: #8c6a43;
+  --color6: #3b3b3b;
+  --border: #1f3d2b66;
+  --text1: #2b2b2b;
+  --text2: #5f6f63;
+
+  --gray1: #222;
+  --gray2: #555;
+  --gray3: #717171;
+  --gray4: #8f8f8f;
+  --gray5: #b7b7b7;
+  --gray6: #d6d6d6;
+  --gray7: #efefef;
+  --gray8: #fff;
+}
+
+body {
+  /* background-color: var(--color4); */
+}
