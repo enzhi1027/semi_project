@@ -1,7 +1,9 @@
+import styles from "./AttractionSearchPage.module.css";
+
 const AttractionSearchPage = () => {
   return (
     <>
-      <div>hi</div>
+      <div className={styles.test}>hi</div>
     </>
   );
 };
