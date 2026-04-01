@@ -9,7 +9,7 @@
   z-index: 9999;
 }
 .header_wrap_main {
-  width: 100vw;
+  width: 100%;
   background-color: var(--gray8);
   padding: 24px;
   position: sticky;
@@ -53,7 +53,7 @@
   transition-duration: 0.3s;
 }
 .header_nav > li > a:hover {
-  color: var(--color1);
+  /* color: #e67e22; */
   font-weight: 800;
 }
 .member {
@@ -210,6 +210,7 @@
 }
 .content_text {
   padding: 24px;
+  background-color: var(--gray8);
 }
 .content_text > h3 {
   margin-bottom: 16px;
