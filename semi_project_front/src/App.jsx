@@ -9,6 +9,7 @@ import AttractionSearchPage from "./pages/attraction/AttractionSearchPage";
 import { useState } from "react";
 import Login from "./pages/attraction/member/Login";
 import Join from "./pages/attraction/member/Join";
+import Mypage from "./pages/attraction/member/Mypage";
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/course/list" element={<CourseListPage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
-            <Route path="/member/login" element={<Login />} />
-            <Route path="/member/join" element={<Join />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/mypage" element={<Mypage />} />
           </Routes>
         </div>
         <Footer />
