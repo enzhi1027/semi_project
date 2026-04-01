@@ -15,7 +15,7 @@ const Header = () => {
           </div>
           <ul className={styles.header_nav}>
             <li>
-              <Link to="/">생태관광지</Link>
+              <Link to="/attraction/list">생태관광지</Link>
             </li>
             <li>
               <Link to="/course/list">관광코스</Link>
