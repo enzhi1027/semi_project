@@ -9,8 +9,6 @@ import AttractionSearchPage from "./pages/attraction/AttractionSearchPage";
 import { useState } from "react";
 
 function App() {
-  const [page, setPage] = useState(0);
-
   return (
     <>
       <div className="wrap">

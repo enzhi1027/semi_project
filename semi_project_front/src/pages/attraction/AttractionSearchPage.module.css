@@ -1,3 +1,50 @@
-.test {
-  font-weight: 100;
+.menubar {
+  display: flex;
+}
+
+.menubar .select_area {
+  display: flex;
+  flex-direction: column;
+}
+
+.menubar .select_area .select_area_content {
+  display: flex;
+}
+
+.menubar .select_area .select_area_content_citys {
+  display: flex;
+  width: 100px;
+  flex-wrap: wrap;
+}
+
+.menubar .select_area .select_area_content_city {
+  align-content: center;
+  width: 50px;
+  text-align: center;
+  border: 1px solid #000;
+}
+
+.menubar .select_area .select_area_content_city:nth-child(2) {
+  border-left: none;
+}
+
+.menubar .select_area .select_area_content_city:nth-child(3),
+.menubar .select_area .select_area_content_city:nth-child(5) {
+  border-top: none;
+}
+
+.menubar .select_area .select_area_content_city:nth-child(4),
+.menubar .select_area .select_area_content_city:nth-child(6) {
+  border-left: none;
+  border-top: none;
+}
+
+.menubar .select_area .select_area_content_gungus {
+  display: flex;
+  width: 180px;
+  gap: 20px;
+  flex-wrap: wrap;
+  border: 1px solid #000;
+  border-left: none;
+  padding: 20px;
 }
