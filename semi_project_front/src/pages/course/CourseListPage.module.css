@@ -1,0 +1,47 @@
+.course_wrap {
+  width: 1200px;
+  margin: 0 auto;
+}
+.page_title {
+  text-align: center;
+  margin-top: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--gray6);
+  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: 600;
+}
+.option_wrap {
+  display: flex;
+}
+.write_course {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+.write_course > p {
+  font-weight: 600;
+}
+.order {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-left: auto;
+}
+.order > .order_line {
+  font-size: 16px;
+  color: var(--gray4);
+}
+.order > p {
+  font-size: 14px;
+  color: var(--gray4);
+}
+.order_text {
+  cursor: pointer;
+}
+.order > .order_active {
+  color: var(--gray1);
+  font-size: 18px;
+  font-weight: 500;
+}
