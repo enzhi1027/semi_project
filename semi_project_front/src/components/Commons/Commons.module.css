@@ -51,9 +51,12 @@
   font-size: 20px;
   font-weight: 500;
   transition-duration: 0.3s;
+  border-radius: 56px;
+  padding: 8px 6px;
 }
 .header_nav > li > a:hover {
-  /* color: #e67e22; */
+  background-color: var(--gray8);
+  color: var(--color1);
   font-weight: 800;
 }
 .member {
