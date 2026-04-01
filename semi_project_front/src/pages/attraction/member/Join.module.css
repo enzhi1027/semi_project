@@ -1,11 +1,12 @@
-/*회원가입 랩-----------------------------*/
-.join_wrap {
+/*회원가입 랩(폼)-----------------------------*/
+.join_wrap form {
   width: 600px;
   height: 700px;
   margin: 50px auto;
   padding: 32px;
   display: flex;
   flex-direction: column;
+  gap: 12px;
   text-align: center;
   background-color: var(--color4);
   border-radius: 16px;
@@ -15,12 +16,79 @@
 
 /*인풋 랩-----------------------------*/
 .input_wrap {
-  justify-self: center;
+  width: 350px;
+  margin: 0 auto;
+}
+.input_wrap > input {
+  padding: 8px;
+  border-radius: 8px;
+  border: solid 1px var(--gray5);
+  width: 100%;
 }
 
-.input_wrap > input {
-  padding: 6px;
-  width: 350px;
-  margin: 10px;
-}
 /*인풋 랩-----------------------------*/
+
+/*비밀번호 불일치 글자색-----------------------------*/
+.check_msg.invalid {
+  color: red;
+}
+
+/*이메일 전송 ----------------------------------- */
+.email_check {
+  justify-content: center;
+  display: flex;
+  gap: 12px;
+}
+.email_check > input {
+  flex-grow: 1;
+}
+
+/*주소 입력 ------------------------------------ */
+.addr_input {
+  justify-content: center;
+  display: flex;
+  gap: 12px;
+}
+.addr_input > input {
+  flex-grow: 1;
+}
+
+/*인풋 랩 버튼 공통 디자인 ------------------------------------ */
+.input_wrap button {
+  padding: 6px;
+  width: 20%;
+  font-size: 12px;
+  color: var(--gray8);
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color1);
+}
+button:hover {
+  cursor: pointer;
+  filter: brightness(1.1);
+}
+button:active {
+  filter: brightness(0.9);
+}
+
+/*회원가입 버튼-----------------------------*/
+.join_btn_wrap > .join_btn {
+  padding: 12px;
+  width: 300px;
+  color: var(--gray8);
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color1);
+  text-align: center;
+}
+.join_btn_wrap > .join_btn:hover {
+  cursor: pointer;
+  filter: brightness(1.1);
+}
+.join_btn_wrap > .join_btn:active {
+  filter: brightness(0.9);
+}
+/*회원가입 버튼-----------------------------*/

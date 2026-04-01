@@ -43,6 +43,9 @@
   cursor: pointer;
   filter: brightness(1.1);
 }
+.member_button_wrap > button:active {
+  filter: brightness(0.9);
+}
 
 /*입력창-----------------------------*/
 
@@ -60,6 +63,12 @@
   gap: 20px;
 }
 
-/*아이디, 비밀번호 찾기-----------------------------*/
+/*아이디, 비밀번호 찾기, 회원가입-----------------------------*/
+.search_info p:hover {
+  font-weight: 600;
+}
 
 /*회원가입-----------------------------*/
+.join_member:hover {
+  font-weight: 600;
+}

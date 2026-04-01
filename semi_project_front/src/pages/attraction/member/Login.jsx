@@ -3,6 +3,8 @@ import styles from "./Login.module.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./MemberCommons.css";
+import useAuthStore from "../../../components/utils/useAuthStore";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
@@ -19,12 +21,22 @@ const Login = () => {
       return;
     }
     axios
-      .post(`${import.meta.VITE_BACKSERVER}/member/login`, member)
+      .post(`${import.meta.env.VITE_BACKSERVER}/member/login`, member)
       .then((res) => {
         console.log(res);
+        useAuthStore.getState().login(res.data);
+        axios.defaults.headers.common["Authorization"] = res.data.token;
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({
+          title: "로그인 실패",
+          text: "아이디, 혹은 비밀번호를 확인하세요.",
+          icon: "error",
+
+          confirmButtonColor: "var(--color1)",
+        });
       });
   };
 
@@ -64,7 +76,7 @@ const Login = () => {
         <div className={styles.assist_wrap}>
           <div className={styles.search_info}>
             <p
-              className="search-id"
+              className={styles.search_id}
               onClick={() => {
                 navigate("/member/searchId");
               }}
@@ -73,7 +85,7 @@ const Login = () => {
             </p>
 
             <p
-              className="search-pw"
+              className={styles.search_pw}
               onClick={() => {
                 navigate("/member/searchPw");
               }}
@@ -82,9 +94,9 @@ const Login = () => {
             </p>
           </div>
           <p
-            className="join-member"
+            className={styles.join_member}
             onClick={() => {
-              navigate("/member/join");
+              navigate("/join");
             }}
           >
             회원가입
