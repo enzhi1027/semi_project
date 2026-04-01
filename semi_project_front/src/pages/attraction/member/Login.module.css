@@ -1,0 +1,63 @@
+/*로그인 랩-----------------------------*/
+.login_wrap {
+  width: 500px;
+  height: 500px;
+  margin: 50px auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: var(--color4);
+  border-radius: 16px;
+  border: solid 1px var(--gray5);
+}
+/*로그인 랩-----------------------------*/
+
+/*입력창-----------------------------*/
+.input_wrap {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  width: 300px;
+  margin: 20px;
+}
+.input_wrap > input {
+  padding: 8px;
+  border-radius: 8px;
+  border: solid 1px var(--gray5);
+}
+
+.member_button_wrap > button {
+  padding: 12px;
+  width: 300px;
+  color: var(--gray8);
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color2);
+  text-align: center;
+}
+.member_button_wrap > button:hover {
+  cursor: pointer;
+}
+/*입력창-----------------------------*/
+
+/*아이디, 비밀번호 찾기-----------------------------*/
+.assist_wrap {
+  display: flex;
+  justify-content: space-around;
+}
+
+.assist_wrap p:hover {
+  cursor: pointer;
+}
+.search_info {
+  display: flex;
+  gap: 20px;
+}
+
+/*아이디, 비밀번호 찾기-----------------------------*/
+
+/*회원가입-----------------------------*/
