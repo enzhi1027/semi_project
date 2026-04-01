@@ -1,0 +1,26 @@
+/*회원가입 랩-----------------------------*/
+.join_wrap {
+  width: 600px;
+  height: 700px;
+  margin: 50px auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: var(--color4);
+  border-radius: 16px;
+  border: solid 1px var(--gray5);
+}
+/*회원가입 랩-----------------------------*/
+
+/*인풋 랩-----------------------------*/
+.input_wrap {
+  justify-self: center;
+}
+
+.input_wrap > input {
+  padding: 6px;
+  width: 350px;
+  margin: 10px;
+}
+/*인풋 랩-----------------------------*/

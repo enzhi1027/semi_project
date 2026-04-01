@@ -1,17 +1,19 @@
-import { useState } from "react";
 import "./App.css";
 import "./font.css";
-import Pagination from "./components/ui/Pagination";
+import { Route, Routes } from "react-router-dom";
+import AttractionSearchPage from "./pages/attraction/AttractionSearchPage";
+import { useState } from "react";
+import Login from "./pages/attraction/member/Login";
 
 function App() {
   const [page, setPage] = useState(0);
 
   return (
     <>
-      <h1>hi</h1>
-      <div className="hi"></div>
-      <h1>good</h1>
-      <Pagination page={page} setPage={setPage} totalPage={30} naviSize={5} />
+      <Routes>
+        <Route path="/attraction/list" element={<AttractionSearchPage />} />
+        <Route path="/member/login" element={<Login />} />
+      </Routes>
     </>
   );
 }

@@ -1,4 +1,9 @@
 import styles from "./Pagination.module.css";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import IconButton from "@mui/material/IconButton";
 
 const Pagination = ({ page, setPage, totalPage, naviSize }) => {
   if (totalPage === null || totalPage < 1) {
@@ -22,25 +27,29 @@ const Pagination = ({ page, setPage, totalPage, naviSize }) => {
 
   return (
     <div className={styles.pagination_wrap}>
-      <button
+      <IconButton
         onClick={() => {
           setPage(0);
         }}
         disabled={isFirst}
+        className={styles.page_arrow_btn}
       >
-        {"<<"}
-      </button>
-      <button
+        <KeyboardDoubleArrowLeftIcon className={styles.page_arrow} />
+      </IconButton>
+
+      <IconButton
         onClick={() => {
           setPage(page - 1);
         }}
         disabled={isFirst}
+        className={styles.page_arrow_btn}
       >
-        {"<"}
-      </button>
+        <NavigateBeforeIcon className={styles.page_arrow} />
+      </IconButton>
+
       {pages.map((p, i) => {
         return (
-          <button
+          <IconButton
             key={"pagination-" + i}
             className={p === current ? styles.active : ""}
             onClick={() => {
@@ -48,25 +57,28 @@ const Pagination = ({ page, setPage, totalPage, naviSize }) => {
             }}
           >
             {p}
-          </button>
+          </IconButton>
         );
       })}
-      <button
+
+      <IconButton
         onClick={() => {
           setPage(page + 1);
         }}
         disabled={isLast}
+        className={styles.page_arrow_btn}
       >
-        {">"}
-      </button>
-      <button
+        <NavigateNextIcon className={styles.page_arrow} />
+      </IconButton>
+      <IconButton
         onClick={() => {
           setPage(totalPage - 1);
         }}
         disabled={isLast}
+        className={styles.page_arrow_btn}
       >
-        {">>"}
-      </button>
+        <KeyboardDoubleArrowRightIcon className={styles.page_arrow} />
+      </IconButton>
     </div>
   );
 };
