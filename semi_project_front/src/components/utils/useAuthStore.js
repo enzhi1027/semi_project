@@ -37,7 +37,7 @@ const useAuthStore = create(
     {
       name: "auth-key",
       storage: createJSONStorage(() => localStorage),
-      //새로고침 해도 저장할 데이터 선택
+      //새로고침 해도 저장할 데이터를 선택
       //-> 6개 데이터 중 5개만 계속 저장하고 isReady는 새로고침 시 초기화하기 위한 설정
       //partialize를 설정하지 않으면 모든 정보를 브라우저에 계속 저장해서 유지
       partialize: (state) => {
