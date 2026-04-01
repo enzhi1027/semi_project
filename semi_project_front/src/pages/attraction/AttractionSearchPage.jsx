@@ -1,70 +1,60 @@
+import { useEffect, useState } from "react";
 import Map from "../../components/attraction/Map";
 import styles from "./AttractionSearchPage.module.css";
+import axios from "axios";
 
 const AttractionSearchPage = () => {
+  const greenTourService = encodeURIComponent(
+    import.meta.env.VITE_GREEN_TOUR_SERVICE_KEY,
+  );
+
+  const [areaList, setAreaList] = useState(null);
+  const [areaCode, setAreaCode] = useState(1);
+  const [sigunguCode, setSigunguCode] = useState(1);
+
+  useEffect(() => {
+    axios
+      .get(
+        // `https://apis.data.go.kr/B551011/GreenTourService1/areaCode1?serviceKey=${greenTourService}&numOfRows=20&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json` /* 지역 */,
+        // `https://apis.data.go.kr/B551011/GreenTourService1/areaCode1?serviceKey=${greenTourService}&numOfRows=35&pageNo=1&MobileOS=ETC&MobileApp=AppTest&areaCode=${areaCode}&_type=json` /* 시군구 */,
+        `https://apis.data.go.kr/B551011/GreenTourService1/areaBasedSyncList1?serviceKey=${greenTourService}&numOfRows=50&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&areaCode=${areaCode}&sigunguCode=&arrange=C` /* 관광지 */,
+      )
+      .then((res) => {
+        // const areas = res.data.response.body.items.item;
+        // console.log(areas);
+        // if (areas.length / 2 === 0) {
+        //   setAreaList(areas);
+        // } else {
+        //   setAreaList([...areas, {}]);
+        // }
+        console.log(res.data.response.body.items.item);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <>
       <section className={styles.attraction_search_wrap}>
         <div className={styles.menubar}>
-          <div className={styles.select_area}>
-            <div className={styles.select_area_title}>지역 선택</div>
-            <div className={styles.select_area_content}>
-              <div className={styles.select_area_content_citys}>
-                <div className={styles.select_area_content_city}>서울</div>
-                <div className={styles.select_area_content_city}>대구</div>
-                <div className={styles.select_area_content_city}>대전</div>
-                <div className={styles.select_area_content_city}>부산</div>
-                <div className={styles.select_area_content_city}>경기</div>
-                <div className={styles.select_area_content_city}>인천</div>
+          <div className={styles.select_where}>
+            <div className={styles.select_where_title}>지역 선택</div>
+            <div className={styles.select_where_content}>
+              <div className={styles.select_where_content_areas}>
+                {areaList &&
+                  areaList.map((item, index) => (
+                    <div
+                      key={"area" + index}
+                      className={styles.select_where_content_area}
+                    >
+                      {item.name}
+                    </div>
+                  ))}
               </div>
-              <div className={styles.select_area_content_gungus}>
-                <div className={styles.select_area_content_gungu}>
+              <div className={styles.select_where_content_sigungus}>
+                <div className={styles.select_where_content_sigungu}>
                   <input type="checkbox" id="gungu1" />
                   <label htmlFor="gungu1">혜화1</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu2" />
-                  <label htmlFor="gungu2">혜화2</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu3" />
-                  <label htmlFor="gungu3">혜화3</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu4" />
-                  <label htmlFor="gungu4">혜화4</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu5" />
-                  <label htmlFor="gungu5">혜화5</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu6" />
-                  <label htmlFor="gungu6">혜화6</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu7" />
-                  <label htmlFor="gungu7">혜화7</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu8" />
-                  <label htmlFor="gungu8">혜화8</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu9" />
-                  <label htmlFor="gungu9">혜화9</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu10" />
-                  <label htmlFor="gungu10">혜화10</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu11" />
-                  <label htmlFor="gungu11">혜화11</label>
-                </div>
-                <div className={styles.select_area_content_gungu}>
-                  <input type="checkbox" id="gungu12" />
-                  <label htmlFor="gungu12">혜화12</label>
                 </div>
               </div>
             </div>
