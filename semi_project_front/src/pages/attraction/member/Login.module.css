@@ -3,10 +3,10 @@
   width: 500px;
   height: 500px;
   margin: 50px auto;
-  padding: 32px;
   display: flex;
   flex-direction: column;
   text-align: center;
+  padding: 32px;
   background-color: var(--color4);
   border-radius: 16px;
   border: solid 1px var(--gray5);
@@ -36,12 +36,14 @@
   margin-bottom: 40px;
   border: none;
   border-radius: 12px;
-  background-color: var(--color2);
+  background-color: var(--color1);
   text-align: center;
 }
 .member_button_wrap > button:hover {
   cursor: pointer;
+  filter: brightness(1.1);
 }
+
 /*입력창-----------------------------*/
 
 /*아이디, 비밀번호 찾기-----------------------------*/
