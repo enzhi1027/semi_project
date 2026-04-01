@@ -17,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/course/list" element={<CourseListPage />} />
+            <Route path="/attraction/list" element={<AttractionSearchPage />} />
           </Routes>
         </div>
         <Footer />
