@@ -10,6 +10,7 @@ import { useState } from "react";
 import Login from "./pages/attraction/member/Login";
 import Join from "./pages/attraction/member/Join";
 import Mypage from "./pages/attraction/member/Mypage";
+import CourseViewPage from "./pages/course/CourseViewPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/course/list" element={<CourseListPage />} />
+            <Route path="/course/view" element={<CourseViewPage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
