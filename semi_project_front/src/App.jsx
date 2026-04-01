@@ -1,17 +1,27 @@
 import { useState } from "react";
 import "./App.css";
 import "./font.css";
-import Pagination from "./components/ui/Pagination";
+import { Route, Routes } from "react-router-dom";
+import MainPage from "./components/Commons/MainPage";
+import Header from "./components/Commons/Header";
+import Footer from "./components/Commons/Footer";
+import CourseListPage from "./pages/course/CourseListPage";
 
 function App() {
   const [page, setPage] = useState(0);
 
   return (
     <>
-      <h1>hi</h1>
-      <div className="hi"></div>
-      <h1>good</h1>
-      <Pagination page={page} setPage={setPage} totalPage={30} naviSize={5} />
+      <div className="wrap">
+        <Header />
+        <div className="main">
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/course/list" element={<CourseListPage />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
     </>
   );
 }
