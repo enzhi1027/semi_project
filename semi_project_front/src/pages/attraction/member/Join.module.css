@@ -6,6 +6,7 @@
   padding: 32px;
   display: flex;
   flex-direction: column;
+  gap: 24px;
   text-align: center;
   background-color: var(--color4);
   border-radius: 16px;
@@ -19,8 +20,13 @@
 }
 
 .input_wrap > input {
-  padding: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  border: solid 1px var(--gray5);
   width: 350px;
-  margin: 10px;
 }
 /*인풋 랩-----------------------------*/
+
+.check_msg.invalid {
+  color: red;
+}

@@ -8,6 +8,7 @@ import CourseListPage from "./pages/course/CourseListPage";
 import AttractionSearchPage from "./pages/attraction/AttractionSearchPage";
 import { useState } from "react";
 import Login from "./pages/attraction/member/Login";
+import Join from "./pages/attraction/member/Join";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/course/list" element={<CourseListPage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
             <Route path="/member/login" element={<Login />} />
+            <Route path="/member/join" element={<Join />} />
           </Routes>
         </div>
         <Footer />

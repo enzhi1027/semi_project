@@ -64,7 +64,7 @@ const Login = () => {
         <div className={styles.assist_wrap}>
           <div className={styles.search_info}>
             <p
-              className="search-id"
+              className={styles.search_id}
               onClick={() => {
                 navigate("/member/searchId");
               }}
@@ -73,7 +73,7 @@ const Login = () => {
             </p>
 
             <p
-              className="search-pw"
+              className={styles.search_pw}
               onClick={() => {
                 navigate("/member/searchPw");
               }}
@@ -82,7 +82,7 @@ const Login = () => {
             </p>
           </div>
           <p
-            className="join-member"
+            className={styles.join_member}
             onClick={() => {
               navigate("/member/join");
             }}
