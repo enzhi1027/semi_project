@@ -2,44 +2,43 @@
   display: flex;
 }
 
-.menubar .select_area {
+.menubar .select_where {
   display: flex;
   flex-direction: column;
 }
 
-.menubar .select_area .select_area_content {
+.menubar .select_where .select_where_content {
   display: flex;
 }
 
-.menubar .select_area .select_area_content_citys {
+.menubar .select_where .select_where_content_areas {
   display: flex;
   width: 100px;
   flex-wrap: wrap;
 }
 
-.menubar .select_area .select_area_content_city {
+.menubar .select_where .select_where_content_area {
   align-content: center;
   width: 50px;
   text-align: center;
   border: 1px solid #000;
 }
 
-.menubar .select_area .select_area_content_city:nth-child(2) {
-  border-left: none;
+.menubar .select_where .select_where_content_area:nth-child(2n + 1) {
+  border-top: none;
+  border-right: none;
 }
 
-.menubar .select_area .select_area_content_city:nth-child(3),
-.menubar .select_area .select_area_content_city:nth-child(5) {
+.menubar .select_where .select_where_content_area:nth-child(2n) {
   border-top: none;
 }
 
-.menubar .select_area .select_area_content_city:nth-child(4),
-.menubar .select_area .select_area_content_city:nth-child(6) {
-  border-left: none;
-  border-top: none;
+.menubar .select_where .select_where_content_area:first-child,
+.menubar .select_where .select_where_content_area:nth-child(2) {
+  border-top: 1px solid #000;
 }
 
-.menubar .select_area .select_area_content_gungus {
+.menubar .select_where .select_where_content_sigungu {
   display: flex;
   width: 180px;
   gap: 20px;
