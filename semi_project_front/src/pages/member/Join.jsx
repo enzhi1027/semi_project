@@ -274,7 +274,7 @@ const Join = () => {
             <div className={styles.input_wrap}>
               <label className="mailAuthInput">이메일 확인</label>
               <div className={styles.input_item}>
-                <Input
+                <input
                   type="text"
                   name="mailAuthInput"
                   id="mailAuthInput"
@@ -283,9 +283,8 @@ const Join = () => {
                     setMailAuthInput(e.target.value);
                   }}
                   disabled={mailAuth === 3}
-                ></Input>
-                <Button
-                  className="btn primary sm"
+                ></input>
+                <button
                   type="button"
                   onClick={() => {
                     if (mailAuthCode === mailAuthInput) {
@@ -299,7 +298,7 @@ const Join = () => {
                   }}
                 >
                   인증하기
-                </Button>
+                </button>
               </div>
               <p className={styles.check_msg}>
                 {mailAuth === 3 ? "인증되었습니다." : showTime()}
@@ -326,7 +325,7 @@ const Join = () => {
 
                 const roadAddress =
                   data.roadAddress +
-                  (data.buildingName ? "(" + data.buildingName + ")" : "");
+                  (data.buildingName ? " (" + data.buildingName + ")" : "");
 
                 setMember({
                   ...member,

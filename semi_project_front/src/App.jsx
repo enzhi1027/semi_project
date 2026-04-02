@@ -7,9 +7,9 @@ import Footer from "./components/Commons/Footer";
 import CourseListPage from "./pages/course/CourseListPage";
 import AttractionSearchPage from "./pages/attraction/AttractionSearchPage";
 import { useState } from "react";
-import Login from "./pages/attraction/member/Login";
-import Join from "./pages/attraction/member/Join";
-import Mypage from "./pages/attraction/member/Mypage";
+import Login from "./pages/member/Login";
+import Join from "./pages/member/Join";
+import Mypage from "./pages/member/Mypage";
 import CourseViewPage from "./pages/course/CourseViewPage";
 
 function App() {
