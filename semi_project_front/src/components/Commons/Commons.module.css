@@ -62,7 +62,16 @@
   align-items: center;
   font-size: 18px;
 }
-
+.member > .logout {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+.member > .logout * {
+  color: var(--text1);
+}
 .header_nav li {
   cursor: pointer;
   position: relative;
@@ -186,10 +195,10 @@
   text-align: center;
   font-weight: 400;
   width: 170px;
-  color: var(--color5);
+  color: var(--gray8);
   font-size: 20px;
   padding: 8px 14px;
-  background-color: var(--gray8);
+  background-color: var(--color5);
   border-radius: 16px;
   cursor: pointer;
   font-weight: 500;
@@ -197,8 +206,8 @@
   text-decoration: none;
 }
 .attraction_btn:hover {
-  color: var(--gray8);
-  background-color: var(--color5);
+  color: var(--color5);
+  background-color: var(--gray8);
 }
 .site_intro {
   width: 1200px;
