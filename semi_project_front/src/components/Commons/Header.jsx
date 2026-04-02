@@ -2,10 +2,16 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./Commons.module.css";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import userImg from "../../assets/img/mainPage/user.png";
+import LogoutIcon from "@mui/icons-material/Logout";
+import mainImg from "../../assets/img/mainPage/main.jpg";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import useAuthStore from "../utils/useAuthStore";
 
 const Header = () => {
   const location = useLocation();
   const mainPage = location.pathname === "/";
+  const { memberId } = useAuthStore();
   return (
     <>
       <div className={mainPage ? styles.header_wrap_main : styles.header_wrap}>
@@ -27,16 +33,33 @@ const Header = () => {
               <Link to="/">투어상품</Link>
             </li>
           </ul>
-          <div className={styles.member}>
-            <Link to="/login">
-              <LoginIcon />
-              <p>로그인</p>
-            </Link>
-            <Link to="/join">
-              <PersonAddAlt1Icon />
-              <p>회원가입</p>
-            </Link>
-          </div>
+          {memberId ? (
+            <>
+              <div className={styles.member}>
+                <Link to="/mypage">
+                  <AccountCircleIcon />
+                  <p>마이페이지</p>
+                </Link>
+                <div className={styles.logout}>
+                  <LogoutIcon />
+                  <p>로그아웃</p>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={styles.member}>
+                <Link to="/login">
+                  <LoginIcon />
+                  <p>로그인</p>
+                </Link>
+                <Link to="/join">
+                  <PersonAddAlt1Icon />
+                  <p>회원가입</p>
+                </Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>
