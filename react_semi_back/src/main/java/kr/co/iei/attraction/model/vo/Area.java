@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Alias(value = "area")
 public class Area {
+	private Integer areaNo;
+	
 	@JsonProperty("code")
 	private String areaCode;
 	
