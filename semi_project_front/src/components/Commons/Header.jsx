@@ -2,9 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "./Commons.module.css";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
-import userImg from "../../assets/img/mainPage/user.png";
+
 import LogoutIcon from "@mui/icons-material/Logout";
-import mainImg from "../../assets/img/mainPage/main.jpg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuthStore from "../utils/useAuthStore";
 
