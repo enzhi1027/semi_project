@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.iei.attraction.model.vo.Area;
+import kr.co.iei.attraction.model.vo.Attraction;
+import kr.co.iei.attraction.model.vo.GreenTourAttractionResponse;
 import kr.co.iei.attraction.model.vo.GreenTourResponse;
 import kr.co.iei.attraction.model.vo.Sigungu;
 import kr.co.iei.attraction.service.AttractionService;
@@ -30,8 +34,18 @@ public class AttractionController {
 
 	@GetMapping(value = "test")
 	public void test() {
-		String serviceKey = "mk3QzvdjY94ri5cguFYhSxkkDKHzw2HkMmqwxcPWSPsAXEFunDA%2BQSGC9MZO12wzdxjRkzilt14xj8Rh7Jsk%2BQ%3D%3D";
-		testArea(serviceKey);
+		String serviceKey = "fb331309e5dfe9890ebfccd656fe364f5a15f230f4c2551afe1a083b86151329";
+		// testArea(serviceKey);
+		/*
+		 * for (String areaCode : areaCodeList) { testSigungu(serviceKey, areaCode); }
+		 */
+
+		List<String> areaCodeList = service.selectAreaCode();
+
+		for (String areaCode : areaCodeList) {
+			List<String> sigunguCodeList = service.selectSigunguCode(areaCode);
+			testAttractions(serviceKey, areaCode);
+		}
 	}
 
 	public void testArea(String serviceKey) {
@@ -79,12 +93,7 @@ public class AttractionController {
 
 			if (root.getResponse().getBody().getItems() != null) {
 				List<Area> list = root.getResponse().getBody().getItems().getItem();
-				for (Area a : list) {
-					System.out.println("코드: " + a.getAreaCode() + ", 명칭: " + a.getAreaName());
-					testSigungu(serviceKey, a.getAreaCode());
-					System.out.println("\n------------------------------------------\n");
-				}
-				// service.saveAreaList(list);
+				int result = service.insertArea(list);
 			}
 
 		} catch (Exception e) {
@@ -138,10 +147,7 @@ public class AttractionController {
 
 			if (root.getResponse().getBody().getItems() != null) {
 				List<Sigungu> list = root.getResponse().getBody().getItems().getItem();
-				for (Sigungu a : list) {
-					System.out.println("코드: " + a.getSigunguCode() + ", 명칭: " + a.getSigunguName());
-				}
-				// service.saveAreaList(list);
+				int result = service.insertSigungu(areaCode, list);
 			}
 
 		} catch (Exception e) {
@@ -149,10 +155,11 @@ public class AttractionController {
 		}
 	}
 
-	public void testAttractions(String serviceKey, String areaCode, String sigunguCode) {
+	public void testAttractions(String serviceKey, String areaCode) {
+		HttpURLConnection conn = null;
 		try {
 			StringBuilder urlBuilder = new StringBuilder(
-					"https://apis.data.go.kr/B551011/GreenTourService1/areaBasedList1");
+					"https://apis.data.go.kr/B551011/GreenTourService1/areaBasedSyncList1");
 			urlBuilder.append("?serviceKey=").append(serviceKey);
 			urlBuilder.append("&").append(URLEncoder.encode("numOfRows", "UTF-8")).append("=")
 					.append(URLEncoder.encode("50", "UTF-8"));
@@ -162,15 +169,15 @@ public class AttractionController {
 					.append(URLEncoder.encode("ETC", "UTF-8"));
 			urlBuilder.append("&").append(URLEncoder.encode("MobileApp", "UTF-8")).append("=")
 					.append(URLEncoder.encode("AppTest", "UTF-8"));
-			urlBuilder.append("&").append(URLEncoder.encode("areaCode", "UTF-8")).append("=")
-					.append(URLEncoder.encode(areaCode, "UTF-8"));
 			urlBuilder.append("&").append(URLEncoder.encode("_type", "UTF-8")).append("=")
 					.append(URLEncoder.encode("json", "UTF-8"));
+			urlBuilder.append("&").append(URLEncoder.encode("areaCode", "UTF-8")).append("=")
+					.append(URLEncoder.encode(areaCode, "UTF-8"));
 			urlBuilder.append("&").append(URLEncoder.encode("arrange", "UTF-8")).append("=")
 					.append(URLEncoder.encode("C", "UTF-8"));
 
 			URL url = new URL(urlBuilder.toString());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 
@@ -187,25 +194,84 @@ public class AttractionController {
 				sb.append(line);
 			}
 			rd.close();
-			conn.disconnect();
 
 			String jsonString = sb.toString();
-			ObjectMapper objectMapper = new ObjectMapper();
-
-			JavaType targetType = objectMapper.getTypeFactory().constructParametricType(GreenTourResponse.class,
-					Sigungu.class);
-			GreenTourResponse<Sigungu> root = objectMapper.readValue(jsonString, targetType);
-
-			if (root.getResponse().getBody().getItems() != null) {
-				List<Sigungu> list = root.getResponse().getBody().getItems().getItem();
-				for (Sigungu a : list) {
-					System.out.println("코드: " + a.getSigunguCode() + ", 명칭: " + a.getSigunguName());
-				}
-				// service.saveAreaList(list);
+			
+			if (jsonString.startsWith("<")) {
+				System.out.println("API 호출 에러 발생: " + jsonString);
+				return;
 			}
 
+			if (jsonString.contains("\"items\":\"\"")) {
+				jsonString = jsonString.replace("\"items\":\"\"", "\"items\":null");
+			}
+
+			ObjectMapper objectMapper = new ObjectMapper();
+
+			GreenTourAttractionResponse root = objectMapper.readValue(jsonString, GreenTourAttractionResponse.class);
+
+			if (root.getResponse() != null && root.getResponse().getBody() != null
+					&& root.getResponse().getBody().getItems() != null) {
+				List<Attraction> list = root.getResponse().getBody().getItems().getItem();
+				if (list != null) {
+					for (Attraction a : list) {
+						String[] targets = { "휴무일", "지정현황", "이용요금", "화장실", "장애인 편의시설", "주차시설" };
+
+						for (String target : targets) {
+							Pattern pattern = Pattern.compile(target + "\\s*:\\s*([^<\\n]+)");
+							Matcher matcher = pattern.matcher(a.getAttractionSummary());
+
+							if (matcher.find()) {
+								String value = matcher.group(1).trim();
+								switch (target) {
+									case "휴무일" -> a.setAttractionHoliday(value);
+									case "지정현황" -> a.setAttractionDesignation(value);
+									case "이용요금" -> a.setAttractionFee(value);
+									case "화장실" -> a.setAttractionRestroom(value);
+									case "장애인 편의시설" -> a.setAttractionAccessible(value);
+									case "주차시설" -> a.setAttractionParking(value);
+								}
+							} else {
+								switch (target) {
+								case "휴무일" -> a.setAttractionHoliday("");
+								case "지정현황" -> a.setAttractionDesignation("");
+								case "이용요금" -> a.setAttractionFee("");
+								case "화장실" -> a.setAttractionRestroom("");
+								case "장애인 편의시설" -> a.setAttractionAccessible("");
+								case "주차시설" -> a.setAttractionParking("");
+							}
+							}
+						}
+						
+						String origin = a.getAttractionSummary();
+						String summary = "";
+
+						if (origin != null) {
+							if (origin.contains("* 문의")) {
+								String[] parts = origin.split("\\* 문의");
+								summary = parts[0].trim();
+							} else if (origin.contains("◎이용안내")) {
+								String[] parts = origin.split("◎이용안내");
+								summary = parts[0].trim();
+							} else {
+								summary = origin.trim();
+							}
+
+							a.setAttractionSummary(summary);
+						}
+					}
+				}
+				
+				int result = service.insertAttraction(list);
+				System.out.println(result);
+			} else {
+				System.out.println(areaCode + " 지역에 데이터가 없습니다.");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (conn != null)
+				conn.disconnect();
 		}
 	}
 }
