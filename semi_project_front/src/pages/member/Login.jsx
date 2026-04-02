@@ -21,7 +21,7 @@ const Login = () => {
       return;
     }
     axios
-      .post(`${import.meta.env.VITE_BACKSERVER}/member/login`, member)
+      .post(`${import.meta.env.VITE_BACKSERVER}/members/login`, member)
       .then((res) => {
         console.log(res);
         useAuthStore.getState().login(res.data);
@@ -37,6 +37,7 @@ const Login = () => {
 
           confirmButtonColor: "var(--color1)",
         });
+        setMember({ memberId: "", memberPw: "" });
       });
   };
 
@@ -96,7 +97,7 @@ const Login = () => {
           <p
             className={styles.join_member}
             onClick={() => {
-              navigate("/join");
+              navigate("/member/join");
             }}
           >
             회원가입

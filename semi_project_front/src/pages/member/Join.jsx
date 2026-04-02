@@ -3,8 +3,11 @@ import styles from "./Join.module.css";
 import axios from "axios";
 import { PostcodePopup } from "@clroot/react-kakao-postcode";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Join = () => {
+  const navigate = useNavigate();
+
   //저장할 정보
   const [member, setMember] = useState({
     memberId: "",
@@ -27,16 +30,25 @@ const Join = () => {
   const [memberPwRe, setMemberPwRe] = useState("");
 
   //아이디 중복 체크---------------------------------------
-
-  //아이디 중복 체크 스테이트(0 : 중복 체크 전, 1 : 아이디 중복, 2 : 아이디 사용 가능)
+  //아이디 중복 체크 스테이트(0 : 중복 체크 전, 1 : 아이디 중복, 2 : 아이디 사용 가능, 3 : 공백)
   const [checkId, setCheckId] = useState(0);
+
   const idDupCheck = () => {
+    if (member.memberId === "") {
+      setCheckId(3);
+      return;
+    }
     axios
       .get(
-        `${import.meta.env.VITE_BACKSERVER}/members/axists?memberId=${member.memberId}`,
+        `${import.meta.env.VITE_BACKSERVER}/members/exists?memberId=${member.memberId}`,
       )
       .then((res) => {
         console.log(res);
+        if (res.data) {
+          setCheckId(2);
+        } else {
+          setCheckId(1);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -45,25 +57,31 @@ const Join = () => {
   //아이디 중복 체크---------------------------------------
 
   //비밀번호 중복 체크---------------------------------------
-
-  //비밀번호 중복 확인 스테이트 0 : 확인 전 , 1 : 일치, 2 : 불일치
+  //비밀번호 중복 확인 스테이트 0 : 확인 전 , 1 : 일치, 2 : 불일치, 3 : 공백
   const [checkPw, setCheckPw] = useState(0);
 
   const pwDupCheck = () => {
-    if (member.memberPw === memberPwRe) {
+    if (member.memberPw === "") {
+      setCheckPw(3);
+    } else if (member.memberPw === memberPwRe) {
       setCheckPw(1);
     } else {
       setCheckPw(2);
     }
   };
-
+  //비밀번호 중복 체크---------------------------------------
   //전화번호 중복 체크----------------------------------------
-  // 0 : 확인 전, 1 : 중복, 2 : 사용 가능
+  // 0 : 확인 전, 1 : 중복, 2 : 사용 가능 3 : 공백
   const [checkPhone, setCheckPhone] = useState(0);
 
   const phoneDupCheck = () => {
+    if (member.memberPhone === "") {
+      setCheckPhone(3);
+      return;
+    }
+
     axios(
-      `${import.meta.env.VITE_BACKSERVER}/members/axists?memberPhone=${member.memberPhone}`,
+      `${import.meta.env.VITE_BACKSERVER}/members/exists?memberPhone=${member.memberPhone}`,
     )
       .then((res) => {
         console.log(res);
@@ -72,12 +90,15 @@ const Join = () => {
         console.log(err);
       });
   };
-
+  //전화번호 중복 체크----------------------------------------
+  /*
+        
+        
   //이메일 중복 체크----------------------------------------------
   const [checkEmail, setCheckEmail] = useState(0);
   const EmailDupCheck = () => {
     axios(
-      `${import.meta.env.VITE_BACKSERVER}/members/axists?memberEmail=${member.memberEmail}`,
+      `${import.meta.env.VITE_BACKSERVER}/members/exists?memberEmail=${member.memberEmail}`,
     )
       .then((res) => {
         console.log(res);
@@ -86,25 +107,44 @@ const Join = () => {
         console.log(err);
       });
   };
-
+  //이메일 중복 체크----------------------------------------------
+*/
   //회원 가입 ----------------------------------------------------
   const joinMember = () => {
     if (
       checkId !== 2 ||
       checkPw !== 1 ||
-      checkPhone !== 2 ||
-      checkEmail !== 3 ||
+      //checkPhone !== 2 ||
+      //checkEmail !== 3 ||
       member.memberAddr === "" ||
       member.memberName === ""
     ) {
       Swal.fire({
-        title: "입력값을 확인하세요.",
+        title: "올바른 정보를 입력해 주세요!",
         icon: "warning",
-
         confirmButtonColor: "var(--color1)",
       });
+      return; //코드 종료
     }
+    axios
+      .post(`${import.meta.env.VITE_BACKSERVER}/members`, member)
+      .then((res) => {
+        console.log(res);
+        if (res.data == 1) {
+          //로그인 페이지로 이동
+          Swal.fire({
+            title: "회원가입이 완료되었습니다!",
+            icon: "success",
+            confirmButtonColor: "var(--color1)",
+          });
+          navigate("/member/login");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+  //회원 가입 ----------------------------------------------------
 
   //이메일 인증 -----------------------------------------------------
 
@@ -163,6 +203,7 @@ const Join = () => {
     console.log(time);
     return `${min}:${sec}`;
   };
+  //이메일 인증 -----------------------------------------------------
 
   return (
     <div>
@@ -176,14 +217,18 @@ const Join = () => {
         >
           <h3 className="page-title">회원가입</h3>
           <div className={styles.input_wrap}>
-            <input
-              type="text"
-              name="memberId"
-              id="memberId"
-              placeholder="아이디"
-              onChange={inputMember}
-              onBlur={idDupCheck}
-            />
+            <div className={styles.input_id}>
+              <input
+                type="text"
+                name="memberId"
+                id="memberId"
+                placeholder="아이디"
+                onChange={inputMember}
+              />
+              <button type="button" onClick={idDupCheck}>
+                중복 체크
+              </button>
+            </div>
             {checkId > 0 && (
               <p
                 className={
@@ -192,21 +237,11 @@ const Join = () => {
                     : styles.check_msg + " " + styles.invalid
                 }
               >
-                {checkId == 2
-                  ? "사용 가능한 아이디입니다."
-                  : "이미 사용 중인 아이디입니다."}
+                {checkId == 2 && "사용 가능한 아이디입니다."}
+                {checkId == 1 && "이미 사용 중인 아이디입니다."}
+                {checkId == 3 && "아이디를 입력해주세요."}
               </p>
             )}
-          </div>
-
-          <div className={styles.input_wrap}>
-            <input
-              type="text"
-              name="memberName"
-              id="memberName"
-              placeholder="이름"
-              onChange={inputMember}
-            />
           </div>
 
           <div className={styles.input_wrap}>
@@ -239,11 +274,21 @@ const Join = () => {
                     : styles.check_msg + " " + styles.invalid
                 }
               >
-                {checkPw === 1
-                  ? "비밀번호가 일치합니다."
-                  : "비밀번호가 일치하지 않습니다."}
+                {checkPw === 1 && "비밀번호가 일치합니다."}
+                {checkPw === 2 && "비밀번호가 일치하지 않습니다."}
+                {checkPw === 3 && "비밀번호를 입력해주세요."}
               </p>
             )}
+          </div>
+
+          <div className={styles.input_wrap}>
+            <input
+              type="text"
+              name="memberName"
+              id="memberName"
+              placeholder="이름"
+              onChange={inputMember}
+            />
           </div>
 
           <div className={styles.input_wrap}>
@@ -253,7 +298,21 @@ const Join = () => {
               id="memberPhone"
               placeholder="전화번호"
               onChange={inputMember}
+              onBlur={phoneDupCheck}
             />
+            {checkPhone > 0 && (
+              <p
+                className={
+                  checkPhone === 2
+                    ? styles.check_msg
+                    : styles.check_msg + " " + styles.invalid
+                }
+              >
+                {checkPhone == 2 && "사용 가능한 전화번호입니다."}
+                {checkPhone == 1 && "이미 사용 중인 전화번호입니다."}
+                {checkPhone == 3 && "전화번호를 입력해주세요."}
+              </p>
+            )}
           </div>
 
           {/*메일 입력(전송)---------------------------------------- */}
@@ -272,18 +331,18 @@ const Join = () => {
           {/*메일 입력(인증)---------------------------------------- */}
           {mailAuth > 1 && ( //메일을 받았을 때만 나타날 수 있도록 해줌
             <div className={styles.input_wrap}>
-              <label className="mailAuthInput">이메일 확인</label>
               <div className={styles.input_item}>
                 <input
                   type="text"
                   name="mailAuthInput"
                   id="mailAuthInput"
+                  placeholder="인증번호"
                   value={mailAuthInput}
                   onChange={(e) => {
                     setMailAuthInput(e.target.value);
                   }}
                   disabled={mailAuth === 3}
-                ></input>
+                />
                 <button
                   type="button"
                   onClick={() => {

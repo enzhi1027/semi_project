@@ -23,9 +23,9 @@ function App() {
             <Route path="/course/list" element={<CourseListPage />} />
             <Route path="/course/view" element={<CourseViewPage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/mypage" element={<Mypage />} />
+            <Route path="/member/login" element={<Login />} />
+            <Route path="/member/join" element={<Join />} />
+            <Route path="/member/mypage" element={<Mypage />} />
           </Routes>
         </div>
         <Footer />

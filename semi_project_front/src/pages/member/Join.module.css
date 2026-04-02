@@ -1,8 +1,8 @@
 /*회원가입 랩(폼)-----------------------------*/
 .join_wrap form {
   width: 600px;
-  height: 700px;
-  margin: 50px auto;
+  min-height: 600px;
+  margin: 70px auto;
   padding: 32px;
   display: flex;
   flex-direction: column;
@@ -14,12 +14,20 @@
 }
 /*회원가입 랩-----------------------------*/
 
+/*P태그-----------------------------*/
+p {
+  text-align: left;
+  margin-top: 6px;
+  margin-left: 6px;
+  font-size: 12px;
+}
+
 /*인풋 랩-----------------------------*/
 .input_wrap {
   width: 350px;
   margin: 0 auto;
 }
-.input_wrap > input {
+.input_wrap input {
   padding: 8px;
   border-radius: 8px;
   border: solid 1px var(--gray5);
@@ -28,7 +36,13 @@
 
 /*인풋 랩-----------------------------*/
 
-/*비밀번호 불일치 글자색-----------------------------*/
+/*아이디 인풋 랩-----------------------------*/
+.input_id {
+  display: flex;
+  gap: 12px;
+}
+
+/*비밀번호 불일치 -----------------------------*/
 .check_msg.invalid {
   color: red;
 }
@@ -41,6 +55,12 @@
 }
 .email_check > input {
   flex-grow: 1;
+}
+
+/*이메일 인증 ---------------------------------------*/
+.input_item {
+  display: flex;
+  gap: 12px;
 }
 
 /*주소 입력 ------------------------------------ */
