@@ -13,9 +13,13 @@ import lombok.NoArgsConstructor;
 @Data
 @Alias(value = "sigungu")
 public class Sigungu {
+	private Integer sigunguNo;
+	
 	@JsonProperty("code")
 	private String sigunguCode;
 	
 	@JsonProperty("name")
 	private String sigunguName;
+	
+	private Integer areaNo;
 }

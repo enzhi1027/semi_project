@@ -1,8 +1,27 @@
 package kr.co.iei.attraction.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+
+import kr.co.iei.attraction.model.vo.Area;
+import kr.co.iei.attraction.model.vo.Attraction;
+import kr.co.iei.attraction.model.vo.Sigungu;
 
 @Mapper
 public interface AttractionDao {
 
+	int insertArea(Area area);
+
+	List<String> selectAreaCode();
+
+	int insertSigungu(Sigungu sigungu);
+
+	Integer selectAreaNo(String areaCode);
+
+	List<String> selectSigunguCode(Integer areaNo);
+
+	int insertAttraction(Attraction a);
+
+	Integer selectSigunguNo(Integer areaNo, String sigunguCode);
 }
