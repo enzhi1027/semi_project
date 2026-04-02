@@ -28,14 +28,16 @@ const Header = () => {
             </li>
           </ul>
           <div className={styles.member}>
-            <Link to="/login">
-              <LoginIcon />
-              <p>로그인</p>
-            </Link>
-            <Link to="/join">
-              <PersonAddAlt1Icon />
-              <p>회원가입</p>
-            </Link>
+            <>
+              <Link to="/member/login">
+                <LoginIcon />
+                <p>로그인</p>
+              </Link>
+              <Link to="/member/join">
+                <PersonAddAlt1Icon />
+                <p>회원가입</p>
+              </Link>
+            </>
           </div>
         </div>
       </div>
