@@ -1,4 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.member.model.dao.MemberDao">
+
+	<select id="selectOneMember" resultType="member">
+		select * from member_tbl where member_id = #{memberId}
+	</select>
+	
+	<insert id="insertMember">
+		insert into member_tbl values(
+			#{memberId},
+			#{memberPw},
+			#{memberName},
+			#{memberEmail},
+			#{memberPhone},
+			#{memberAddr},
+			#{memberAddrDetail},
+			null,
+			0,
+			sysdate
+		)
+	</insert>
 </mapper>
