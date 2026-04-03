@@ -1,0 +1,16 @@
+.input {
+  padding: 8px;
+  border-radius: 8px;
+  border: solid 1px var(--gray5);
+  outline: none;
+  width: 100%;
+}
+.textarea {
+  width: 100%;
+  outline: none;
+  padding: 8px 4px;
+  border: 1px solid;
+  border-radius: 8px;
+  min-height: 300px;
+  resize: none;
+}

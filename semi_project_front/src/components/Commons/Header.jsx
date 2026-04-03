@@ -7,6 +7,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import mainImg from "../../assets/img/mainPage/main.jpg";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuthStore from "../utils/useAuthStore";
+import axios from "axios";
 
 const Header = () => {
   const location = useLocation();
@@ -40,7 +41,13 @@ const Header = () => {
                   <AccountCircleIcon />
                   <p>마이페이지</p>
                 </Link>
-                <div className={styles.logout}>
+                <div
+                  className={styles.logout}
+                  onClick={() => {
+                    useAuthStore.getState().logout();
+                    delete axios.defaults.headers.common["Authorization"];
+                  }}
+                >
                   <LogoutIcon />
                   <p>로그아웃</p>
                 </div>

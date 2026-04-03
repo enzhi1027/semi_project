@@ -1,0 +1,29 @@
+.btn {
+  padding: 6px;
+  width: 20%;
+  font-size: 12px;
+  color: var(--gray8);
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color1);
+}
+.join-btn {
+  padding: 12px;
+  width: 300px;
+  color: var(--gray8);
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color1);
+  text-align: center;
+}
+.join_btn:hover {
+  cursor: pointer;
+  filter: brightness(1.1);
+}
+
+.join_btn_wrap > .join_btn:active {
+  filter: brightness(0.9);
+}

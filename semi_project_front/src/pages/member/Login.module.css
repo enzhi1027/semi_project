@@ -2,7 +2,7 @@
 .login_wrap {
   width: 500px;
   height: 500px;
-  margin: 70px auto;
+  margin: 100px auto;
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -20,11 +20,6 @@
   justify-self: center;
   width: 300px;
   margin: 20px;
-}
-.input_wrap > input {
-  padding: 8px;
-  border-radius: 8px;
-  border: solid 1px var(--gray5);
 }
 
 .member_button_wrap > button {
