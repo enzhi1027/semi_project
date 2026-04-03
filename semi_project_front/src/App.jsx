@@ -13,6 +13,7 @@ import Mypage from "./pages/member/Mypage";
 import CourseViewPage from "./pages/course/CourseViewPage";
 import useAuthStore from "./components/utils/useAuthStore";
 import axios from "axios";
+import BoardListPage from "./pages/board/BoardListPage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -43,11 +44,13 @@ function App() {
           <Routes>
             <Route path="/" element={<MainPage />} />
             <Route path="/course/list" element={<CourseListPage />} />
-            <Route path="/course/view" element={<CourseViewPage />} />
+            <Route path="/course/view/:courseNo" element={<CourseViewPage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
+
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/mypage/*" element={<Mypage />} />
+            <Route path="/board/list" element={<BoardListPage />} />
           </Routes>
         </div>
         <Footer />

@@ -26,6 +26,11 @@
   --gray6: #d6d6d6;
   --gray7: #efefef;
   --gray8: #fff;
+
+  --primary: #2f6f4e;
+  --secondary: #6ba368;
+
+  --danger: #8c6a43;
 }
 
 body {

@@ -4,71 +4,39 @@ import styles from "./CourseListPage.module.css";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { useEffect, useState } from "react";
 import CourseList from "../../components/Course/CourseList";
+import axios from "axios";
+import useAuthStore from "../../components/utils/useAuthStore";
 
 const CourseListPage = () => {
   const [order, setOrder] = useState(1);
   const [courseList, setCourseList] = useState([]);
+  const { memberId } = useAuthStore();
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(8);
+  const [totalPage, setTotalPage] = useState(null);
   useEffect(() => {
-    setCourseList([
-      {
-        courseTitle: "관광지 추천 코스 제 목",
-        courseContent:
-          "코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 5,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 8,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 6,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 4,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 5,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 9,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 5,
-      },
-      {
-        courseTitle: "관광지 추천 코스 제목",
-        courseContent: "코스 관련 설명 내용",
-        courseWriter: "작성자(유저이름)",
-        courseIndex: 7,
-      },
-    ]);
-  }, []);
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/courses?order=${order}&memberId=${memberId}&page=${page}&size=${size}`,
+      )
+      .then((res) => {
+        setCourseList(res.data.items);
+        setTotalPage(res.data.totalPage);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [page, order]);
   return (
     <section className={styles.course_wrap}>
       <h3 className={styles.page_title}>관광지 코스 목록</h3>
       <div className={styles.option_wrap}>
-        <Link to="/course/write" className={styles.write_course}>
-          <PlaylistAddIcon />
-          <p>코스생성</p>
-        </Link>
+        {memberId && (
+          <Link to="/course/write" className={styles.write_course}>
+            <PlaylistAddIcon />
+            <p>코스생성</p>
+          </Link>
+        )}
         <div className={styles.order}>
           <p
             className={
@@ -98,7 +66,12 @@ const CourseListPage = () => {
         </div>
       </div>
       <CourseList courseList={courseList} />
-      <Pagination />
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalPage={totalPage}
+        naviSize={5}
+      />
     </section>
   );
 };

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.iei.course.model.dao.CourseDao">
+  <select id="selectCourseList" resultType="courseList">
+  	select 
+	    course_no,
+	    course_title,
+	    course_content,
+	    (select member_name from member_tbl where member_id = c.course_writer) as course_writer,
+	    (select count(course_index) from course_attraction_tbl where course_no = c.course_no) as course_count,
+	    (select attraction_thumb from course_attraction_tbl where course_no = c.course_no and 
+	    course_index = (select min(course_index) from course_attraction_tbl where course_no = c.course_no)) as course_thumb,
+	    (select count(member_id) from course_like_tbl where course_no = c.course_no and member_id = #{memberId}) as is_like
+	from course_tbl c
+	<if test="order == 1">
+		order by (select count(member_id) from course_like_tbl where course_no = c.course_no) desc
+	</if>
+	<if test="order == 2">
+		order by course_no desc
+	</if>
+	offset #{page} * #{size} rows fetch next #{size} rows only
+  </select>
+  
+  <select id="selectCourseAttractionList" resultType="courseAttractionList">
+  	select 
+  		(select course_writer from course_tbl where course_no = #{courseNo}) as course_writer,
+	    attraction_title,
+	    attraction_summary,
+	    attraction_thumb,
+	    attraction_addr,
+	    rownum as courseIndex
+	from course_attraction_tbl
+	where course_no = #{courseNo}
+	order by course_index asc
+  </select>
+  
+  <delete id="deleteCourseLike">
+  		delete from course_like_tbl where course_no = #{courseNo} and member_id = #{memberId}
+  </delete>
+  
+  <insert id="insertCourseLike">
+  	insert into course_like_tbl values(#{memberId}, #{courseNo})
+  </insert>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
