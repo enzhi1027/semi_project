@@ -11,8 +11,16 @@ const BoardList = ({ boardList }) => {
     </ul>
   );
 };
+
 const BoardItem = ({ board }) => {
   const navigate = useNavigate();
+
+  const getCategoryName = (category) => {
+    if (category === 1) return 'Review';
+    if (category === 2) return 'Forum';
+    return '';
+  };
+
   return (
     <li
       className={styles.board_item}
@@ -24,7 +32,9 @@ const BoardItem = ({ board }) => {
         <img src={board.boardThumb ? board.boardThumb : defaultImage} />
       </div>
       <div className={styles.board_info}>
-        <p className={styles.board_title}>{board.boardTitle}</p>
+        <p className={styles.board_title}>
+          [{getCategoryName(board.boardCategory)}] {board.boardTitle}
+        </p>
         <div className={styles.board_sub_info}>
           <div className={styles.board_writer}>
             <div
