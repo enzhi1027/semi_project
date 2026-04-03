@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Commons.module.css";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
@@ -11,6 +11,11 @@ const Header = () => {
   const location = useLocation();
   const mainPage = location.pathname === "/";
   const { memberId } = useAuthStore();
+  const navigate = useNavigate();
+  const logout = () => {
+    useAuthStore.getState().logout();
+    delete axios.defaults.headers.common["Authorization"];
+  };
   return (
     <>
       <div className={mainPage ? styles.header_wrap_main : styles.header_wrap}>
@@ -35,11 +40,11 @@ const Header = () => {
           {memberId ? (
             <>
               <div className={styles.member}>
-                <Link to="/mypage">
-                  <AccountCircleIcon />
+                <Link to="/member/mypage">
+                  <AccountCircleIcon sx={{ fontSize: 32, color: "#fff" }} />
                   <p>마이페이지</p>
                 </Link>
-                <div className={styles.logout}>
+                <div className={styles.logout} onClick={logout}>
                   <LogoutIcon />
                   <p>로그아웃</p>
                 </div>
@@ -48,11 +53,11 @@ const Header = () => {
           ) : (
             <>
               <div className={styles.member}>
-                <Link to="/login">
+                <Link to="/member/login">
                   <LoginIcon />
                   <p>로그인</p>
                 </Link>
-                <Link to="/join">
+                <Link to="/member/join">
                   <PersonAddAlt1Icon />
                   <p>회원가입</p>
                 </Link>
