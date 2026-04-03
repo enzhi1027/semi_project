@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.iei.attraction.model.dao.AttractionDao;
 import kr.co.iei.attraction.model.vo.Area;
 import kr.co.iei.attraction.model.vo.Attraction;
+import kr.co.iei.attraction.model.vo.AttractionListItem;
+import kr.co.iei.attraction.model.vo.AttractionListResponse;
 import kr.co.iei.attraction.model.vo.Sigungu;
 
 @Service
@@ -58,5 +60,23 @@ public class AttractionService {
 			result += dao.insertAttraction(a);
 		}
 		return result;
+	}
+
+	public AttractionListResponse selectAttractionList(AttractionListItem request) {
+		Integer totalCount = dao.selectAttractionCount(request);
+		int totalPage = (int) Math.ceil(totalCount / (double) request.getSize());
+		AttractionListResponse response = new AttractionListResponse(dao.selectAttractionList(request), 1);
+		
+		return response;
+	}
+
+	public List<Area> selectAreaList() {
+		List<Area> list = dao.selectAreaList();
+		return list;
+	}
+
+	public List<Sigungu> selectSigunguList(String areaCode) {
+		List<Sigungu> list = dao.selectSigunguList(areaCode);
+		return list;
 	}
 }

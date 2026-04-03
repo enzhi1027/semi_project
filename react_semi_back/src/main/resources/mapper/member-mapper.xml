@@ -20,4 +20,19 @@
 			sysdate
 		)
 	</insert>
+	
+	<update id="updateMemberThumb">
+		update member_tbl 
+			set member_thumb = #{memberThumb}
+		where member_id = #{memberId}
+	</update>
+	
+	<update id="updateMember">
+		update member_tbl set 
+			member_name = #{memberName},
+			member_email = #{memberEmail},
+			member_phone = #{memberPhone},
+			member_addr_detail = #{memberAddrDetail}
+		where member_id = #{memberId}
+	</update>
 </mapper>

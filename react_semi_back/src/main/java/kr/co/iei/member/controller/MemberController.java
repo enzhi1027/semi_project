@@ -3,19 +3,25 @@ package kr.co.iei.member.controller;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.member.model.service.MemberService;
 import kr.co.iei.member.model.vo.LoginMember;
 import kr.co.iei.member.model.vo.Member;
 import kr.co.iei.utils.EmailSender;
+import kr.co.iei.utils.FileUtils;
 
 @CrossOrigin(value="*")
 @RestController
@@ -27,11 +33,16 @@ public class MemberController {
 	@Autowired
 	private EmailSender sender;
 	
+	@Autowired
+	private FileUtils fileUtils;
+	
+	@Value("${file.root}")
+	private String root;
+	
 	//아이디 중복 체크-------------------------------------------------------------------
 	@GetMapping(value = "/exists")
 	public ResponseEntity<?> dupCheckId(@RequestParam String memberId) {
 		Member m = memberService.selectOneMember(memberId);
-		System.out.println(m);
 		return ResponseEntity.ok(m == null);
 	}
 	//아이디 중복 체크-------------------------------------------------------------------
@@ -93,5 +104,33 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 	//회원가입----------------------------------------------------------------------
+	
+	//유저 썸네일--------------------------------------------------------------------
+	@PatchMapping(value="{memberId}/thumbnail")//일부 정보 수정 @PatchMapping
+	public ResponseEntity<?> updateThumbnail(@PathVariable String memberId,
+												@ModelAttribute MultipartFile file) {
+		String savepath = root + "member/";
+		String memberThumb = fileUtils.upload(savepath, file);
+		Member m = new Member();
+		m.setMemberId(memberId);
+		m.setMemberThumb(memberThumb);
+		int result = memberService.updateMemberThumb(m);
+		return ResponseEntity.ok(memberThumb);
+	}
+	
+	//유저 조회 ------------------------------------------------------------------
+	@GetMapping(value = "/{memberId}")
+	public ResponseEntity<?> selectOneMember(@PathVariable String memberId) {
+		Member member = memberService.selectOneMember(memberId);
+		member.setMemberPw(null);//비밀번호는 제외
+		return ResponseEntity.ok(member);
+	}
+	
+	//유저 정보 수정 ---------------------------------------------------------------
+	@PatchMapping(value = "/{memberId}")
+	public ResponseEntity<?> updateMember(@RequestBody Member member){
+		int result = memberService.updateMember(member);
+		return ResponseEntity.ok(result);
+	}
 	
 }

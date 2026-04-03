@@ -1,74 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CourseViewPage.module.css";
 import testImg from "../../assets/img/mainPage/main.jpg";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Button from "../../components/ui/Button";
+import { StyleSharp } from "@mui/icons-material";
+import useAuthStore from "../../components/utils/useAuthStore";
 
 const CourseViewPage = () => {
-  const [attractionList, setAttractionList] = useState([
-    {
-      attractionImg: testImg,
-      attractionIndex: 1,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 영춘면 온달로 23",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 2,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 ",
-      attractionAddr: "충청북도 단양군 가곡면 남한강로 494",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 3,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 단양읍 천동2길 18",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 4,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 단양읍 고수동굴길 8",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 5,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 단성면 벌천리",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 6,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 단성면 하방리",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 7,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 대강면 사인암리",
-    },
-    {
-      attractionImg: testImg,
-      attractionIndex: 8,
-      attractionTitle: "관광지명",
-      attractionContent:
-        "관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명 관광지설명",
-      attractionAddr: "충청북도 단양군 대강면 방곡리",
-    },
-  ]);
+  const params = useParams();
+  const courseNo = params.courseNo;
+  const { memberId } = useAuthStore();
+  const [attractionList, setAttractionList] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/courses/${courseNo}`)
+      .then((res) => {
+        console.log(res);
+        setAttractionList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const mapDivRef = useRef(null);
   useEffect(() => {
@@ -121,7 +75,7 @@ const CourseViewPage = () => {
                   justify-content:center;
                   font-size:14px;
                 ">
-                  ${spot.attractionIndex}
+                  ${spot.courseIndex}
                 </div>
               `,
               size: new naver.maps.Size(10, 10),
@@ -129,7 +83,7 @@ const CourseViewPage = () => {
             },
           });
 
-          coords.push({ index: spot.attractionIndex, latlng });
+          coords.push({ index: spot.courseIndex, latlng });
 
           if (coords.length === attractionList.length) {
             coords.sort((a, b) => a.index - b.index);
@@ -165,6 +119,13 @@ const CourseViewPage = () => {
         </div>
         <div className={styles.course_map} ref={mapDivRef}></div>
       </div>
+      {attractionList.length !== 0 && (
+        <div className={styles.delete_btn}>
+          {memberId === attractionList[0].courseWriter && (
+            <Button className="btn danger">코스 삭제하기</Button>
+          )}
+        </div>
+      )}
     </section>
   );
 };
@@ -172,36 +133,38 @@ const CourseViewPage = () => {
 const AttractionItem = ({ attraction }) => {
   return (
     <>
-      {attraction.attractionIndex % 2 === 0 ? (
+      {attraction.courseIndex % 2 === 0 ? (
         <div className={styles.attraction_wrap}>
           <div className={styles.content_wrap}>
             <div className={styles.content_title}>
               <div>
-                <p>{attraction.attractionIndex}</p>
+                <p>{attraction.courseIndex}</p>
               </div>
               <h3>{attraction.attractionTitle}</h3>
             </div>
             <div className={styles.attraction_content}>
-              {attraction.attractionContent}
+              {attraction.attractionSummary}
             </div>
           </div>
           <div className={styles.img_wrap}>
-            <img src={attraction.attractionImg} />
+            <img src={attraction.attractionThumb} />
           </div>
         </div>
       ) : (
         <div className={styles.attraction_wrap}>
           <div className={styles.img_wrap}>
-            <img src={attraction.attractionImg} />
+            <img src={attraction.attractionThumb} />
           </div>
           <div className={styles.content_wrap}>
             <div className={styles.content_title}>
               <div>
-                <p>{attraction.attractionIndex}</p>
+                <p>{attraction.courseIndex}</p>
               </div>
               <h3>{attraction.attractionTitle}</h3>
             </div>
-            <div>{attraction.attractionContent}</div>
+            <div className={styles.attraction_content}>
+              {attraction.attractionSummary}
+            </div>
           </div>
         </div>
       )}
@@ -215,12 +178,12 @@ const AttractionInfoItem = ({ attraction }) => {
       <div className={styles.info_item_wrap}>
         <div className={styles.attraction_index}>
           <div className={styles.index_num}>
-            <p>{attraction.attractionIndex}</p>
+            <p>{attraction.courseIndex}</p>
           </div>
           <div className={styles.index_bar}></div>
         </div>
         <div className={styles.attraction_img_wrap}>
-          <img src={attraction.attractionImg} />
+          <img src={attraction.attractionThumb} />
           <div className={styles.img_back}></div>
           <p className={styles.info_attraction_title}>
             {attraction.attractionTitle}

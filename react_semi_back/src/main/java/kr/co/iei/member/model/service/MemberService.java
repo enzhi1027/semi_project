@@ -50,6 +50,16 @@ public class MemberService {
 		return result;
 	}
 	//회원가입----------------------------------------------------------------
+
+	public int updateMemberThumb(Member m) {
+		int result = memberDao.updateMemberThumb(m);
+		return result;
+	}
+
+	public int updateMember(Member member) {
+		int result = memberDao.updateMember(member);
+		return result;
+	}
 	
 	
 	
