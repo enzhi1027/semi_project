@@ -16,7 +16,7 @@ const MainPage = () => {
                 <p>자연을 지키는 여행</p>
                 <p>함께 만드는 생태관광 커뮤니티</p>
               </div>
-              <Link to="/" className={styles.attraction_btn}>
+              <Link to="/attraction/list" className={styles.attraction_btn}>
                 관광지 목록보기
               </Link>
             </div>
@@ -30,7 +30,7 @@ const MainPage = () => {
                   커뮤니티입니다.
                 </p>
                 <p>
-                  각종 생태 관광지 안내부터 관광지 리뷰, 정보와 경험을 나무며
+                  각종 생태 관광지 안내부터 관광지 리뷰, 정보와 경험을 나누며
                   생태 관광에 관심을 가지는 공간입니다
                 </p>
               </div>

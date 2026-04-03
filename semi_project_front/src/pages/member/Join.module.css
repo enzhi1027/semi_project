@@ -15,7 +15,7 @@
 /*회원가입 랩-----------------------------*/
 
 /*P태그-----------------------------*/
-p {
+.join_wrap p {
   text-align: left;
   margin-top: 6px;
   margin-left: 6px;
