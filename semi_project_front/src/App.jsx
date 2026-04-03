@@ -12,6 +12,7 @@ import Join from './pages/member/Join';
 import Mypage from './pages/member/Mypage';
 import CourseViewPage from './pages/course/CourseViewPage';
 import BoardListPage from './pages/board/BoardListPage';
+import BoardWritePage from './pages/board/BoardWritePage';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
             <Route path="/member/join" element={<Join />} />
             <Route path="/member/mypage" element={<Mypage />} />
             <Route path="/board/list" element={<BoardListPage />} />
+            <Route path="/board/write" element={<BoardWritePage />} />
           </Routes>
         </div>
         <Footer />

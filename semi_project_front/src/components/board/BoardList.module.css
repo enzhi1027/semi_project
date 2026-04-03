@@ -35,11 +35,12 @@
   gap: 12px;
 }
 .board_title {
-  padding: 8px;
-  font-family: gs_b;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 700;
+  font-size: 18px;
+  margin-left: -4px;
 }
 .board_sub_info {
   display: flex;

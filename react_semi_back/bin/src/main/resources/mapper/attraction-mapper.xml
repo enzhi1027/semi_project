@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="kr.co.iei.attraction.model.dao.AttractionDao">
+	<insert id="insertArea">
+		INSERT
+		  INTO AREA_TBL
+		VALUES
+		     (
+		       AREA_SEQ.NEXTVAL
+		     , #{areaCode}
+		     , #{areaName}
+		     )
+	</insert>
+	
+	<select id="selectAreaCode" resultType="String">
+		SELECT AREA_CODE
+		  FROM AREA_TBL
+		 ORDER
+		    BY AREA_NO
+	</select>
+	
+	<select id="selectAreaNo" resultType="Integer">
+		SELECT AREA_NO
+		  FROM AREA_TBL
+		 WHERE AREA_CODE = ${areaCode}
+	</select>
+	
+	<insert id="insertSigungu">
+		INSERT
+		  INTO SIGUNGU_TBL
+		VALUES
+		     (
+		       SIGUNGU_SEQ.NEXTVAL
+		     , #{sigunguCode}
+		     , #{sigunguName}
+		     , #{areaNo}
+		     )
+	</insert>
+	
+	<select id="selectSigunguCode" resultType="String">
+		SELECT SIGUNGU_CODE
+		  FROM SIGUNGU_TBL
+		 WHERE AREA_NO = #{areaNo}
+		 ORDER
+		    BY SIGUNGU_NO
+	</select>
+	
+	<select id="selectSigunguNo" resultType="Integer">
+		SELECT SIGUNGU_NO
+		  FROM SIGUNGU_TBL
+		 WHERE AREA_NO = #{areaNo}
+		   AND SIGUNGU_CODE = #{sigunguCode}
+	</select>
+	
+	<insert id="insertAttraction">
+		INSERT
+		  INTO ATTRACTION_TBL
+		VALUES
+		     (
+		       ATTRACTION_SEQ.NEXTVAL
+		     , #{attractionAddr}
+		     , #{attractionContentId}
+		     , #{attractionThumbnail}
+		     , #{attractionModifiedTime}
+		     , #{attractionSummary}
+		     , #{attractionHoliday}
+		     , #{attractionDesignation}
+		     , #{attractionFee}
+		     , #{attractionRestroom}
+		     , #{attractionAccessible}
+		     , #{attractionParking}
+		     , #{attractionPhone}
+		     , #{attractionTitle}
+		     , #{sigunguNo}
+		     )
+	</insert>
+</mapper>

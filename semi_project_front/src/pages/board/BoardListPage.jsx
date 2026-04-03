@@ -15,7 +15,7 @@ const BoardListPage = () => {
 
   const [boardList, setBoardList] = useState([]); //게시글 목록 저장
   const [page, setPage] = useState(0); //현재 페이지 번호
-  const [size, setSize] = useState(8); //한 페이지에 몇 개 보여줄지(12개)
+  const [size, setSize] = useState(8); //한 페이지에 몇 개 보여줄지(8개)
   const [totalPage, setTotalPage] = useState(null); //전체 페이지 개수
   const [order, setOrder] = useState(1); //정렬 방식(1: 최신순, 2: 작성순)
 
@@ -48,12 +48,7 @@ const BoardListPage = () => {
 
   return (
     <section className={styles.board_wrap}>
-      <h3
-        className="page-title"
-        style={{ textAlign: 'center', marginBottom: '20px' }}
-      >
-        게시글 목록
-      </h3>
+      <h3 className={styles.page_title}>게시글 목록</h3>
 
       <div className={styles.list_option_wrap}>
         <div className={styles.left_option}>

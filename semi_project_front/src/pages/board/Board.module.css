@@ -73,3 +73,31 @@
 .btn_wrap > button {
   width: 100%;
 }
+
+/* 게시글 작성 제목 중앙정렬 */
+.page_title {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 28px;
+  margin: 10px 0 50px;
+}
+/* 카테고리 선택박스 영역 (제목 위) */
+.category_wrap {
+  width: 800px;
+  margin: 0 auto 16px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.select_wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.location_icon {
+  font-size: 30px;
+  color: var(--color1);
+}
