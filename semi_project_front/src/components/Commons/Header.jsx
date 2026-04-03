@@ -54,11 +54,11 @@ const Header = () => {
           ) : (
             <>
               <div className={styles.member}>
-                <Link to="/member/login">
+                <Link to="/login">
                   <LoginIcon />
                   <p>로그인</p>
                 </Link>
-                <Link to="/member/join">
+                <Link to="/join">
                   <PersonAddAlt1Icon />
                   <p>회원가입</p>
                 </Link>
