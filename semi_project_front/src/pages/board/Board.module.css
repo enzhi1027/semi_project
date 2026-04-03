@@ -1,0 +1,75 @@
+.board_wrap {
+  width: 1200px;
+  margin: 50px auto;
+  border-radius: 10px;
+  background-color: var(--gray8);
+  padding: 32px;
+}
+
+.board_list_pagination {
+  margin-top: 30px;
+}
+
+/* 전체 옵션 영역 */
+.list_option_wrap {
+  margin-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 왼쪽 묶음 (카테고리 + 검색) */
+.left_option {
+  display: flex;
+  align-items: center;
+}
+
+/* 오른쪽 (최신순) */
+.right_option {
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  outline: none;
+  appearance: none;
+  width: 80px;
+  text-align: center;
+  text-align-last: center;
+  background-position: right 8px center;
+  padding: 6px 10px;
+}
+
+.select option {
+  text-align: center;
+}
+
+/* 검색 영역 */
+.search_wrap {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.search_wrap > input {
+  width: 200px;
+}
+
+.search_wrap > button {
+  width: 80px;
+}
+
+.write_btn_zone {
+  display: flex;
+  justify-content: flex-end;
+  margin: 12px 0px;
+}
+
+.btn_wrap {
+  width: 800px;
+  margin: 50px auto;
+}
+
+.btn_wrap > button {
+  width: 100%;
+}

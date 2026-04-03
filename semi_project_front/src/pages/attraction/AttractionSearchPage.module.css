@@ -1,27 +1,136 @@
-.menubar {
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  background-color: var(--gray8);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+input[type="checkbox"]:checked {
+  background-color: var(--color2);
+  border-color: var(--color2);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  width: 4px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
+}
+
+.attraction_search_wrap {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+/* 메뉴바 */
+.menubar {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  position: relative;
+}
+
+/* 지역 선택 */
 .menubar .select_where {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.menubar .select_where .select_where_title {
+  width: 100%;
+  height: 100%;
+  padding: 0 12px;
+  border-radius: 10px;
+  align-content: center;
+  cursor: pointer;
+  background-color: var(--color2);
+  border: 1px solid var(--color2);
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.menubar .select_where .select_where_title:hover {
+  color: var(--text1);
+  background-color: var(--gray8);
+}
+
+.menubar .select_where .select_where_title div {
+  font-weight: 700;
+  font-size: 0.9em;
+}
+
+.menubar .select_where .select_where_title:hover * {
+  color: var(--color2);
+}
+
+.menubar .select_where .select_where_title * {
+  color: var(--color4);
 }
 
 .menubar .select_where .select_where_content {
   display: flex;
+  width: 650px;
+  background-color: var(--gray8);
+  border-radius: 20px;
+  position: absolute;
+  z-index: 1000;
+  top: 50px;
 }
 
 .menubar .select_where .select_where_content_areas {
   display: flex;
-  width: 100px;
+  width: 35%;
   flex-wrap: wrap;
 }
 
-.menubar .select_where .select_where_content_area {
+.menubar .select_where .select_where_content_area,
+.menubar .select_where .select_where_content_area_null {
   align-content: center;
-  width: 50px;
+  width: 50%;
+  min-height: 50px;
   text-align: center;
-  border: 1px solid #000;
+  border: 1px solid var(--border);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.menubar .select_where .select_where_content_area_null {
+  border: 1px solid var(--border);
+  cursor: auto;
+}
+
+.menubar .select_where .select_where_content_area.active {
+  background-color: var(--color2);
+  color: var(--color4);
+}
+
+.menubar .select_where .select_where_content_area:not(.active):hover {
+  background-color: var(--color4);
 }
 
 .menubar .select_where .select_where_content_area:nth-child(2n + 1) {
@@ -29,21 +138,94 @@
   border-right: none;
 }
 
-.menubar .select_where .select_where_content_area:nth-child(2n) {
+.menubar .select_where .select_where_content_area:nth-child(2n),
+.menubar .select_where .select_where_content_area_null {
   border-top: none;
 }
 
 .menubar .select_where .select_where_content_area:first-child,
 .menubar .select_where .select_where_content_area:nth-child(2) {
-  border-top: 1px solid #000;
+  border-top: 1px solid var(--border);
+}
+
+.menubar .select_where .select_where_content_area:first-child {
+  border-radius: 20px 0 0 0;
+}
+
+.menubar
+  .select_where
+  .select_where_content_area.select_where_content_area_bdrs {
+  border-radius: 0 0 0 20px;
+}
+
+.menubar .select_where .select_where_content_sigungus {
+  width: 65%;
+  gap: 20px;
+  flex-wrap: wrap;
+  border: 1px solid var(--border);
+  border-left: none;
+  border-radius: 0 20px 20px 0;
+  padding: 10px 20px;
 }
 
 .menubar .select_where .select_where_content_sigungu {
+  width: calc(100% / 3);
+  height: 40px;
+  display: inline-block;
+  align-content: center;
+}
+
+.menubar .select_where .select_where_content_sigungu > div {
   display: flex;
-  width: 180px;
-  gap: 20px;
-  flex-wrap: wrap;
-  border: 1px solid #000;
-  border-left: none;
-  padding: 20px;
+  align-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+/* 검색바 */
+.menubar .search_bar {
+  flex: 1;
+}
+
+.menubar .search_bar > div {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background-color: var(--gray8);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0 5px;
+}
+
+.menubar .search_bar > div input {
+  flex: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  padding-left: 10px;
+}
+
+.menubar .search_bar svg {
+  cursor: pointer;
+}
+
+.menubar .search_bar svg path {
+  color: var(--border);
+}
+
+/* 카테고리바 */
+.menubar .category_bar {
+  display: flex;
+  gap: 10px;
+}
+
+.menubar .category_bar .category {
+  display: flex;
+  gap: 5px;
 }
