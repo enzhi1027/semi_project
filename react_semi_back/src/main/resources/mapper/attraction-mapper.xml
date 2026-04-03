@@ -54,10 +54,10 @@
 	
 	<insert id="insertAttraction">
 		INSERT
-		  INTO ATTRACTION_TBL
+		  INTO TEST_ATTRACTION_TBL
 		VALUES
 		     (
-		       ATTRACTION_SEQ.NEXTVAL
+		       TEST_ATTRACTION_SEQ.NEXTVAL
 		     , #{attractionAddr}
 		     , #{attractionContentId}
 		     , #{attractionThumbnail}
@@ -74,4 +74,56 @@
 		     , #{sigunguNo}
 		     )
 	</insert>
+	
+	<select id="selectAttractionList" resultType="attraction">
+		SELECT ATTRACTION_ADDR
+			 , ATTRACTION_THUMBNAIL
+			 , ATTRACTION_SUMMARY
+			 , ATTRACTION_HOLIDAY
+			 , ATTRACTION_DESIGNATION
+			 , ATTRACTION_FEE
+			 , ATTRACTION_RESTROOM
+			 , ATTRACTION_ACCESSIBLE
+			 , ATTRACTION_PARKING
+			 , ATTRACTION_PHONE
+			 , ATTRACTION_TITLE
+		  FROM TEST_ATTRACTION_TBL
+          JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
+          JOIN AREA_TBL USING (AREA_NO)
+		 WHERE AREA_CODE = #{areaCode}
+		   AND SIGUNGU_CODE = #{sigunguCode}
+		   AND ATTRACTION_TITLE LIKE '%' || #{searchKeyword} || '%'
+		 ORDER
+		    BY ATTRACTION_NO
+	    OFFSET #{page} * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
+	</select>
+	
+	<select id="selectAttractionCount" resultType="Integer">
+		SELECT COUNT(*)
+		  FROM TEST_ATTRACTION_TBL
+		  JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
+          JOIN AREA_TBL USING (AREA_NO)
+		 WHERE AREA_CODE = #{areaCode}
+		   AND SIGUNGU_CODE = #{sigunguCode}
+		   AND ATTRACTION_TITLE LIKE '%' || #{searchKeyword} || '%'
+	</select>
+	
+	<select id="selectAreaList" resultType="area">
+		SELECT AREA_NO
+		     , AREA_CODE
+		     , AREA_NAME
+		  FROM AREA_TBL
+	</select>
+	
+	<select id="selectSigunguList" resultType="sigungu">
+		SELECT SIGUNGU_NO
+		     , SIGUNGU_CODE
+		     , SIGUNGU_NAME
+		     , AREA_NO
+		  FROM SIGUNGU_TBL
+		  JOIN AREA_TBL USING (AREA_NO)
+		 WHERE AREA_CODE = #{areaCode}
+		 ORDER
+		    BY SIGUNGU_NAME
+	</select>
 </mapper>
