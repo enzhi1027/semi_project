@@ -62,6 +62,10 @@
   align-items: center;
   font-size: 18px;
 }
+.member > a > p {
+  font-size: 20px;
+  margin: 0;
+}
 .member > .logout {
   display: flex;
   gap: 12px;
