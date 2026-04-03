@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.attraction.model.vo.Area;
 import kr.co.iei.attraction.model.vo.Attraction;
+import kr.co.iei.attraction.model.vo.AttractionListItem;
 import kr.co.iei.attraction.model.vo.Sigungu;
 
 @Mapper
@@ -24,4 +25,12 @@ public interface AttractionDao {
 	int insertAttraction(Attraction a);
 
 	Integer selectSigunguNo(Integer areaNo, String sigunguCode);
+
+	List<Attraction> selectAttractionList(AttractionListItem request);
+
+	Integer selectAttractionCount(AttractionListItem request);
+
+	List<Area> selectAreaList();
+
+	List<Sigungu> selectSigunguList(String areaCode);
 }

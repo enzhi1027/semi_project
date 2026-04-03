@@ -10,13 +10,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.iei.attraction.model.vo.Area;
 import kr.co.iei.attraction.model.vo.Attraction;
+import kr.co.iei.attraction.model.vo.AttractionListItem;
+import kr.co.iei.attraction.model.vo.AttractionListResponse;
 import kr.co.iei.attraction.model.vo.GreenTourAttractionResponse;
 import kr.co.iei.attraction.model.vo.GreenTourResponse;
 import kr.co.iei.attraction.model.vo.Sigungu;
@@ -31,9 +36,28 @@ public class AttractionController {
 
 	@Autowired
 	private AttractionService service;
+	
+	@GetMapping
+	public ResponseEntity<?> selectAttractionList(@ModelAttribute AttractionListItem request) {
+		AttractionListResponse response = service.selectAttractionList(request);
+
+		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping(value = "/areaList")
+	public ResponseEntity<?> selectAreaList() {
+		List<Area> list = service.selectAreaList();
+		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping(value = "/sigunguList/{areaCode}")
+	public ResponseEntity<?> selectSigunguList(@PathVariable String areaCode) {
+		List<Sigungu> list = service.selectSigunguList(areaCode);
+		return ResponseEntity.ok(list);
+	}
 
 	@GetMapping(value = "test")
-	public void test() {
+	public void test() { 
 		String serviceKey = "fb331309e5dfe9890ebfccd656fe364f5a15f230f4c2551afe1a083b86151329";
 		// testArea(serviceKey);
 		/*
@@ -243,6 +267,7 @@ public class AttractionController {
 							}
 						}
 						
+						/*
 						String origin = a.getAttractionSummary();
 						String summary = "";
 
@@ -259,6 +284,7 @@ public class AttractionController {
 
 							a.setAttractionSummary(summary);
 						}
+						*/
 					}
 				}
 				
