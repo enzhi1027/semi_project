@@ -6,6 +6,7 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import useAuthStore from "../utils/useAuthStore";
+import axios from "axios";
 
 const Header = () => {
   const location = useLocation();

@@ -4,6 +4,8 @@ import axios from "axios";
 import { PostcodePopup } from "@clroot/react-kakao-postcode";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { Input } from "../../components/ui/Form";
+import Button from "../../components/ui/Button";
 
 const Join = () => {
   const navigate = useNavigate();
@@ -22,6 +24,13 @@ const Join = () => {
   const inputMember = (e) => {
     const name = e.target.name;
     const value = e.target.value;
+
+    if (name === "memberId") {
+      setCheckId(0); //중복 체크 하기 전으로 초기화(입력이 달라질 때마다 체크해야 함)
+    }
+    if (name === "memberPw") {
+      setCheckPw(0);
+    }
     const newMember = { ...member, [name]: value };
     setMember(newMember);
   };
@@ -137,7 +146,7 @@ const Join = () => {
             icon: "success",
             confirmButtonColor: "var(--color1)",
           });
-          navigate("/member/login");
+          navigate("/login");
         }
       })
       .catch((err) => {
@@ -156,11 +165,20 @@ const Join = () => {
   const [mailAuthCode, setMailAuthCode] = useState(null);
   //이메일 인증 input용 state
   const [mailAuthInput, setMailAuthInput] = useState("");
-  //이메일 인증 시간 처리를 위한 state
+  //이메일 인증 시간 처리를 위한 state 내가 이걸 왜 한다고 했을까
   const [time, setTime] = useState(180); //인증 유효를 3분으로 처리
   const [timeout, setTimeout] = useState(null); //유효 시간 안에 인증이 완료되면 시간이 줄어드는 함수를 정지
 
   const sendMail = () => {
+    if (!member.memberEmail || member.memberEmail.trim() === "") {
+      Swal.fire({
+        title: "이메일을 입력해주세요!",
+        icon: "warning",
+        confirmButtonColor: "var(--color1)",
+      });
+      setMember({ ...member, memberEmail: "" });
+      return;
+    }
     setTime(180);
     if (timeout) {
       window.clearInterval(timeout);
@@ -218,16 +236,17 @@ const Join = () => {
           <h3 className="page-title">회원가입</h3>
           <div className={styles.input_wrap}>
             <div className={styles.input_id}>
-              <input
+              <Input
                 type="text"
                 name="memberId"
                 id="memberId"
                 placeholder="아이디"
                 onChange={inputMember}
+                autoComplete="username"
               />
-              <button type="button" onClick={idDupCheck}>
+              <Button className="btn" type="button" onClick={idDupCheck}>
                 중복 체크
-              </button>
+              </Button>
             </div>
             {checkId > 0 && (
               <p
@@ -245,17 +264,18 @@ const Join = () => {
           </div>
 
           <div className={styles.input_wrap}>
-            <input
+            <Input
               type="password"
               name="memberPw"
               id="memberPw"
               placeholder="비밀번호"
               onChange={inputMember}
+              autoComplete="new-password"
             />
           </div>
 
           <div className={styles.input_wrap}>
-            <input
+            <Input
               type="password"
               name="memberPwRe"
               id="memberPwRe"
@@ -265,6 +285,8 @@ const Join = () => {
                 setMemberPwRe(e.target.value);
               }}
               onBlur={pwDupCheck}
+              autoComplete="new-password" //오토컴플아 경고문을 없애다오
+              //라벨태그 사용 안 할 시 작성해서 무엇을 위한 인풋인지 명시하기 위해 사용
             />
             {checkPw > 0 && (
               <p
@@ -282,7 +304,7 @@ const Join = () => {
           </div>
 
           <div className={styles.input_wrap}>
-            <input
+            <Input
               type="text"
               name="memberName"
               id="memberName"
@@ -292,7 +314,7 @@ const Join = () => {
           </div>
 
           <div className={styles.input_wrap}>
-            <input
+            <Input
               type="text"
               name="memberPhone"
               id="memberPhone"
@@ -317,22 +339,23 @@ const Join = () => {
 
           {/*메일 입력(전송)---------------------------------------- */}
           <div className={`${styles.input_wrap} ${styles.email_check}`}>
-            <input
+            <Input
               type="text"
               name="memberEmail"
               id="memberEmail"
               placeholder="이메일"
+              value={member.memberEmail}
               onChange={inputMember}
             />
-            <button type="button" onClick={sendMail}>
+            <Button className="btn" type="button" onClick={sendMail}>
               메일 전송
-            </button>
+            </Button>
           </div>
           {/*메일 입력(인증)---------------------------------------- */}
           {mailAuth > 1 && ( //메일을 받았을 때만 나타날 수 있도록 해줌
             <div className={styles.input_wrap}>
               <div className={styles.input_item}>
-                <input
+                <Input
                   type="text"
                   name="mailAuthInput"
                   id="mailAuthInput"
@@ -343,7 +366,8 @@ const Join = () => {
                   }}
                   disabled={mailAuth === 3}
                 />
-                <button
+                <Button
+                  className="btn"
                   type="button"
                   onClick={() => {
                     if (mailAuthCode === mailAuthInput) {
@@ -357,7 +381,7 @@ const Join = () => {
                   }}
                 >
                   인증하기
-                </button>
+                </Button>
               </div>
               <p className={styles.check_msg}>
                 {mailAuth === 3 ? "인증되었습니다." : showTime()}
@@ -369,7 +393,7 @@ const Join = () => {
 
           {/*주소 입력---------------------------------------- */}
           <div className={`${styles.input_wrap} ${styles.addr_input}`}>
-            <input
+            <Input
               type="text"
               name="memberAddr"
               id="memberAddr"
@@ -392,13 +416,15 @@ const Join = () => {
                 });
               }}
             >
-              <button type="button">주소 검색</button>
+              <Button className="btn" type="button">
+                주소 검색
+              </Button>
             </PostcodePopup>
           </div>
           {/*주소 입력---------------------------------------- */}
 
           <div className={styles.input_wrap}>
-            <input
+            <Input
               type="text"
               name="memberAddrDetail"
               id="memberAddrDetail"
@@ -407,9 +433,9 @@ const Join = () => {
             />
           </div>
           <div className={styles.join_btn_wrap}>
-            <button className={styles.join_btn} type="submit">
+            <Button className="join-btn" type="submit">
               회원가입
-            </button>
+            </Button>
           </div>
         </form>
       </section>

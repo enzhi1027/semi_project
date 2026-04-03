@@ -10,5 +10,9 @@ public interface MemberDao {
 	Member selectOneMember(String memberId);
 
 	int insertMember(Member member);
+
+	int updateMemberThumb(Member m);
+
+	int updateMember(Member member);
 	
 }

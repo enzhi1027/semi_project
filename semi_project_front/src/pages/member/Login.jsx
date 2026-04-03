@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import "./MemberCommons.css";
 import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
+import { Input } from "../../components/ui/Form";
+import Button from "../../components/ui/Button";
 
 const Login = () => {
   const [member, setMember] = useState({ memberId: "", memberPw: "" });
@@ -18,6 +20,11 @@ const Login = () => {
 
   const login = () => {
     if (member.memberId === "" || member.memberPw === "") {
+      Swal.fire({
+        title: "아이디 혹은, 비밀번호를<br>입력해주세요!",
+        icon: "warning",
+        confirmButtonColor: "var(--color1)",
+      });
       return;
     }
     axios
@@ -52,27 +59,32 @@ const Login = () => {
         autoComplete="off"
       >
         <div className={styles.input_wrap}>
-          <input
+          <Input
             type="text"
             placeholder="아이디"
             name="memberId"
             id="memberId"
             value={member.memberId}
             onChange={inputMember}
-          ></input>
+            autoComplete="username" //사용자id, 이메일, 별명 명시
+            //여기서는 유저ID를 명시
+          ></Input>
         </div>
         <div className={styles.input_wrap}>
-          <input
+          <Input
             type="password"
             placeholder="비밀번호"
             name="memberPw"
             id="memberPw"
             value={member.memberPw}
             onChange={inputMember}
-          ></input>
+            autoComplete="current-password" //현재 사용 중인 비밀번호 명시
+          ></Input>
         </div>
         <div className={styles.member_button_wrap}>
-          <button type="submit">로그인</button>
+          <Button className="btn" type="submit">
+            로그인
+          </Button>
         </div>
         <div className={styles.assist_wrap}>
           <div className={styles.search_info}>
@@ -97,7 +109,7 @@ const Login = () => {
           <p
             className={styles.join_member}
             onClick={() => {
-              navigate("/member/join");
+              navigate("/join");
             }}
           >
             회원가입

@@ -1,0 +1,106 @@
+/*프로필 이미지----------------------------------------------------*/
+.member_thumb,
+.member_thumb_exists {
+  margin-left: 30px;
+  width: 200px;
+  height: 200px;
+  background-color: var(--gray6);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.member_thumb > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.member_thumb_exists {
+  width: 200px;
+  height: 200px;
+  background-color: var(--gray6);
+  border-radius: 50%;
+}
+.member_thumb_exists:hover {
+  border: 2px solid var(--gray6);
+}
+
+.member_thumb_exists > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/*프로필 이미지----------------------------------------------------*/
+
+/*내 정보 전체 인풋 랩 ---------------------------------------------*/
+
+.my_info_wrap > h3 {
+  margin-bottom: 24px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.my_info_wrap > form {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.thumb_and_info_wrap {
+  display: flex;
+}
+
+/*내 정보 전체 인풋 랩 ---------------------------------------------*/
+
+.all_input_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex-grow: 1;
+  margin-right: 80px;
+}
+.input_wrap {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+}
+.input_wrap > label {
+  width: 100px;
+  text-align: right;
+}
+
+.input_wrap > input {
+  flex: 1; /*단축 속성  flex-grow, flex-shrink, flex-basis 포함*/
+  min-width: 0;
+}
+
+.input_addr_wrap button {
+  width: 80px;
+  font-size: 14px;
+}
+
+.btn_wrap {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0px;
+}
+.btn_wrap > button {
+  width: 50%;
+  padding: 12px;
+  font-size: 16px;
+}
+
+/*회원 탈퇴 ---------------------------------------------------------------------------------*/
+.member_out {
+  display: flex;
+  justify-content: right;
+  margin-right: 36px;
+}
+.member_out > p {
+  text-align: right;
+  width: fit-content;
+  color: var(--gray4);
+}
+.member_out > p:hover {
+  border-bottom: 1px solid var(--gray4);
+  cursor: pointer;
+}

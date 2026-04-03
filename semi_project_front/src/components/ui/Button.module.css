@@ -1,41 +1,29 @@
 .btn {
-  cursor: pointer;
-  font-size: 14px;
-  padding: 9px 20px;
+  padding: 6px;
+  width: 20%;
+  font-size: 12px;
+  color: var(--gray8);
   border: none;
-  border-radius: 6px;
+  border-radius: 12px;
+  background-color: var(--color1);
 }
-.primary {
-  background-color: var(--primary);
-  border: 1px solid var(--primary);
+.join-btn {
+  padding: 12px;
+  width: 300px;
   color: var(--gray8);
+  font-size: 16px;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color1);
+  text-align: center;
 }
-.danger {
-  background-color: var(--danger);
-  border: 1px solid var(--danger);
-  color: var(--gray8);
-}
-.primary.outline {
-  background-color: var(--gray8);
-  color: var(--primary);
-}
-.danger.outline {
-  background-color: var(--gray8);
-  color: var(--danger);
-}
-.btn:not(:disabled):hover {
+.join_btn:hover {
+  cursor: pointer;
   filter: brightness(1.1);
 }
-.btn:disabled {
-  opacity: 0.8;
-}
-.sm {
-  padding: 5px 10px;
-  font-family: gs_l;
-  font-size: 12px;
-}
-.lg {
-  padding: 12px 25px;
-  font-size: 16px;
-  border-radius: 25px;
+
+.join_btn_wrap > .join_btn:active {
+  filter: brightness(0.9);
 }
