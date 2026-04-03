@@ -5,6 +5,7 @@
 	<select id="selectBoardList" resultType="board">
 	select 
 		board_no,
+		board_category,
 		board_title,
 		board_thumb,
 		board_writer,

@@ -1,3 +1,5 @@
+import styles from "./Form.module.css";
+
 const Input = (props) => {
   return <input className={styles.input} {...props}></input>;
 };

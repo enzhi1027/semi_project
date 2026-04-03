@@ -16,14 +16,6 @@ public class BoardService {
 	private BoardDao boardDao;
 
 	public ListResponse selectBoardList(ListItem request) {
-	    // 디버깅용 파라미터 출력
-	    System.out.println("status = " + request.getStatus());
-	    System.out.println("category = " + request.getCategory());
-	    System.out.println("searchType = " + request.getSearchType());
-	    System.out.println("searchKeyword = " + request.getSearchKeyword());
-	    System.out.println("page = " + request.getPage());
-	    System.out.println("size = " + request.getSize());
-
 	    Integer totalCount = boardDao.selectBoardCount(request); // DB에서 전체 글 개수
 	    int totalPage = (int) Math.ceil(totalCount / (double) request.getSize()); // 총 페이지 계산
 	    List<Board> list = boardDao.selectBoardList(request); // 목록 조회

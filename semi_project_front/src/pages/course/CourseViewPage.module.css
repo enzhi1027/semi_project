@@ -2,7 +2,6 @@
 .course_view_wrap {
   width: 1200px;
   margin: 0 auto;
-  margin-bottom: 50px;
 }
 
 .page_title {
@@ -42,6 +41,12 @@
   font-size: 20px;
   color: var(--color1);
   text-align: center;
+}
+
+.delete_btn {
+  display: flex;
+  justify-content: end;
+  margin: 32px 0;
 }
 
 /*어트랙션 아이템*/
@@ -91,7 +96,9 @@
   border-radius: 10px;
 }
 .attraction_content {
+  height: 305px;
   overflow: hidden;
+  line-height: 1.6;
 }
 
 /*어트랙션인포아이템*/
@@ -152,11 +159,15 @@
   border-radius: 16px;
 }
 .info_attraction_title {
+  width: 80%;
   position: absolute;
   top: 50%;
-  left: 50%;
+  left: 52%;
+  text-align: center;
   transform: translate(-55%, -50%);
   color: var(--gray8);
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 500;
+  word-break: keep-all;
+  white-space: normal;
 }

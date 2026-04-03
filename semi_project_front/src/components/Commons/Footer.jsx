@@ -19,10 +19,10 @@ const Footer = () => {
             <h4 className={styles.footer_title}>빠른링크</h4>
             <ul className={styles.footer_ul}>
               <li>
-                <Link to="/">생태관광지</Link>
+                <Link to="/attraction/list">생태관광지</Link>
               </li>
               <li>
-                <Link to="/">관광코스</Link>
+                <Link to="/course/list">관광코스</Link>
               </li>
               <li>
                 <Link to="/">커뮤니티</Link>
