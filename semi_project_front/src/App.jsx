@@ -15,6 +15,7 @@ import useAuthStore from "./components/utils/useAuthStore";
 import axios from "axios";
 import BoardListPage from "./pages/board/BoardListPage";
 import BoardWritePage from "./pages/board/BoardWritePage";
+import NaverSearch from "./pages/board/NaverSearch";
 import CourseWritePage from "./pages/course/CourseWritePage";
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
             <Route path="/mypage/*" element={<Mypage />} />
             <Route path="/board/list" element={<BoardListPage />} />
             <Route path="/board/write" element={<BoardWritePage />} />
+            <Route path="/boardNavermap" element={<NaverSearch />} />
           </Routes>
         </div>
         <Footer />

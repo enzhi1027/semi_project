@@ -6,28 +6,27 @@
   padding: 32px;
 }
 
-.board_list_pagination {
-  margin-top: 30px;
+.page_title {
+  text-align: center;
+  width: 100%;
+  font-weight: 700;
+  font-size: 28px;
+  margin: 10px 0 50px;
 }
 
-/* 전체 옵션 영역 */
-.list_option_wrap {
-  margin-top: 32px;
+/* 카테고리 & 지도 영역 (게시글 작성용) */
+.category_wrap {
+  width: 800px;
+  margin: 0 auto 16px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 
-/* 왼쪽 묶음 (카테고리 + 검색) */
-.left_option {
+.select_wrap {
   display: flex;
   align-items: center;
-}
-
-/* 오른쪽 (최신순) */
-.right_option {
-  display: flex;
-  align-items: center;
+  gap: 4px; /* 요소 간 밀착 */
 }
 
 .select {
@@ -35,16 +34,67 @@
   appearance: none;
   width: 80px;
   text-align: center;
-  text-align-last: center;
-  background-position: right 8px center;
   padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-.select option {
-  text-align: center;
+/* 지도 아이콘 스타일 */
+.location_icon {
+  font-size: 30px;
+  color: var(--color1);
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
 }
 
-/* 검색 영역 */
+.location_icon:hover {
+  transform: scale(1.1);
+}
+
+/* 비활성화된 아이콘 (Review 카테고리일 때 적용) */
+.disabled_icon {
+  color: var(--gray6) !important;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled_icon:hover {
+  transform: none;
+}
+
+/* 선택된 장소 이름 (마커 옆에 밀착 및 선 제거) */
+.selected_place_name {
+  font-size: 15px;
+  color: var(--color1);
+  font-weight: 700;
+  background-color: transparent;
+  padding: 0;
+  border: none;
+  margin-left: -2px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* 게시판 목록용 옵션 영역 (기존 유지) */
+.list_option_wrap {
+  margin-top: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.left_option {
+  display: flex;
+  align-items: center;
+}
+
+.right_option {
+  display: flex;
+  align-items: center;
+}
+
 .search_wrap {
   display: flex;
   gap: 4px;
@@ -59,45 +109,25 @@
   width: 80px;
 }
 
+.board_list_pagination {
+  margin-top: 30px;
+}
+
 .write_btn_zone {
   display: flex;
   justify-content: flex-end;
   margin: 12px 0px;
 }
 
+/* 작성 페이지 하단 버튼 영역 */
 .btn_wrap {
   width: 800px;
   margin: 50px auto;
 }
 
 .btn_wrap > button {
-  width: 100%;
-}
-
-/* 게시글 작성 제목 중앙정렬 */
-.page_title {
-  text-align: center;
-  width: 100%;
-  margin-bottom: 20px;
-  font-weight: 700;
-  font-size: 28px;
-  margin: 10px 0 50px;
-}
-/* 카테고리 선택박스 영역 (제목 위) */
-.category_wrap {
-  width: 800px;
-  margin: 0 auto 16px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.select_wrap {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.location_icon {
-  font-size: 30px;
-  color: var(--color1);
+  width: 100% !important;
+  height: 50px !important;
+  font-size: 18px !important;
+  border-radius: 12px !important;
 }
