@@ -41,7 +41,7 @@ const Header = () => {
           {memberId ? (
             <>
               <div className={styles.member}>
-                <Link to="/member/mypage">
+                <Link to="/mypage">
                   <AccountCircleIcon sx={{ fontSize: 32, color: "#fff" }} />
                   <p>마이페이지</p>
                 </Link>

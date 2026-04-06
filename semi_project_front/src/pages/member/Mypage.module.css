@@ -47,12 +47,25 @@
 .side_menu {
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  font-size: 20px;
+  margin-left: 12px;
 }
+
+.side_menu > a {
+  text-decoration: none;
+}
+.side_menu > a:hover {
+  text-decoration: underline;
+}
+
+/*썸네일 관련-----------------------------------*/
 .member_profile_side {
   display: flex;
   flex-direction: column;
   gap: 12px;
   align-items: center;
+  margin: 16px;
 }
 .member_thumb {
   width: 140px;
@@ -69,8 +82,8 @@
   padding: 16px 16px 0 16px;
 }
 .member_thumb > img {
-  width: 110%;
-  height: 110%;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   margin-bottom: -8px;
 }
@@ -86,4 +99,24 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+/*관리자 관련 -----------------------------------*/
+.admin_line {
+  margin-top: 24px;
+}
+
+.admin_line > ul {
+  list-style-type: none;
+}
+.admin_line > ul:hover {
+  cursor: default;
+}
+.admin_line > ul > li {
+  margin: 12px;
+}
+.admin_line > ul > li > a {
+  text-decoration: none;
+}
+.admin_line > ul > li > a:hover {
+  text-decoration: underline;
 }

@@ -7,11 +7,14 @@
   background-color: var(--gray6);
   border-radius: 50%;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
 }
 .member_thumb > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  margin-bottom: -16px;
 }
 
 .member_thumb_exists {
@@ -34,7 +37,7 @@
 /*내 정보 전체 인풋 랩 ---------------------------------------------*/
 
 .my_info_wrap > h3 {
-  margin-bottom: 24px;
+  margin: 24px 0px;
   font-size: 24px;
   text-align: center;
 }

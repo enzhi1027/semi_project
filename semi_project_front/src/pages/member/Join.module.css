@@ -49,12 +49,19 @@
 
 /*이메일 전송 ----------------------------------- */
 .email_check {
+  display: flex;
+  flex-direction: column;
+}
+.email_check > div {
   justify-content: center;
   display: flex;
   gap: 12px;
 }
 .email_check > input {
   flex-grow: 1;
+}
+.dup_false {
+  color: red;
 }
 
 /*이메일 인증 ---------------------------------------*/

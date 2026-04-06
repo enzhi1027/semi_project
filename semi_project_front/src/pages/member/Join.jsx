@@ -43,10 +43,20 @@ const Join = () => {
   const [checkId, setCheckId] = useState(0);
 
   const idDupCheck = () => {
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+    const pwValue = member.memberPw;
+
     if (member.memberId === "") {
+      //공백일 때
       setCheckId(3);
       return;
     }
+
+    if (!pwRegex.test(pwValue)) {
+      setCheckPw(4);
+      return;
+    }
+
     axios
       .get(
         `${import.meta.env.VITE_BACKSERVER}/members/exists?memberId=${member.memberId}`,
@@ -79,57 +89,19 @@ const Join = () => {
     }
   };
   //비밀번호 중복 체크---------------------------------------
-  //전화번호 중복 체크----------------------------------------
-  // 0 : 확인 전, 1 : 중복, 2 : 사용 가능 3 : 공백
-  const [checkPhone, setCheckPhone] = useState(0);
 
-  const phoneDupCheck = () => {
-    if (member.memberPhone === "") {
-      setCheckPhone(3);
-      return;
-    }
-
-    axios(
-      `${import.meta.env.VITE_BACKSERVER}/members/exists?memberPhone=${member.memberPhone}`,
-    )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  //전화번호 중복 체크----------------------------------------
-  /*
-        
-        
-  //이메일 중복 체크----------------------------------------------
-  const [checkEmail, setCheckEmail] = useState(0);
-  const EmailDupCheck = () => {
-    axios(
-      `${import.meta.env.VITE_BACKSERVER}/members/exists?memberEmail=${member.memberEmail}`,
-    )
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  //이메일 중복 체크----------------------------------------------
-*/
   //회원 가입 ----------------------------------------------------
   const joinMember = () => {
     if (
       checkId !== 2 ||
       checkPw !== 1 ||
-      //checkPhone !== 2 ||
-      //checkEmail !== 3 ||
+      checkPhone !== 2 ||
+      checkEmail !== 3 ||
       member.memberAddr === "" ||
       member.memberName === ""
     ) {
       Swal.fire({
-        title: "올바른 정보를 입력해 주세요!",
+        title: "모든 정보, 혹은 올바른 정보를 입력해 주세요!",
         icon: "warning",
         confirmButtonColor: "var(--color1)",
       });
@@ -154,6 +126,68 @@ const Join = () => {
       });
   };
   //회원 가입 ----------------------------------------------------
+
+  //전화번호 중복 체크----------------------------------------
+  // 0 : 확인 전, 1 : 중복, 2 : 사용 가능 3 : 공백
+  const [checkPhone, setCheckPhone] = useState(0);
+
+  const phoneDupCheck = () => {
+    if (member.memberPhone === "") {
+      setCheckPhone(3);
+      return;
+    }
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/members/exists/phone?memberPhone=${member.memberPhone}`,
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data) {
+          setCheckPhone(1);
+        } else {
+          setCheckPhone(2);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //이메일 중복 체크----------------------------------------------
+  //조회 전 : 0 / 중복 : 1 / 사용 가능 : 2 / 공백 : 3 / 검사 로직 불통 : 4
+
+  const [checkEmail, setCheckEmail] = useState(0);
+  const EmailDupCheck = () => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const emailValue = member.memberEmail;
+
+    if (!member.memberEmail || member.memberEmail.trim() === "") {
+      setCheckEmail(3);
+      return;
+    }
+
+    //정규표현식 검사 로직
+    if (!emailRegex.test(emailValue)) {
+      setCheckEmail(4);
+      return;
+    }
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/members/exists/email?memberEmail=${member.memberEmail}`,
+      )
+      .then((res) => {
+        console.log(res);
+        if (res.data) {
+          setCheckEmail(1); //중복
+        } else {
+          setCheckEmail(2); //사용 가능
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  //이메일 중복 체크----------------------------------------------
 
   //이메일 인증 -----------------------------------------------------
 
@@ -256,7 +290,7 @@ const Join = () => {
                     : styles.check_msg + " " + styles.invalid
                 }
               >
-                {checkId == 2 && "사용 가능한 아이디입니다."}
+                {checkId == 2 && "사용 가능한 아이디입니다!"}
                 {checkId == 1 && "이미 사용 중인 아이디입니다."}
                 {checkId == 3 && "아이디를 입력해주세요."}
               </p>
@@ -268,7 +302,7 @@ const Join = () => {
               type="password"
               name="memberPw"
               id="memberPw"
-              placeholder="비밀번호"
+              placeholder="비밀번호 / 8자리 이상/대소문자,숫자,특수문자 포함"
               onChange={inputMember}
               autoComplete="new-password"
             />
@@ -311,6 +345,7 @@ const Join = () => {
               placeholder="이름"
               onChange={inputMember}
             />
+            {member.memberName === "" ? <p>이름을 입력해주세요.</p> : null}
           </div>
 
           <div className={styles.input_wrap}>
@@ -318,38 +353,51 @@ const Join = () => {
               type="text"
               name="memberPhone"
               id="memberPhone"
-              placeholder="전화번호"
+              placeholder="전화번호/ - 포함 : 010-0000-0000"
               onChange={inputMember}
               onBlur={phoneDupCheck}
             />
-            {checkPhone > 0 && (
-              <p
-                className={
-                  checkPhone === 2
-                    ? styles.check_msg
-                    : styles.check_msg + " " + styles.invalid
-                }
-              >
-                {checkPhone == 2 && "사용 가능한 전화번호입니다."}
-                {checkPhone == 1 && "이미 사용 중인 전화번호입니다."}
-                {checkPhone == 3 && "전화번호를 입력해주세요."}
-              </p>
+            {checkPhone === 1 && (
+              <p className={styles.dup_false}>이미 사용 중인 전화번호입니다.</p>
+            )}
+            {checkPhone === 2 && (
+              <p className={styles.dup_ture}>사용 가능한 전화번호입니다!</p>
+            )}
+            {checkPhone === 3 && (
+              <p className={styles.dup_false}>전화번호를 입력해주세요.</p>
             )}
           </div>
 
           {/*메일 입력(전송)---------------------------------------- */}
           <div className={`${styles.input_wrap} ${styles.email_check}`}>
-            <Input
-              type="text"
-              name="memberEmail"
-              id="memberEmail"
-              placeholder="이메일"
-              value={member.memberEmail}
-              onChange={inputMember}
-            />
-            <Button className="btn" type="button" onClick={sendMail}>
-              메일 전송
-            </Button>
+            <div>
+              <Input
+                type="text"
+                name="memberEmail"
+                id="memberEmail"
+                placeholder="이메일"
+                value={member.memberEmail}
+                onBlur={EmailDupCheck}
+                onChange={inputMember}
+              />
+              <Button className="btn" type="button" onClick={sendMail}>
+                메일 전송
+              </Button>
+            </div>
+            {checkEmail === 1 && (
+              <p className={styles.dup_false}>이미 사용 중인 이메일입니다.</p>
+            )}
+            {checkEmail === 2 && (
+              <p className={styles.dup_true}>사용 가능한 이메일입니다!</p>
+            )}
+            {checkEmail === 3 && (
+              <p className={styles.dup_false}>이메일을 입력해주세요.</p>
+            )}
+            {checkEmail === 4 && (
+              <p className={styles.dup_false}>
+                형식에 맞는 이메일을 작성해주세요.
+              </p>
+            )}
           </div>
           {/*메일 입력(인증)---------------------------------------- */}
           {mailAuth > 1 && ( //메일을 받았을 때만 나타날 수 있도록 해줌

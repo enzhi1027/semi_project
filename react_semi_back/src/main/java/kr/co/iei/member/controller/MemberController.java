@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -132,5 +133,38 @@ public class MemberController {
 		int result = memberService.updateMember(member);
 		return ResponseEntity.ok(result);
 	}
+	
+	//유저 정보 삭제 ---------------------------------------------------------------
+	@DeleteMapping(value = "/{memberId}")
+	public ResponseEntity<?> deleteMember(@PathVariable String memberId){
+		int result = memberService.deleteMember(memberId);
+		return ResponseEntity.ok(result);
+	}
+	
+	//유저 비밀번호 체크 -------------------------------------------------------------
+	@PostMapping(value = "/check-pw")
+	public ResponseEntity<?> checkPw(@RequestBody Member m){
+		//비밀번호 일치 여부만 따지면 되니까 bollean타입
+		boolean result = memberService.checkPw(m);
+		return ResponseEntity.ok(result);
+	}
+	//유저 비밀번호 변경 -------------------------------------------------------------
+	@PatchMapping(value = "/pw")
+	public ResponseEntity<?> changePw(@RequestBody Member m) {
+		int result = memberService.updateMemberPw(m);
+		return ResponseEntity.ok(result);
+	}
+	//이메일 중복 체크 -------------------------------------------------------------
+	@GetMapping(value = "/exists/email")
+	public ResponseEntity<?> dupCheckEmail(@RequestParam String memberEmail){
+		Member m = memberService.selectOneMemberEmail(memberEmail);
+		return ResponseEntity.ok(m);
+	}
+	@GetMapping(value = "/exists/phone")
+	public ResponseEntity<?> dupCheckPhone(@RequestParam String memberPhone){
+		Member m = memberService.selectOneMemberPhone(memberPhone);
+		return ResponseEntity.ok(m);
+	}
+	
 	
 }

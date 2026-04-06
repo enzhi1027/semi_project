@@ -25,6 +25,7 @@ const MyInfo = () => {
       });
   }, []);
 
+  //회원 탈퇴 -------------------------------------------------------------
   const outMember = () => {
     Swal.fire({
       title: "회원 탈퇴",
@@ -33,8 +34,47 @@ const MyInfo = () => {
       showCancelButton: true,
       cancelButtonText: "닫기",
       confirmButtonText: "탈퇴하기",
+      cancelButtonColor: "var(--color1)",
+      confirmButtonColor: "var(--gray4)",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        Swal.fire({
+          title:
+            "탈퇴 시 회원 정보가 모두 삭제되며 <br>추후 복구가 불가합니다.",
+          text: "정말로 탈퇴하시겠습니까?",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: "닫기",
+          confirmButtonText: "탈퇴하기",
+          cancelButtonColor: "var(--color1)",
+          confirmButtonColor: "var(--gray4)",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            axios
+              .delete(`${import.meta.env.VITE_BACKSERVER}/members/${memberId}`)
+              .then((res) => {
+                console.log(res);
+                if (res.data === 1) {
+                  useAuthStore.getState().logout();
+                  delete axios.defaults.headers.common["Authorization"];
+                  Swal.fire({
+                    title: "회원 탈퇴가 정상적으로<br>처리되었습니다.",
+                    text: "그동안 감사했습니다! 언젠가 다시 만나요!",
+                    icon: "success",
+                  }).then((res) => {
+                    navigate("/");
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+        });
+      }
     });
   };
+  //회원 탈퇴 -------------------------------------------------------------
 
   return (
     member && (

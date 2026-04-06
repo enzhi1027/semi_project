@@ -35,4 +35,22 @@
 			member_addr_detail = #{memberAddrDetail}
 		where member_id = #{memberId}
 	</update>
+	
+	<delete id="deleteMember">
+		delete from member_tbl where member_id = #{memberId}
+	</delete>
+	
+	<update id="updateMemberPw">
+		update member_tbl set
+			member_pw = #{memberPw}
+		where member_id = #{memberId}
+	</update>
+	
+	<select id="selectOneMemberEmail" resultType="member">
+		select * from member_tbl where member_email = #{memberEmail}
+	</select>
+	
+	<select id="selectOneMemberPhone" resultType="member">
+		select * from member_tbl where member_phone = #{memberPhone}
+	</select>
 </mapper>
