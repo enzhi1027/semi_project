@@ -43,6 +43,7 @@ const MenuBar = ({ editor }) => {
   if (!editor) {
     return null;
   }
+
   const addImage = () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -54,7 +55,6 @@ const MenuBar = ({ editor }) => {
       if (!file) {
         return;
       }
-      //선택한 이미지를 백엔드서버에 업로드하고, 파일이름을 받아옴
       const form = new FormData();
       form.append('image', file);
       axios
@@ -64,7 +64,6 @@ const MenuBar = ({ editor }) => {
           },
         })
         .then((res) => {
-          console.log(res);
           const imageUrl = `${import.meta.env.VITE_BACKSERVER}/editor/${res.data}`;
           editor.chain().focus().setImage({ src: imageUrl }).run();
         })
@@ -73,6 +72,7 @@ const MenuBar = ({ editor }) => {
         });
     };
   };
+
   return (
     <div className={styles.menu_bar}>
       <button
@@ -116,7 +116,17 @@ const MenuBar = ({ editor }) => {
       <button type="button" onClick={addImage}>
         Image
       </button>
+
+      {/* --- 되돌리기 버튼 추가 --- */}
+      <button
+        type="button"
+        onClick={() => editor.chain().focus().undo().run()}
+        disabled={!editor.can().undo()} // 되돌릴 내용이 없을 때 버튼 비활성화 (선택 사항)
+      >
+        Undo
+      </button>
     </div>
   );
 };
+
 export default TextEditor;

@@ -1,21 +1,21 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import styles from "./Commons.module.css";
-import LoginIcon from "@mui/icons-material/Login";
-import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import styles from './Commons.module.css';
+import LoginIcon from '@mui/icons-material/Login';
+import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
-import LogoutIcon from "@mui/icons-material/Logout";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import useAuthStore from "../utils/useAuthStore";
-import axios from "axios";
+import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import useAuthStore from '../utils/useAuthStore';
+import axios from 'axios';
 
 const Header = () => {
   const location = useLocation();
-  const mainPage = location.pathname === "/";
+  const mainPage = location.pathname === '/';
   const { memberId } = useAuthStore();
   const navigate = useNavigate();
   const logout = () => {
     useAuthStore.getState().logout();
-    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common['Authorization'];
   };
   return (
     <>
@@ -32,7 +32,7 @@ const Header = () => {
               <Link to="/course/list">관광코스</Link>
             </li>
             <li>
-              <Link to="/">커뮤니티</Link>
+              <Link to="/board/list">커뮤니티</Link>
             </li>
             <li>
               <Link to="/">투어상품</Link>
@@ -42,7 +42,7 @@ const Header = () => {
             <>
               <div className={styles.member}>
                 <Link to="/member/mypage">
-                  <AccountCircleIcon sx={{ fontSize: 32, color: "#fff" }} />
+                  <AccountCircleIcon sx={{ fontSize: 32, color: '#fff' }} />
                   <p>마이페이지</p>
                 </Link>
                 <div className={styles.logout} onClick={logout}>
