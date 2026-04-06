@@ -1,4 +1,3 @@
-
 import "./App.css";
 import "./font.css";
 import { Route, Routes } from "react-router-dom";
@@ -15,7 +14,8 @@ import CourseViewPage from "./pages/course/CourseViewPage";
 import useAuthStore from "./components/utils/useAuthStore";
 import axios from "axios";
 import BoardListPage from "./pages/board/BoardListPage";
-import BoardWritePage from './pages/board/BoardWritePage';
+import BoardWritePage from "./pages/board/BoardWritePage";
+import CourseWritePage from "./pages/course/CourseWritePage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -47,6 +47,7 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/course/list" element={<CourseListPage />} />
             <Route path="/course/view/:courseNo" element={<CourseViewPage />} />
+            <Route path="/course/write" element={<CourseWritePage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
 
             <Route path="/login" element={<Login />} />

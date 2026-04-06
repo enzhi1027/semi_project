@@ -38,7 +38,6 @@ public class CourseController {
 	@GetMapping(value="/{courseNo}")
 	public ResponseEntity<?> selectCourseAttractionList(@PathVariable int courseNo){
 		List<CourseAttractionList> list = courseService.selectCourseAttractionList(courseNo);
-		System.out.println(list);
 		return ResponseEntity.ok(list);
 	}
 	

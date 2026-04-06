@@ -25,7 +25,7 @@ const Footer = () => {
                 <Link to="/course/list">관광코스</Link>
               </li>
               <li>
-                <Link to="/">커뮤니티</Link>
+                <Link to="/board/list">커뮤니티</Link>
               </li>
               <li>
                 <Link to="/">투어상품</Link>
