@@ -14,5 +14,13 @@ public interface MemberDao {
 	int updateMemberThumb(Member m);
 
 	int updateMember(Member member);
+
+	int deleteMember(String memberId);
+
+	int updateMemberPw(Member m);
+
+	Member selectOneMemberEmail(String memberEmail);
+
+	Member selectOneMemberPhone(String memberPhone);
 	
 }

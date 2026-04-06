@@ -1,6 +1,6 @@
-import styles from './BoardFrm.module.css';
-import TextEditor from '../ui/TextEditor';
-import { Input } from '../ui/Form';
+import styles from "./BoardFrm.module.css";
+import TextEditor from "../ui/TextEditor";
+import { Input } from "../ui/Form";
 
 const BoardFrm = ({
   board, //게시글 데이터(제목, 내용..)

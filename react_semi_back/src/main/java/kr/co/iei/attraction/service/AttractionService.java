@@ -65,8 +65,7 @@ public class AttractionService {
 	public AttractionListResponse selectAttractionList(AttractionListItem request) {
 		Integer totalCount = dao.selectAttractionCount(request);
 		int totalPage = (int) Math.ceil(totalCount / (double) request.getSize());
-		AttractionListResponse response = new AttractionListResponse(dao.selectAttractionList(request), 1);
-		
+		AttractionListResponse response = new AttractionListResponse(dao.selectAttractionList(request), totalPage);
 		return response;
 	}
 

@@ -34,8 +34,9 @@
 }
 
 body {
-  background-color: var(--color4);
+  background-color: var(--gray8);
 }
+
 .wrap {
   min-height: 100vh;
   display: flex;
@@ -43,4 +44,37 @@ body {
 }
 .main {
   flex-grow: 1;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid var(--border);
+  border-radius: 3px;
+  background-color: var(--gray8);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color2);
+  border-color: var(--color2);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "";
+  width: 4px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-bottom: 2px;
 }

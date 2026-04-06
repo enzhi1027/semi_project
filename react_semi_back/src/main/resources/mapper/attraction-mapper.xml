@@ -76,25 +76,50 @@
 	</insert>
 	
 	<select id="selectAttractionList" resultType="attraction">
-		SELECT ATTRACTION_ADDR
-			 , ATTRACTION_THUMBNAIL
-			 , ATTRACTION_SUMMARY
-			 , ATTRACTION_HOLIDAY
-			 , ATTRACTION_DESIGNATION
-			 , ATTRACTION_FEE
-			 , ATTRACTION_RESTROOM
-			 , ATTRACTION_ACCESSIBLE
-			 , ATTRACTION_PARKING
-			 , ATTRACTION_PHONE
-			 , ATTRACTION_TITLE
-		  FROM TEST_ATTRACTION_TBL
-          JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
-          JOIN AREA_TBL USING (AREA_NO)
-		 WHERE AREA_CODE = #{areaCode}
-		   AND SIGUNGU_CODE = #{sigunguCode}
-		   AND ATTRACTION_TITLE LIKE '%' || #{searchKeyword} || '%'
-		 ORDER
-		    BY ATTRACTION_NO
+    	SELECT ATTRACTION_ADDR
+	         , ATTRACTION_THUMBNAIL
+	         , ATTRACTION_SUMMARY
+	         , ATTRACTION_HOLIDAY
+	         , ATTRACTION_DESIGNATION
+	         , ATTRACTION_FEE
+	         , ATTRACTION_RESTROOM
+	         , ATTRACTION_ACCESSIBLE
+	         , ATTRACTION_PARKING
+	         , ATTRACTION_PHONE
+	         , ATTRACTION_TITLE
+          FROM TEST_ATTRACTION_TBL
+	      JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
+	      JOIN AREA_TBL USING (AREA_NO)
+	     <where>
+		    AND AREA_CODE = #{areaCode}
+			<choose>
+				 <when test="checkedItems != null and checkedItems.size != 0">
+					 AND SIGUNGU_NO IN
+					 <foreach collection="checkedItems" item="item" open="(" close=")" separator=",">
+						 #{item}
+					 </foreach>
+				 </when>
+				 <otherwise>
+					 AND SIGUNGU_NO = 0
+				 </otherwise>
+			 </choose>
+			 <if test="searchKeyword != null and searchKeyword != ''">
+				 AND ATTRACTION_TITLE LIKE '%' || #{searchKeyword} || '%'
+			 </if>
+			 <if test="fee">
+			 	 AND ATTRACTION_FEE LIKE '%무료%'
+			 </if>
+			 <if test="restroom">
+			 	 AND ATTRACTION_RESTROOM LIKE '%있음%'
+			 </if>
+			 <if test="accessible">
+			 	 AND ATTRACTION_ACCESSIBLE NOT LIKE '%없음%'
+			 </if>
+			 <if test="parking">
+			 	 AND NOT REGEXP_LIKE(ATTRACTION_PARKING, '불가|없음')
+			 </if>
+		 </where>
+	     ORDER BY ATTRACTION_NO
 	    OFFSET #{page} * #{size} ROWS FETCH NEXT #{size} ROWS ONLY
 	</select>
 	
@@ -103,8 +128,35 @@
 		  FROM TEST_ATTRACTION_TBL
 		  JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
           JOIN AREA_TBL USING (AREA_NO)
-		 WHERE AREA_CODE = #{areaCode}
-		   AND SIGUNGU_CODE = #{sigunguCode}
+		 <where>
+		    AND AREA_CODE = #{areaCode}
+			<choose>
+				 <when test="checkedItems != null and checkedItems.size != 0">
+					 AND SIGUNGU_NO IN
+					 <foreach collection="checkedItems" item="item" open="(" close=")" separator=",">
+						 #{item}
+					 </foreach>
+				 </when>
+				 <otherwise>
+					 AND SIGUNGU_NO = 0
+				 </otherwise>
+			 </choose>
+			 <if test="searchKeyword != null and searchKeyword != ''">
+				 AND ATTRACTION_TITLE LIKE '%' || #{searchKeyword} || '%'
+			 </if>
+			 <if test="fee">
+			 	 AND ATTRACTION_FEE LIKE '%무료%'
+			 </if>
+			 <if test="restroom">
+			 	 AND ATTRACTION_RESTROOM LIKE '%있음%'
+			 </if>
+			 <if test="accessible">
+			 	 AND ATTRACTION_ACCESSIBLE NOT LIKE '%없음%'
+			 </if>
+			 <if test="parking">
+			 	 AND NOT REGEXP_LIKE(ATTRACTION_PARKING, '불가|없음')
+			 </if>
+		 </where>
 		   AND ATTRACTION_TITLE LIKE '%' || #{searchKeyword} || '%'
 	</select>
 	

@@ -14,20 +14,26 @@ import LikeContent from "../../components/mypage/LikeContent";
 import MyActive from "../../components/mypage/MyActive";
 import Mypayment from "../../components/mypage/MyPayment";
 import userImg from "../../assets/img/mainPage/user.png";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
+import AdminContent from "../../components/admin/AdminContent";
+import AdminTour from "../../components/Admin/AdminTour";
 
 const Mypage = () => {
   const { memberId, isReady } = useAuthStore();
   const navigate = useNavigate();
   //아이디가 있고 isReady가 true일 때만 동작
-  if (isReady && memberId == null) {
-    Swal.fire({ title: "로그인 후 이용 가능합니다.", icon: "warning" }).then(
-      () => {
-        navigate("/login");
-      },
-    );
-  }
+
+  useEffect(() => {
+    // isReady가 true인데 memberId가 없다면 로그인이 안 된 상태
+    if (isReady && memberId == null) {
+      Swal.fire({ title: "로그인 후 이용 가능합니다.", icon: "warning" }).then(
+        () => {
+          navigate("/login");
+        },
+      );
+    }
+  }, [isReady, memberId, navigate]);
   return (
     isReady &&
     memberId && (
@@ -35,7 +41,6 @@ const Mypage = () => {
         <h3 className={styles.mypage_title}>마이페이지</h3>
         <div className={styles.mypage_menu_wrap}>
           <div className={styles.mypage_aside}>
-            <h3>메뉴</h3>
             <MemberProfileSide />
             <SideMenu />
           </div>
@@ -65,6 +70,12 @@ const Mypage = () => {
               />
               <Route path="myactive" element={<MyActive /> /*내 활동 관리 */} />
               <Route path="mypayment" element={<Mypayment /> /*결제 내역 */} />
+              <Route path="admincontent" element={<AdminContent />} />
+              <Route
+                path="admintour"
+                element={<AdminTour /> /*투어 상품 관리 */}
+              />
+              /
             </Routes>
           </div>
         </div>
@@ -140,6 +151,37 @@ const SideMenu = () => {
       >
         결제 내역
       </NavLink>
+
+      {/*관리자 전용 --------------------------------------------------- */}
+      {memberGrade === 1 && (
+        <>
+          <div className={styles.admin_line}>
+            <ul>
+              관리자 전용
+              <li>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? styles.active_menu : ""
+                  }
+                  to="/mypage/admincontent"
+                >
+                  회원, 게시글 관리
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? styles.active_menu : ""
+                  }
+                  to="/mypage/admintour"
+                >
+                  투어 상품 관리
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 };
