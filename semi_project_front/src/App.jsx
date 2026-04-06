@@ -49,7 +49,6 @@ function App() {
             <Route path="/course/view/:courseNo" element={<CourseViewPage />} />
             <Route path="/course/write" element={<CourseWritePage />} />
             <Route path="/attraction/list" element={<AttractionSearchPage />} />
-
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/mypage/*" element={<Mypage />} />

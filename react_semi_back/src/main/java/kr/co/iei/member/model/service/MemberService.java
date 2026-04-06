@@ -50,15 +50,47 @@ public class MemberService {
 		return result;
 	}
 	//회원가입----------------------------------------------------------------
-
+	@Transactional
 	public int updateMemberThumb(Member m) {
 		int result = memberDao.updateMemberThumb(m);
 		return result;
 	}
-
+	@Transactional
 	public int updateMember(Member member) {
 		int result = memberDao.updateMember(member);
 		return result;
+	}
+	@Transactional
+	public int deleteMember(String memberId) {
+		int result = memberDao.deleteMember(memberId);
+		return result;
+	}
+
+	public boolean checkPw(Member m) {
+		//비밀번호 암호화 되어 있어서 로직 다름
+		//아이디 먼저 조회
+		Member member = memberDao.selectOneMember(m.getMemberId());
+		return bcrypt.matches(m.getMemberPw(), member.getMemberPw());
+							//입력받은 패스워드			//암호화된 패스워드
+	}
+	
+	@Transactional
+	public int updateMemberPw(Member m) {
+		//그냥 업데이트 X	반드시 암호화해서 업데이트 해야 함.
+		String encPw = bcrypt.encode(m.getMemberPw());
+		m.setMemberPw(encPw);
+		int result = memberDao.updateMemberPw(m);
+		return result;
+	}
+	
+	public Member selectOneMemberEmail(String memberEmail) {
+		Member m = memberDao.selectOneMemberEmail(memberEmail);
+		return m;
+	}
+
+	public Member selectOneMemberPhone(String memberPhone) {
+		Member m = memberDao.selectOneMemberPhone(memberPhone);
+		return m;
 	}
 	
 	
