@@ -1,5 +1,7 @@
 package kr.co.iei.attraction.model.vo;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,8 +15,10 @@ public class AttractionListItem {
 	private String areaCode;
 	private String sigunguCode;
 	private String searchKeyword;
+	private String holiday;
 	private Integer fee;
 	private Integer restroom;
 	private Integer accessible;
 	private Integer parking;
+	private List<String> checkedItems;
 }

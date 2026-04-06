@@ -13,35 +13,6 @@
   font-size: 28px;
   font-weight: 600;
 }
-.course_info_wrap {
-  height: 525px;
-  display: flex;
-  gap: 24px;
-}
-.course_info {
-  width: 380px;
-  overflow: auto;
-}
-.course_map {
-  flex-grow: 1;
-  border: 2px solid var(--color1);
-  border-radius: 10px;
-}
-.marker {
-  width: 25px;
-  height: 23px;
-  border: 2px solid var(--color1);
-  background-color: var(--gray8);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.marker > p {
-  font-size: 20px;
-  color: var(--color1);
-  text-align: center;
-}
 
 .delete_btn {
   display: flex;
@@ -99,75 +70,4 @@
   height: 305px;
   overflow: hidden;
   line-height: 1.6;
-}
-
-/*어트랙션인포아이템*/
-.info_item_wrap {
-  display: flex;
-  gap: 16px;
-}
-.attraction_index {
-  width: 50px;
-  position: relative;
-}
-.index_bar {
-  width: 3px;
-  height: 100%;
-  background-color: var(--color1);
-  position: absolute;
-  left: 50%;
-  z-index: 1;
-}
-.index_num {
-  width: 35px;
-  height: 33px;
-  border: 3px solid var(--color1);
-  background-color: var(--gray8);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  left: 18%;
-  top: 42%;
-  z-index: 2;
-}
-.index_num > p {
-  font-size: 24px;
-  color: var(--color1);
-  text-align: center;
-}
-.attraction_img_wrap {
-  width: 270px;
-  height: calc((500px - 48px) / 3);
-  position: relative;
-  margin: 12px 0;
-}
-.attraction_img_wrap > img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-}
-.img_back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 16px;
-}
-.info_attraction_title {
-  width: 80%;
-  position: absolute;
-  top: 50%;
-  left: 52%;
-  text-align: center;
-  transform: translate(-55%, -50%);
-  color: var(--gray8);
-  font-size: 20px;
-  font-weight: 500;
-  word-break: keep-all;
-  white-space: normal;
 }
