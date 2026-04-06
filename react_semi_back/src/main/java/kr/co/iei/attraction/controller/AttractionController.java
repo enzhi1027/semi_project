@@ -39,6 +39,7 @@ public class AttractionController {
 	
 	@GetMapping
 	public ResponseEntity<?> selectAttractionList(@ModelAttribute AttractionListItem request) {
+		request.setSearchKeyword(request.getSearchKeyword().trim());
 		AttractionListResponse response = service.selectAttractionList(request);
 
 		return ResponseEntity.ok(response);

@@ -5,13 +5,14 @@
 }
 
 .pagination_wrap > button {
-  padding: 4px;
+  padding: 2px;
   cursor: pointer;
   border: none;
   background-color: var(--gray8);
   color: var(--text2);
   border-radius: 4px;
-  min-width: 38px;
+  min-width: 28px;
+  font-size: 1em;
 }
 
 .pagination_wrap > .active,
