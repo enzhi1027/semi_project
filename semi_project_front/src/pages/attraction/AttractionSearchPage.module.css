@@ -1,36 +1,3 @@
-input[type="checkbox"] {
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  width: 15px;
-  height: 15px;
-  border: 1.5px solid var(--border);
-  border-radius: 3px;
-  background-color: var(--gray8);
-  cursor: pointer;
-  outline: none;
-  transition: all 0.2s;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-input[type="checkbox"]:checked {
-  background-color: var(--color2);
-  border-color: var(--color2);
-}
-
-input[type="checkbox"]:checked::after {
-  content: "";
-  width: 4px;
-  height: 6px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  margin-bottom: 2px;
-}
-
 .attraction_search_wrap {
   width: 1200px;
   margin: 0 auto;
@@ -91,7 +58,7 @@ input[type="checkbox"]:checked::after {
 
 .menubar .select_where .select_where_content {
   display: flex;
-  width: 650px;
+  width: 726px;
   background-color: var(--gray8);
   border-radius: 20px;
   position: absolute;
@@ -101,7 +68,7 @@ input[type="checkbox"]:checked::after {
 
 .menubar .select_where .select_where_content_areas {
   display: flex;
-  width: 35%;
+  width: 30%;
   flex-wrap: wrap;
 }
 
@@ -158,21 +125,27 @@ input[type="checkbox"]:checked::after {
   border-radius: 0 0 0 20px;
 }
 
-.menubar .select_where .select_where_content_sigungus {
-  width: 65%;
-  gap: 20px;
+.menubar .select_where .select_where_content_sigungus_wrap {
+  width: 70%;
   flex-wrap: wrap;
   border: 1px solid var(--border);
   border-left: none;
   border-radius: 0 20px 20px 0;
   padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menubar .select_where .select_where_content_sigungus {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .menubar .select_where .select_where_content_sigungu {
-  width: calc(100% / 3);
-  height: 40px;
-  display: inline-block;
+  width: calc(100% / 4);
   align-content: center;
+  height: 50px;
 }
 
 .menubar .select_where .select_where_content_sigungu > div {
@@ -228,4 +201,34 @@ input[type="checkbox"]:checked::after {
 .menubar .category_bar .category {
   display: flex;
   gap: 5px;
+}
+
+/* 메인 컨텐츠 */
+.content {
+  display: flex;
+  width: 100%;
+  gap: 25px;
+  background-color: var(--gray8);
+  padding: 20px;
+  margin-top: 15px;
+  border-radius: 14px;
+  min-height: 550px;
+}
+
+.content .content_right {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.content .content_list_wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.content .content_empty {
+  align-content: center;
+  text-align: center;
+  height: 100%;
 }
