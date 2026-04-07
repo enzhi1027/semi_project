@@ -1,7 +1,7 @@
-import styles from './BoardList.module.css';
-import defaultImage from '../../assets/img/board/image.png';
-import userImage from '../../assets/img/board/user.png';
-import { useNavigate } from 'react-router-dom';
+import styles from "./BoardList.module.css";
+import defaultImage from "../../assets/img/board/image.png";
+import userImage from "../../assets/img/board/user.png";
+import { useNavigate } from "react-router-dom";
 const BoardList = ({ boardList }) => {
   return (
     <ul className={styles.board_list_wrap}>
@@ -16,9 +16,9 @@ const BoardItem = ({ board }) => {
   const navigate = useNavigate();
 
   const getCategoryName = (category) => {
-    if (category === 1) return 'Review';
-    if (category === 2) return 'Forum';
-    return '';
+    if (category === 1) return "Review";
+    if (category === 2) return "Forum";
+    return "";
   };
 
   return (
@@ -38,7 +38,7 @@ const BoardItem = ({ board }) => {
         <div className={styles.board_sub_info}>
           <div className={styles.board_writer}>
             <div
-              className={board.memberThumb ? styles.member_thumb_exists : ''}
+              className={board.memberThumb ? styles.member_thumb_exists : ""}
             >
               <img
                 src={

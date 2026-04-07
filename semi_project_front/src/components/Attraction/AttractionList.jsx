@@ -17,16 +17,19 @@ const AttractionList = ({
   handleWishToggle,
   setClickedAttraction,
   selectAttraction,
+  categoryTest,
 }) => {
   const { memberId, isReady } = useAuthStore();
-
   return (
     <>
       <div
         className={styles.content_list}
         onClick={() => {
-          // selectAttraction;
-          setClickedAttraction(attractionNo);
+          if (categoryTest === 0) {
+            setClickedAttraction(attractionNo);
+          } else {
+            selectAttraction();
+          }
         }}
       >
         <div className={styles.content_img}>
