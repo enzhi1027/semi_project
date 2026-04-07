@@ -1,6 +1,7 @@
 package kr.co.iei.attraction.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,5 +78,22 @@ public class AttractionService {
 	public List<Sigungu> selectSigunguList(String areaCode) {
 		List<Sigungu> list = dao.selectSigunguList(areaCode);
 		return list;
+	}
+
+	public List<Integer> selectWishList(String memberId) {
+		List<Integer> list = dao.selectWishList(memberId);
+		return list;
+	}
+
+	@Transactional
+	public int deleteWish(String memberId, Integer attractionNo) {
+		int result = dao.deleteWish(memberId, attractionNo);
+		return result;
+	}
+
+	@Transactional
+	public int insertWish(Map<String, Object> request) {
+		int result = dao.insertWish(request);
+		return result;
 	}
 }

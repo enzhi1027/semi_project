@@ -76,7 +76,8 @@
 	</insert>
 	
 	<select id="selectAttractionList" resultType="attraction">
-    	SELECT ATTRACTION_ADDR
+    	SELECT ATTRACTION_NO
+    		 , ATTRACTION_ADDR
 	         , ATTRACTION_THUMBNAIL
 	         , ATTRACTION_SUMMARY
 	         , ATTRACTION_HOLIDAY
@@ -178,4 +179,28 @@
 		 ORDER
 		    BY SIGUNGU_NAME
 	</select>
+	
+	<select id="selectWishList" resultType="Integer">
+		SELECT ATTRACTION_NO
+		  FROM TEST_ATTRACTION_WISH_TBL
+		 WHERE MEMBER_ID = #{memberId}
+	</select>
+	
+	<delete id="deleteWish">
+		DELETE
+		  FROM TEST_ATTRACTION_WISH_TBL
+		 WHERE MEMBER_ID = #{memberId}
+		   AND ATTRACTION_NO = #{attractionNo}
+	</delete>
+	
+	<insert id="insertWish">
+		INSERT
+		  INTO TEST_ATTRACTION_WISH_TBL
+		VALUES
+		     (
+		       TEST_ATTRACTION_WISH_SEQ.NEXTVAL
+		     , #{memberId}
+		     , #{attractionNo} 
+		     )
+	</insert>
 </mapper>

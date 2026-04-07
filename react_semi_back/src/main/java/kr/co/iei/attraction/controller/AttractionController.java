@@ -6,15 +6,20 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -55,6 +60,24 @@ public class AttractionController {
 	public ResponseEntity<?> selectSigunguList(@PathVariable String areaCode) {
 		List<Sigungu> list = service.selectSigunguList(areaCode);
 		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping(value = "/wishList/{memberId}")
+	public ResponseEntity<?> selectWishList(@PathVariable String memberId) {
+		List<Integer> list = service.selectWishList(memberId);
+		return ResponseEntity.ok(list);
+	}
+	
+	@DeleteMapping(value = "/wishList/{memberId}/{attractionNo}")
+	public ResponseEntity<?> deleteWish(@PathVariable String memberId, @PathVariable Integer attractionNo) {
+		int result = service.deleteWish(memberId, attractionNo);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value = "/wishList")
+	public ResponseEntity<?> insertWish(@RequestBody Map<String, Object> request) {
+		int result = service.insertWish(request);
+		return ResponseEntity.ok(result);
 	}
 
 	@GetMapping(value = "test")

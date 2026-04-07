@@ -7,6 +7,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Pagination from "../../components/ui/Pagination";
 import AttractionList from "../../components/Attraction/AttractionList";
+import useAuthStore from "../../components/utils/useAuthStore";
 
 const AttractionSearchPage = () => {
   const [areaList, setAreaList] = useState([]);
@@ -27,11 +28,28 @@ const AttractionSearchPage = () => {
   const [accessible, setAccessible] = useState(0); // 0: 전체, 1: 장애인 편의 시설 있음
   const [parking, setParking] = useState(0); // 0: 전체, 1: 주차장 있음
 
-  const [isWhereOpen, setIsWhereOpen] = useState(false); // true: 열림, false: 닫힘]
+  const [isWhereOpen, setIsWhereOpen] = useState(false); // true: 열림, false: 닫힘
   const whereRef = useRef(null);
   const [checkedItems, setCheckedItems] = useState([]);
   const isAllChecked =
     sigunguList.length > 0 && checkedItems.length === sigunguList.length;
+
+  const [wishList, setWishList] = useState([]);
+
+  const { memberId, isReady } = useAuthStore();
+
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/attractions/wishList/${memberId}`,
+      )
+      .then((res) => {
+        setWishList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
     axios
@@ -118,6 +136,39 @@ const AttractionSearchPage = () => {
     } else {
       setCheckedItems([...checkedItems, sigunguNo]);
     }
+  };
+
+  const handleWishToggle = (attractionNo) => {
+    if (wishList.includes(attractionNo)) {
+      axios
+        .delete(
+          `${import.meta.env.VITE_BACKSERVER}/attractions/wishList/${memberId}/${attractionNo}`,
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setWishList(wishList.filter((id) => id !== attractionNo));
+    } else {
+      axios
+        .post(`${import.meta.env.VITE_BACKSERVER}/attractions/wishList`, {
+          memberId: memberId,
+          attractionNo: attractionNo,
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setWishList([...wishList, attractionNo]);
+    }
+  };
+
+  const test = () => {
+    console.log("diq");
   };
 
   return (
@@ -291,12 +342,16 @@ const AttractionSearchPage = () => {
                   const infoStr = `${item.attractionHoliday ? "휴무일: " + item.attractionHoliday + " | " : ""}${item.attractionFee ? "이용요금: " + item.attractionFee + " | " : ""}${item.attractionRestroom ? "화장실: " + item.attractionRestroom + " | " : ""}${item.attractionAccessible ? "장애인편의시설: " + item.attractionAccessible + " | " : ""}${item.attractionParking ? "주차장: " + item.attractionParking + " | " : ""}${item.tel ? "기타문의: " + item.tel : ""}`;
                   return (
                     <AttractionList
+                      attractionNo={item.attractionNo}
                       title={item.title}
                       subtitle={
                         item.attractionDesignation && item.attractionDesignation
                       }
                       info={infoStr}
                       thumb={item.mainimage}
+                      isLiked={wishList.includes(item.attractionNo)}
+                      handleWishToggle={handleWishToggle}
+                      test={test}
                       key={"attractionList-" + index}
                     />
                   );
@@ -313,6 +368,17 @@ const AttractionSearchPage = () => {
               totalPage={totalPage}
               naviSize={5}
             />
+          </div>
+        </div>
+      </section>
+      <section className={styles.attraction_detail_wrap}>
+        <div className={styles.attraction_detail_popup}>
+          <div className={styles.detail_menubar}>
+            <div className={styles.detail_mini}>
+              <div>INFO</div>
+              <div>REVIEW</div>
+            </div>
+            <div className={styles.detail_cancle}></div>
           </div>
         </div>
       </section>

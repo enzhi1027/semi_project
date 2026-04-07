@@ -1,14 +1,32 @@
 import styles from "./AttractionList.module.css";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../utils/useAuthStore";
+import Swal from "sweetalert2";
 
-const AttractionList = ({ title, subtitle, info, thumb }) => {
-  const [isLiked, setIsLiked] = useState(0); // 1: 찜
+const AttractionList = ({
+  attractionNo,
+  title,
+  subtitle,
+  info,
+  thumb,
+  isLiked,
+  handleWishToggle,
+  test,
+}) => {
+  const { memberId, isReady } = useAuthStore();
 
   return (
     <>
-      <div className={styles.content_list}>
+      <div
+        className={styles.content_list}
+        onClick={() => {
+          test();
+        }}
+      >
         <div className={styles.content_img}>
           <img
             src={
@@ -25,7 +43,14 @@ const AttractionList = ({ title, subtitle, info, thumb }) => {
             <div
               className={styles.content_list_like}
               onClick={() => {
-                setIsLiked(!isLiked);
+                if (isReady && memberId == null) {
+                  Swal.fire({
+                    title: "로그인 후 이용 가능합니다.",
+                    icon: "warning",
+                  });
+                } else {
+                  handleWishToggle(attractionNo);
+                }
               }}
             >
               {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
