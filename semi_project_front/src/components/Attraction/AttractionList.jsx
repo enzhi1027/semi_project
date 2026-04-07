@@ -15,7 +15,8 @@ const AttractionList = ({
   thumb,
   isLiked,
   handleWishToggle,
-  test,
+  setClickedAttraction,
+  selectAttraction,
 }) => {
   const { memberId, isReady } = useAuthStore();
 
@@ -24,8 +25,8 @@ const AttractionList = ({
       <div
         className={styles.content_list}
         onClick={() => {
-          selectAttraction
-          test();
+          // selectAttraction;
+          setClickedAttraction(attractionNo);
         }}
       >
         <div className={styles.content_img}>
@@ -43,7 +44,7 @@ const AttractionList = ({
             <div className={styles.content_list_subtitle}>{subtitle}</div>
             <div
               className={styles.content_list_like}
-              onClick={() => {
+              onClick={(e) => {
                 e.stopPropagation();
                 if (isReady && memberId == null) {
                   Swal.fire({
@@ -57,8 +58,8 @@ const AttractionList = ({
             >
               {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </div>
-            <div className={styles.content_list_info}>{info}</div>
           </div>
+          <div className={styles.content_list_info}>{info}</div>
         </div>
       </div>
     </>
