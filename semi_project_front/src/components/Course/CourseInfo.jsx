@@ -2,9 +2,15 @@ import styles from "./CourseInfo.module.css";
 import { useEffect, useRef, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import ClearIcon from "@mui/icons-material/Clear";
 import { useLocation } from "react-router-dom";
 
-const CourseInfo = ({ attractionList, listLength }) => {
+const CourseInfo = ({
+  attractionList,
+  listLength,
+  setCreateAttractionList,
+  setAddAttractionList,
+}) => {
   const mapDivRef = useRef(null);
   useEffect(() => {
     if (!mapDivRef.current || !window.naver) {
@@ -91,6 +97,10 @@ const CourseInfo = ({ attractionList, listLength }) => {
                 key={"key-" + index}
                 attraction={attraction}
                 listLength={listLength}
+                index={index}
+                attractionList={attractionList}
+                setCreateAttractionList={setCreateAttractionList}
+                setAddAttractionList={setAddAttractionList}
               />
             );
           })}
@@ -101,11 +111,50 @@ const CourseInfo = ({ attractionList, listLength }) => {
   );
 };
 
-const AttractionInfoItem = ({ attraction, listLength }) => {
+const AttractionInfoItem = ({
+  attraction,
+  listLength,
+  index,
+  attractionList,
+  setCreateAttractionList,
+  setAddAttractionList,
+}) => {
   const location = useLocation();
   const courseWritePage = location.pathname === "/course/write";
-  const listIndexDown = () => {};
-  const listIndexUp = () => {};
+  if (courseWritePage) {
+    attraction.courseIndex = index + 1;
+  }
+  const attractionIndexDown = () => {
+    if (index >= attractionList.length - 1) {
+      return;
+    }
+    setCreateAttractionList((prev) => {
+      const newList = [...prev];
+      [newList[index], newList[index + 1]] = [
+        newList[index + 1],
+        newList[index],
+      ];
+      return newList;
+    });
+  };
+  const attractionIndexUp = () => {
+    if (index <= 0) {
+      return;
+    }
+    setCreateAttractionList((prev) => {
+      const newList = [...prev];
+      [newList[index - 1], newList[index]] = [
+        newList[index],
+        newList[index - 1],
+      ];
+      return newList;
+    });
+  };
+  const deleteAttraction = () => {
+    setCreateAttractionList((prev) =>
+      prev.filter((item) => item !== attraction),
+    );
+  };
   return (
     <>
       <div className={styles.info_item_wrap}>
@@ -122,28 +171,38 @@ const AttractionInfoItem = ({ attraction, listLength }) => {
         {courseWritePage && (
           <div className={styles.course_write_index}>
             {listLength !== 1 && attraction.courseIndex === 1 && (
-              <KeyboardArrowDownIcon onClick={listIndexDown()} />
+              <KeyboardArrowDownIcon onClick={attractionIndexDown} />
             )}
             {attraction.courseIndex !== 1 &&
               attraction.courseIndex !== listLength && (
                 <>
-                  <KeyboardArrowUpIcon onClick={listIndexUp()} />{" "}
-                  <KeyboardArrowDownIcon onClick={listIndexDown()} />{" "}
+                  <KeyboardArrowUpIcon onClick={attractionIndexUp} />{" "}
+                  <KeyboardArrowDownIcon onClick={attractionIndexDown} />{" "}
                 </>
               )}
             {listLength !== 1 && attraction.courseIndex === listLength && (
-              <KeyboardArrowUpIcon onClick={listIndexUp()} />
+              <KeyboardArrowUpIcon onClick={attractionIndexUp} />
             )}
           </div>
         )}
         <div className={styles.attraction_img_wrap}>
-          <img src={attraction.attractionThumb} />
+          <img
+            src={
+              attraction.attractionThumb
+                ? attraction.attractionThumb
+                : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+            }
+          />
           <div className={styles.img_back}></div>
           <p className={styles.info_attraction_title}>
             {attraction.attractionTitle}
           </p>
         </div>
-        {courseWritePage && <div className={styles.course_write_delete}></div>}
+        {courseWritePage && (
+          <div className={styles.course_write_delete}>
+            <ClearIcon onClick={deleteAttraction} />
+          </div>
+        )}
       </div>
     </>
   );
