@@ -62,8 +62,19 @@ const CourseItem = ({ course }) => {
   return (
     <>
       <div className={styles.course_item}>
-        <div className={styles.course_img}>
-          <img src={course.courseThumb} />
+        <div
+          className={styles.course_img}
+          onClick={() => {
+            navigate(`/course/view/${course.courseNo}`);
+          }}
+        >
+          <img
+            src={
+              course.courseThumb
+                ? course.courseThumb
+                : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+            }
+          />
         </div>
         <div
           className={styles.course_info}

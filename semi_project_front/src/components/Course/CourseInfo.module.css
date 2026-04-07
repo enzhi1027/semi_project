@@ -1,7 +1,7 @@
 .course_info_wrap {
   height: 525px;
   display: flex;
-  gap: 24px;
+  gap: 16px;
 }
 .course_info {
   width: 380px;
@@ -124,5 +124,14 @@
   gap: 8px;
 }
 .course_write_index > svg {
+  cursor: pointer;
+}
+.course_write_delete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 6px;
+}
+.course_write_delete > svg {
   cursor: pointer;
 }

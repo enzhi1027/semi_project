@@ -7,10 +7,11 @@
   flex-direction: column;
   text-align: center;
   padding: 32px;
-  background-color: var(--color4);
+  background-color: var(--gray8);
   border-radius: 16px;
   border: solid 1px var(--gray5);
 }
+
 /*로그인 랩-----------------------------*/
 
 /*입력창-----------------------------*/

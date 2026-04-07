@@ -13,6 +13,11 @@ const MyInfo = () => {
   const { memberId } = useAuthStore();
   const [member, setMember] = useState(null);
   const navigate = useNavigate();
+
+  //수정 에러 메시지(이메일, 전화번호)
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/members/${memberId}`)
@@ -76,6 +81,45 @@ const MyInfo = () => {
   };
   //회원 탈퇴 -------------------------------------------------------------
 
+  //이메일 수정 ------------------------------------------------------
+  const checkEmail = () => {
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!member.memberEmail) {
+      setEmailError("이메일을 입력해주세요.");
+    } else if (!emailRegex.test(member.memberEmail)) {
+      setEmailError("올바른 이메일을 입력해주세요.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  //전화번호 수정 ------------------------------------------------------
+  const checkPhone = () => {
+    const phoneValue = member.memberPhone;
+    if (!phoneValue) {
+      setPhoneError("전화번호를 입력해주세요.");
+    }
+
+    const onlyNum = phoneValue.replace(/[^\d]/g, "");
+    let onlyNumPhone = onlyNum;
+
+    if (onlyNum.length == 11) {
+      onlyNumPhone = onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    } else if (onlyNum.length == 10) {
+      onlyNumPhone = onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    }
+
+    setMember({ ...member, memberPhone: onlyNumPhone });
+
+    const phoneRegex = /^010-\d{3,4}-\d{4}$/;
+
+    if (!phoneRegex.test(onlyNumPhone)) {
+      setPhoneError("올바른 전화번호를 입력해주세요.");
+    } else {
+      setPhoneError("");
+    }
+  };
+
   return (
     member && (
       <div className={styles.my_info_wrap}>
@@ -83,6 +127,25 @@ const MyInfo = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+
+            const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+            const phoneRegex = /^010-\d{3,4}-\d{4}$/;
+
+            //에러 메시지가 있고, 검사식 결과가 불일치할 때는 등록 불가
+            if (
+              emailError ||
+              phoneError ||
+              !emailRegex.test(member.memberEmail) ||
+              !phoneRegex.test(member.memberPhone)
+            ) {
+              Swal.fire({
+                title: "잘못된 정보가 있습니다!",
+                text: "정보를 다시 확인해주세요!",
+                icon: "error",
+                confirmButtonColor: "var(--color1)",
+              });
+              return;
+            }
             axios
               .patch(
                 `${import.meta.env.VITE_BACKSERVER}/members/${member.memberId}`,
@@ -132,28 +195,40 @@ const MyInfo = () => {
 
               <div className={styles.input_wrap}>
                 <label htmlFor="memberEmail">이메일 : </label>
-                <Input
-                  type="text"
-                  name="memberEmail"
-                  id="memberEmail"
-                  value={member.memberEmail}
-                  onChange={(e) => {
-                    setMember({ ...member, memberEmail: e.target.value });
-                  }}
-                ></Input>
+                <div className={styles.check_wrap}>
+                  <Input
+                    type="text"
+                    name="memberEmail"
+                    id="memberEmail"
+                    value={member.memberEmail}
+                    onChange={(e) => {
+                      setMember({ ...member, memberEmail: e.target.value });
+                    }}
+                    onBlur={checkEmail}
+                  />
+                  {emailError && (
+                    <p className={styles.check_false}>{emailError}</p>
+                  )}
+                </div>
               </div>
 
               <div className={styles.input_wrap}>
                 <label htmlFor="memberPhone">전화번호 : </label>
-                <Input
-                  type="text"
-                  name="memberPhone"
-                  id="memberPhone"
-                  value={member.memberPhone}
-                  onChange={(e) => {
-                    setMember({ ...member, memberPhone: e.target.value });
-                  }}
-                ></Input>
+                <div className={styles.check_wrap}>
+                  <Input
+                    type="text"
+                    name="memberPhone"
+                    id="memberPhone"
+                    value={member.memberPhone}
+                    onBlur={checkPhone}
+                    onChange={(e) => {
+                      setMember({ ...member, memberPhone: e.target.value });
+                    }}
+                  />
+                  {phoneError && (
+                    <p className={styles.check_false}>{phoneError}</p>
+                  )}
+                </div>
               </div>
 
               <div className={`${styles.input_wrap} ${styles.input_addr_wrap}`}>

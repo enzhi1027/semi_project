@@ -9,13 +9,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class FileUtils {
-
 	public String upload(String savepath, MultipartFile file) {
-		// 사용자가 올린 원본 파일 이름
+		//사용자가 올린 원본 파일 이름
 		String filename = file.getOriginalFilename();
 		int dotIndex = filename.lastIndexOf(".");
 		String extension = "";
-		if(dotIndex != -1) {//-1 = 빈문자열, 아니면 확장자 찾아오기
+		if(dotIndex != -1) {//-1이면 빈 문자열, 아니면 확장자 찾아오기
 			extension = filename.substring(dotIndex);
 		}
 		String uuid = UUID.randomUUID().toString();
@@ -29,8 +28,6 @@ public class FileUtils {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return filepath;
 	}
-
 }
