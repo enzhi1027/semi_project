@@ -12,19 +12,20 @@ const BoardWritePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // 게시글 상태 (카테고리 및 장소명 추가)
   const [board, setBoard] = useState({
     boardTitle: '',
     boardContent: '',
     boardWriter: memberId,
-    category: 1,
-    locationName: '',
+    category: 1, // 1: Review, 2: Forum
+    locationName: '', // 지도에서 선택한 장소명
   });
 
+  // 지도 페이지에서 돌아왔을 때 데이터 수신
   useEffect(() => {
     if (location.state && location.state.selectedPlace) {
       setBoard((prev) => ({
         ...prev,
-        // state에 category가 넘어오면 해당 카테고리로, 없으면 유지
         category: location.state.category || prev.category,
         locationName: location.state.selectedPlace,
       }));
@@ -40,6 +41,15 @@ const BoardWritePage = () => {
     setBoard({ ...board, boardContent: data });
   };
 
+  // 지도 아이콘 클릭 시 카테고리에 맞는 검색 페이지로 이동
+  const handleMapClick = () => {
+    if (board.category === 2) {
+      navigate('/boardNavermap');
+    } else if (board.category === 1) {
+      navigate('/attraction/list', { state: { fromWrite: true } });
+    }
+  };
+
   const registBoard = () => {
     if (board.boardTitle === '' || board.boardContent === '') {
       Swal.fire({ title: '제목과 내용을 입력해주세요.', icon: 'warning' });
@@ -47,19 +57,25 @@ const BoardWritePage = () => {
     }
 
     const form = new FormData();
+    //기본정보(필수)
     form.append('boardTitle', board.boardTitle);
     form.append('boardContent', board.boardContent);
     form.append('boardWriter', board.boardWriter);
-    form.append('category', board.category);
-
+    form.append('boardCategory', board.category);
+    //장소 관련 정보 (Review나 Forum에서 선택된 경우)
     if (board.locationName) {
       form.append('locationName', board.locationName);
     }
+    form.append('addressName', board.addressName || '');
+    if (board.attractionNo) {
+      form.append('attractionNo', board.attractionNo);
+    }
+    if (board.locationNo) {
+      form.append('locationNo', board.locationNo);
+    }
 
     axios
-      .post(`${import.meta.env.VITE_BACKSERVER}/boards`, form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      .post(`${import.meta.env.VITE_BACKSERVER}/boards`, form)
       .then((res) => {
         if (res.data > 0) {
           Swal.fire({ title: '게시글 작성 완료', icon: 'success' }).then(() => {
@@ -67,50 +83,42 @@ const BoardWritePage = () => {
           });
         }
       })
-      .catch((err) => console.log(err));
-  };
-
-  const handleMapClick = () => {
-    if (board.category === 2) {
-      // Forum 카테고리(2)일 때 네이버 지도 검색으로 이동
-      navigate('/boardNavermap');
-    } else if (board.category === 1) {
-      // Review 카테고리(1)일 때 관광지 목록으로 이동
-      // fromWrite 플래그를 담아서 이동
-      navigate('/attraction/list', { state: { fromWrite: true } });
-    }
+      .catch((err) => console.error(err));
   };
 
   return (
     <section className={styles.board_wrap}>
       <h3 className={styles.page_title}>게시글 작성</h3>
 
+      {/* 카테고리 및 장소 선택 UI */}
       <div className={styles.category_wrap}>
         <div className={styles.select_wrap}>
           <select
             className={styles.select}
+            name="category"
             value={board.category}
-            onChange={(e) => {
-              const val = Number(e.target.value);
-              // 카테고리 변경 시 기존 선택된 장소 초기화 (선택 사항)
-              setBoard({ ...board, category: val, locationName: '' });
-            }}
+            onChange={(e) =>
+              setBoard({
+                ...board,
+                category: Number(e.target.value),
+                locationName: '',
+              })
+            }
           >
             <option value={1}>Review</option>
             <option value={2}>Forum</option>
           </select>
-
-          {/* Review(1)이거나 Forum(2)일 때 모두 아이콘 활성화 
-              비활성화 스타일(disabled_icon) 조건 제거
-          */}
           <span
             className={`${styles.location_icon} material-icons`}
             onClick={handleMapClick}
+            style={{
+              cursor: 'pointer',
+              color: 'var(--color1)',
+              fontSize: '30px',
+            }}
           >
             location_on
           </span>
-
-          {/* Review(1) 또는 Forum(2)이면서 장소명이 있을 때 이름 표시 */}
           {board.locationName && (
             <span className={styles.selected_place_name}>
               {board.locationName}

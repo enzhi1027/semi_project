@@ -59,4 +59,33 @@
 	</if>
 </select>
 
+<select id="getNewBoardNo" resultType="int">
+    select board_seq.nextval from dual
+</select>
+
+<insert id="inserBoard">
+    insert into board_tbl (
+        board_no,
+        board_category,
+        board_title,
+        board_content,
+        board_thumb,
+        board_writer,
+        board_date,
+        board_status,
+        attraction_no,
+        location_no,
+        place_name,
+        address_name
+    ) values (
+        #{boardNo},
+        #{boardCategory},
+        #{boardTitle},
+        #{boardContent},
+        #{boardThumb, jdbcType=VARCHAR},     #{boardWriter},
+        sysdate,
+        1,
+        #{attractionNo, jdbcType=NUMERIC},   #{locationNo, jdbcType=VARCHAR},     #{placeName, jdbcType=VARCHAR},      #{addressName, jdbcType=VARCHAR}     )
+</insert>
+
 </mapper>
