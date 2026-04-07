@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.iei.course.model.service.CourseService;
+import kr.co.iei.course.model.vo.AttractionList;
+import kr.co.iei.course.model.vo.AttractionSearchItem;
 import kr.co.iei.course.model.vo.CourseAttractionList;
 import kr.co.iei.course.model.vo.CourseList;
 import kr.co.iei.course.model.vo.CourseListItem;
@@ -55,6 +57,25 @@ public class CourseController {
 		return ResponseEntity.ok(result);
 	}
 	
+	//코스 생성 관광지 리스트
+	@GetMapping(value="/attraction")
+	public ResponseEntity<?> selectAttractionList(@ModelAttribute AttractionSearchItem item){
+		List<AttractionList> list = courseService.selectAttractionList(item);
+		return ResponseEntity.ok(list);
+	}
+	
+	//회원 이름 조회
+	@GetMapping(value="/member/{memberId}")
+	public ResponseEntity<?> selectMemberName(@PathVariable String memberId){
+		String memberName = courseService.selectMemberName(memberId);
+		return ResponseEntity.ok(memberName);
+	}
 	
 	
 }
+
+
+
+
+
+

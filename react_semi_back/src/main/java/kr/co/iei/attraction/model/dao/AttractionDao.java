@@ -1,6 +1,7 @@
 package kr.co.iei.attraction.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -33,4 +34,10 @@ public interface AttractionDao {
 	List<Area> selectAreaList();
 
 	List<Sigungu> selectSigunguList(String areaCode);
+
+	List<Integer> selectWishList(String memberId);
+
+	int deleteWish(String memberId, Integer attractionNo);
+
+	int insertWish(Map<String, Object> request);
 }

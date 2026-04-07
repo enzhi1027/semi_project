@@ -160,6 +160,7 @@ public class MemberController {
 		Member m = memberService.selectOneMemberEmail(memberEmail);
 		return ResponseEntity.ok(m);
 	}
+	// 핸드폰 번호 중복 체크 --------------------------------------------------------
 	@GetMapping(value = "/exists/phone")
 	public ResponseEntity<?> dupCheckPhone(@RequestParam String memberPhone){
 		Member m = memberService.selectOneMemberPhone(memberPhone);

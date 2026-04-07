@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.course.model.dao.CourseDao;
+import kr.co.iei.course.model.vo.AttractionList;
+import kr.co.iei.course.model.vo.AttractionSearchItem;
 import kr.co.iei.course.model.vo.CourseAttractionList;
 import kr.co.iei.course.model.vo.CourseList;
 import kr.co.iei.course.model.vo.CourseListItem;
@@ -44,6 +46,16 @@ public class CourseService {
 	public int insertCourseLike(CourseList request) {
 		int result = courseDao.insertCourseLike(request);
 		return result;
+	}
+
+	public List<AttractionList> selectAttractionList(AttractionSearchItem item) {
+		List<AttractionList> list = courseDao.selectAttractionList(item);
+		return list;
+	}
+
+	public String selectMemberName(String memberId) {
+		String memberName = courseDao.selectMemberName(memberId);
+		return memberName;
 	}
 }
 

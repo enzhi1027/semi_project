@@ -61,13 +61,25 @@ const AttractionItem = ({ attraction }) => {
             </div>
           </div>
           <div className={styles.img_wrap}>
-            <img src={attraction.attractionThumb} />
+            <img
+              src={
+                attraction.attractionThumb
+                  ? attraction.attractionThumb
+                  : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+              }
+            />
           </div>
         </div>
       ) : (
         <div className={styles.attraction_wrap}>
           <div className={styles.img_wrap}>
-            <img src={attraction.attractionThumb} />
+            <img
+              src={
+                attraction.attractionThumb
+                  ? attraction.attractionThumb
+                  : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+              }
+            />
           </div>
           <div className={styles.content_wrap}>
             <div className={styles.content_title}>

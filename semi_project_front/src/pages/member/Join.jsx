@@ -43,17 +43,9 @@ const Join = () => {
   const [checkId, setCheckId] = useState(0);
 
   const idDupCheck = () => {
-    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
-    const pwValue = member.memberPw;
-
     if (member.memberId === "") {
       //공백일 때
       setCheckId(3);
-      return;
-    }
-
-    if (!pwRegex.test(pwValue)) {
-      setCheckPw(4);
       return;
     }
 
@@ -76,10 +68,20 @@ const Join = () => {
   //아이디 중복 체크---------------------------------------
 
   //비밀번호 중복 체크---------------------------------------
-  //비밀번호 중복 확인 스테이트 0 : 확인 전 , 1 : 일치, 2 : 불일치, 3 : 공백
+  //비밀번호 중복 확인 스테이트 0 : 확인 전 , 1 : 일치, 2 : 불일치, 3 : 공백, 4 : 조건 불일치
   const [checkPw, setCheckPw] = useState(0);
 
   const pwDupCheck = () => {
+    //▽비밀번호 정규표현식
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+    const pwValue = member.memberPw;
+
+    if (!pwRegex.test(pwValue)) {
+      //비밀번호 조건 불일치할 때 4 리턴
+      setCheckPw(4);
+      return;
+    }
+
     if (member.memberPw === "") {
       setCheckPw(3);
     } else if (member.memberPw === memberPwRe) {
@@ -132,13 +134,36 @@ const Join = () => {
   const [checkPhone, setCheckPhone] = useState(0);
 
   const phoneDupCheck = () => {
+    //전화번호 정규표현식(010으로 시작하는 핸드폰 번호만)
+    //▽010으로 시작하고 - 3~4자리 숫자 - 4자리 숫자
+    const phoneRegex = /^010-\d{3,4}-\d{4}$/;
+    const phoneValue = member.memberPhone;
+
+    //숫자가 아닌 문자를 찾는 정규식 ^가 대괄호 내에서 사용되면 부정형
+    const onlyNum = phoneValue.replace(/[^\d]/g, "");
+    let onlyNumPhone = onlyNum;
+
+    if (onlyNum.length == 11) {
+      onlyNumPhone = onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    } else if (onlyNum.length == 10) {
+      onlyNumPhone = onlyNum.replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3");
+    }
+
+    //숫자만 입력하면 - 자동으로 삽입
+    setMember({ ...member, memberPhone: onlyNumPhone });
+
+    if (!phoneRegex.test(onlyNumPhone)) {
+      setCheckPhone(4);
+      return;
+    }
+
     if (member.memberPhone === "") {
       setCheckPhone(3);
       return;
     }
     axios
       .get(
-        `${import.meta.env.VITE_BACKSERVER}/members/exists/phone?memberPhone=${member.memberPhone}`,
+        `${import.meta.env.VITE_BACKSERVER}/members/exists/phone?memberPhone=${onlyNumPhone}`,
       )
       .then((res) => {
         console.log(res);
@@ -154,23 +179,25 @@ const Join = () => {
   };
 
   //이메일 중복 체크----------------------------------------------
-  //조회 전 : 0 / 중복 : 1 / 사용 가능 : 2 / 공백 : 3 / 검사 로직 불통 : 4
+  //조회 전 : 0 / 중복 : 1 / 사용 가능 : 2 / 공백 : 3 / 조건 불일치 : 4
 
   const [checkEmail, setCheckEmail] = useState(0);
   const EmailDupCheck = () => {
+    //▽이메일 정규표현식
     const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const emailValue = member.memberEmail;
-
-    if (!member.memberEmail || member.memberEmail.trim() === "") {
-      setCheckEmail(3);
-      return;
-    }
 
     //정규표현식 검사 로직
     if (!emailRegex.test(emailValue)) {
       setCheckEmail(4);
       return;
     }
+
+    if (!member.memberEmail || member.memberEmail.trim() === "") {
+      setCheckEmail(3);
+      return;
+    }
+
     axios
       .get(
         `${import.meta.env.VITE_BACKSERVER}/members/exists/email?memberEmail=${member.memberEmail}`,
@@ -304,8 +331,14 @@ const Join = () => {
               id="memberPw"
               placeholder="비밀번호 / 8자리 이상/대소문자,숫자,특수문자 포함"
               onChange={inputMember}
+              //onBlur={pwDupCheck}
               autoComplete="new-password"
             />
+            {checkPw == 4 && (
+              <p className={styles.dup_false}>
+                조건에 맞는 비밀번호를 입력해주세요.
+              </p>
+            )}
           </div>
 
           <div className={styles.input_wrap}>
@@ -353,7 +386,8 @@ const Join = () => {
               type="text"
               name="memberPhone"
               id="memberPhone"
-              placeholder="전화번호/ - 포함 : 010-0000-0000"
+              placeholder="전화번호 / 010-0000-0000"
+              value={member.memberPhone}
               onChange={inputMember}
               onBlur={phoneDupCheck}
             />
@@ -365,6 +399,11 @@ const Join = () => {
             )}
             {checkPhone === 3 && (
               <p className={styles.dup_false}>전화번호를 입력해주세요.</p>
+            )}
+            {checkPhone === 4 && (
+              <p className={styles.dup_false}>
+                올바른 전화번호를 입력해주세요.
+              </p>
             )}
           </div>
 
