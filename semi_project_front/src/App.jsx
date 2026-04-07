@@ -17,6 +17,7 @@ import BoardListPage from "./pages/board/BoardListPage";
 import BoardWritePage from "./pages/board/BoardWritePage";
 import NaverSearch from "./pages/board/NaverSearch";
 import CourseWritePage from "./pages/course/CourseWritePage";
+import AdminTourInsert from "./pages/member(admin)/AdminTourInsert";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -53,6 +54,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/mypage/*" element={<Mypage />} />
+            <Route path="/admintour/insertitem" element={<AdminTourInsert />} />
             <Route path="/board/list" element={<BoardListPage />} />
             <Route path="/board/write" element={<BoardWritePage />} />
             <Route path="/boardNavermap" element={<NaverSearch />} />

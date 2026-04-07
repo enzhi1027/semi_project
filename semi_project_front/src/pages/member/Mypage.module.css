@@ -31,7 +31,7 @@
 .mypage_content {
   width: 925px;
   min-height: 600px;
-  background-color: var(--color4);
+  background-color: var(--gray8);
   border: 1px solid var(--gray5);
   border-radius: 12px;
 }
@@ -39,7 +39,7 @@
 /*사이드 메뉴 ----------------------------------------*/
 .mypage_aside {
   width: 200px;
-  background-color: var(--color4);
+  background-color: var(--gray8);
   border: 1px solid var(--gray5);
   border-radius: 12px;
 }
@@ -47,7 +47,7 @@
 .side_menu {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
   font-size: 20px;
   margin-left: 12px;
 }
@@ -58,6 +58,9 @@
 .side_menu > a:hover {
   text-decoration: underline;
 }
+.active_menu {
+  font-weight: 600;
+}
 
 /*썸네일 관련-----------------------------------*/
 .member_profile_side {
@@ -65,7 +68,7 @@
   flex-direction: column;
   gap: 12px;
   align-items: center;
-  margin: 16px;
+  margin: 24px 0px;
 }
 .member_thumb {
   width: 140px;
@@ -78,8 +81,8 @@
   justify-content: center;
   align-items: flex-end;
 
-  /* 2. 패딩 수정: 좌우 여백은 유지하되, 아래쪽 패딩을 0으로 해서 바닥에 붙임 */
-  padding: 16px 16px 0 16px;
+  /* 하단 패딩을 0으로 설정해서 바닥에 붙임 */
+  padding: 16px 16px 0px 16px;
 }
 .member_thumb > img {
   width: 100%;

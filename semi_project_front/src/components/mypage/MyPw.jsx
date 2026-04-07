@@ -10,6 +10,9 @@ const MyPw = () => {
   const { memberId } = useAuthStore();
   const [currentPw, setCurrentPw] = useState(""); //기존 비밀번호 확인용
 
+  //비밀번호 정규표현식 검사용 스테이트
+  const [pwError, setPwError] = useState("");
+
   const [member, setMember] = useState({
     //비밀번호 변경하기 위해서는 아이디를 알아야 하니 넣음.
     //새 비밀번호 입력용
@@ -18,6 +21,19 @@ const MyPw = () => {
   });
   const [memberPwRe, setMemberPwRe] = useState(""); //새 비밀번호 확인용
   const [isAuth, setIsAuth] = useState(false); //화면 전환용(인증)
+
+  //비밀번호 정규 표현식
+  const checkPwFormat = () => {
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+
+    if (!member.memberPw) {
+      setPwError("새 비밀번호를 입력해주세요.");
+    } else if (!pwRegex.test(member.memberPw)) {
+      setPwError("8자리 이상 / 대소문자, 숫자, 특수문자를 포함시켜주세요.");
+    } else {
+      setPwError("");
+    }
+  };
 
   const checkPw = () => {
     //비밀번호 관련 조회니까 post
@@ -39,6 +55,16 @@ const MyPw = () => {
   };
 
   const changePw = () => {
+    //정규식 통과 여부
+    const pwRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+    if (!pwRegex.test(member.memberPw)) {
+      Swal.fire({
+        title: "새 비밀번호를 확인해주세요.",
+        icon: "warning",
+        confirmButtonColor: "var(--color1)",
+      });
+    }
+
     if (member.memberPw !== "" && member.memberPw === memberPwRe) {
       axios
         .patch(`${import.meta.env.VITE_BACKSERVER}/members/pw`, member)
@@ -97,13 +123,15 @@ const MyPw = () => {
                 type="password"
                 name="memberPw"
                 id="memberPw"
-                placeholder="새 비밀번호 입력"
+                placeholder="새 비밀번호 입력 / 8자리 이상 / 대소문자, 숫자, 특수문자 포함"
                 value={member.memberPw}
                 disabled={!isAuth}
                 onChange={(e) => {
                   setMember({ ...member, memberPw: e.target.value });
                 }}
+                onBlur={checkPwFormat}
               />
+              {pwError && <p className={styles.check_false}>{pwError}</p>}
             </div>
 
             {/*새 비밀번호 확인-------------------------------------- */}

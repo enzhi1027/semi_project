@@ -81,6 +81,21 @@
   font-size: 14px;
 }
 
+/*수정 관련 메시지 ---------------------------------------------------*/
+.check_wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+}
+
+.check_false {
+  margin-top: 8px;
+  color: red;
+}
+
+/*정보 수정 버튼 ---------------------------------------------------*/
+
 .btn_wrap {
   display: flex;
   justify-content: center;
