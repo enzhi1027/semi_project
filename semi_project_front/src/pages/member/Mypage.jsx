@@ -17,7 +17,7 @@ import userImg from "../../assets/img/mainPage/user.png";
 import { useEffect, useRef } from "react";
 import axios from "axios";
 import AdminContent from "../../components/admin/AdminContent";
-import AdminTour from "../../components/Admin/AdminTour";
+import AdminTour from "../../components/admin/AdminTour";
 
 const Mypage = () => {
   const { memberId, isReady } = useAuthStore();
