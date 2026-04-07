@@ -24,7 +24,8 @@ const BoardWritePage = () => {
     if (location.state && location.state.selectedPlace) {
       setBoard((prev) => ({
         ...prev,
-        category: 2,
+        // state에 category가 넘어오면 해당 카테고리로, 없으면 유지
+        category: location.state.category || prev.category,
         locationName: location.state.selectedPlace,
       }));
     }
@@ -71,14 +72,12 @@ const BoardWritePage = () => {
 
   const handleMapClick = () => {
     if (board.category === 2) {
+      // Forum 카테고리(2)일 때 네이버 지도 검색으로 이동
       navigate('/boardNavermap');
-    } else {
-      Swal.fire({
-        title: '알림',
-        text: '지도는 Forum 카테고리에서만 이용 가능합니다.',
-        icon: 'info',
-        confirmButtonColor: 'var(--color1)',
-      });
+    } else if (board.category === 1) {
+      // Review 카테고리(1)일 때 관광지 목록으로 이동
+      // fromWrite 플래그를 담아서 이동
+      navigate('/attraction/list', { state: { fromWrite: true } });
     }
   };
 
@@ -93,22 +92,26 @@ const BoardWritePage = () => {
             value={board.category}
             onChange={(e) => {
               const val = Number(e.target.value);
-              const loc = val === 1 ? '' : board.locationName;
-              setBoard({ ...board, category: val, locationName: loc });
+              // 카테고리 변경 시 기존 선택된 장소 초기화 (선택 사항)
+              setBoard({ ...board, category: val, locationName: '' });
             }}
           >
             <option value={1}>Review</option>
             <option value={2}>Forum</option>
           </select>
 
+          {/* Review(1)이거나 Forum(2)일 때 모두 아이콘 활성화 
+              비활성화 스타일(disabled_icon) 조건 제거
+          */}
           <span
-            className={`${styles.location_icon} material-icons ${board.category !== 2 ? styles.disabled_icon : ''}`}
+            className={`${styles.location_icon} material-icons`}
             onClick={handleMapClick}
           >
             location_on
           </span>
 
-          {board.category === 2 && board.locationName && (
+          {/* Review(1) 또는 Forum(2)이면서 장소명이 있을 때 이름 표시 */}
+          {board.locationName && (
             <span className={styles.selected_place_name}>
               {board.locationName}
             </span>
