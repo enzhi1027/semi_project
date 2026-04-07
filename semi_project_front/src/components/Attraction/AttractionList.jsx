@@ -24,6 +24,7 @@ const AttractionList = ({
       <div
         className={styles.content_list}
         onClick={() => {
+          selectAttraction
           test();
         }}
       >
@@ -43,6 +44,7 @@ const AttractionList = ({
             <div
               className={styles.content_list_like}
               onClick={() => {
+                e.stopPropagation();
                 if (isReady && memberId == null) {
                   Swal.fire({
                     title: "로그인 후 이용 가능합니다.",
@@ -55,8 +57,8 @@ const AttractionList = ({
             >
               {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </div>
+            <div className={styles.content_list_info}>{info}</div>
           </div>
-          <div className={styles.content_list_info}>{info}</div>
         </div>
       </div>
     </>
