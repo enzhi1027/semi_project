@@ -15,8 +15,8 @@ public class WebConfig implements WebMvcConfigurer {
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		//에디터 이미지
 		registry
-			.addResourceHandler("/editor/**")		//요청패턴
-			.addResourceLocations("file:///"+root+"editor/");	//실제경로
+        .addResourceHandler("/editor/**")		
+        .addResourceLocations("file:///" + root + "editor/");	//실제경로
 		
 		//회원 프로필 이미지
 		registry
