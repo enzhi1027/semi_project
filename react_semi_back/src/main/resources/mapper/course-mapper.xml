@@ -41,6 +41,27 @@
   <insert id="insertCourseLike">
   	insert into course_like_tbl values(#{memberId}, #{courseNo})
   </insert>
+  
+  <select id="selectAttractionList" resultType="attractionList">
+  	select 
+	    attraction_no,
+	    attraction_addr,
+	    attraction_thumbnail as attraction_thumb,
+	    attraction_summary,
+	    attraction_phone,
+	    attraction_title
+	from attraction_tbl a
+	where
+	    (select area_no from area_tbl where area_name = #{category}) = 
+	    (select area_no from sigungu_tbl where sigungu_no = a.sigungu_no)
+	<if test="keyword != null and keyword != ''">
+		and attraction_title like '%'||#{keyword}||'%' 
+	</if>
+  </select>
+  
+  <select id="selectMemberName" resultType="String">
+  	select member_name from member_tbl where member_id = #{memberId}
+  </select>
 </mapper>
 
 
