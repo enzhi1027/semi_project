@@ -1,4 +1,3 @@
-
 import './App.css';
 import './font.css';
 import { Route, Routes } from 'react-router-dom';
@@ -17,7 +16,7 @@ import axios from 'axios';
 import BoardListPage from './pages/board/BoardListPage';
 import BoardWritePage from './pages/board/BoardWritePage';
 import NaverSearch from './pages/board/NaverSearch';
-import CourseWritePage from "./pages/course/CourseWritePage";
+import CourseWritePage from './pages/course/CourseWritePage';
 
 function App() {
   const { endTime, token } = useAuthStore();

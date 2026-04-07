@@ -15,6 +15,10 @@ public interface BoardDao {
 
 	List<Board> selectBoardList(ListItem request);
 
+	int getNewBoardNo();
+
+	int inserBoard(Board board);
+
 
 
 }
