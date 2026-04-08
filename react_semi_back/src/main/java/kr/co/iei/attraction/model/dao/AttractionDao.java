@@ -9,6 +9,7 @@ import kr.co.iei.attraction.model.vo.Area;
 import kr.co.iei.attraction.model.vo.Attraction;
 import kr.co.iei.attraction.model.vo.AttractionListItem;
 import kr.co.iei.attraction.model.vo.Sigungu;
+import kr.co.iei.board.model.vo.Board;
 
 @Mapper
 public interface AttractionDao {
@@ -40,4 +41,6 @@ public interface AttractionDao {
 	int deleteWish(String memberId, Integer attractionNo);
 
 	int insertWish(Map<String, Object> request);
+
+	List<Board> selectReviewList(Integer attractionNo);
 }

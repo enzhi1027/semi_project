@@ -15,7 +15,7 @@ const AttractionList = ({
   thumb,
   isLiked,
   handleWishToggle,
-  setClickedAttraction,
+  setClickedAttractionNo,
   selectAttraction,
   isFromWrite, //true일 때 팝업을 띄우지 않고 바로 selectAttraction 함수를 실행
 }) => {

@@ -31,6 +31,7 @@ import kr.co.iei.attraction.model.vo.GreenTourAttractionResponse;
 import kr.co.iei.attraction.model.vo.GreenTourResponse;
 import kr.co.iei.attraction.model.vo.Sigungu;
 import kr.co.iei.attraction.service.AttractionService;
+import kr.co.iei.board.model.vo.Board;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ObjectMapper;
 
@@ -78,6 +79,12 @@ public class AttractionController {
 	public ResponseEntity<?> insertWish(@RequestBody Map<String, Object> request) {
 		int result = service.insertWish(request);
 		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value = "/reviewList/{attractionNo}")
+	public ResponseEntity<?> selectReviewList(@PathVariable Integer attractionNo) {
+		List<Board> list = service.selectReviewList(attractionNo);
+		return ResponseEntity.ok(list);
 	}
 
 	@GetMapping(value = "test")

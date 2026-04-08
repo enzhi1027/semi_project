@@ -47,7 +47,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
 
   const { memberId, isReady } = useAuthStore();
 
-  const [clickedAttraction, setClickedAttraction] = useState(0);
+  const [clickedAttractionNo, setClickedAttractionNo] = useState(0);
   const [attractionDetailTap, setAttractionDetailTap] = useState(0); // 0: info, 1:review
 
   useEffect(() => {
@@ -397,10 +397,10 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
           </div>
         </div>
       </section>
-      {clickedAttraction && (
+      {clickedAttractionNo && (
         <section
           className={styles.attraction_detail_wrap}
-          onClick={() => setClickedAttraction(0)}
+          onClick={() => setClickedAttractionNo(0)}
         >
           <div
             className={styles.attraction_detail_popup}
@@ -428,21 +428,23 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
               <div
                 className={styles.detail_cancel}
                 onClick={() => {
-                  setClickedAttraction(0);
+                  setClickedAttractionNo(0);
                 }}
               >
                 <CloseIcon />
               </div>
             </div>
             {attractionDetailTap ? (
-              <AttractionReview />
+              <AttractionReview attractionNo={clickedAttractionNo} />
             ) : (
               <AttractionInfo
                 attraction={attractionList.find(
-                  (item) => item.attractionNo === clickedAttraction,
+                  (item) => item.attractionNo === clickedAttractionNo,
                 )}
-                isLiked={wishList.includes(clickedAttraction)}
+                isLiked={wishList.includes(clickedAttractionNo)}
                 handleWishToggle={handleWishToggle}
+                memberId={memberId}
+                isReady={isReady}
               />
             )}
           </div>
