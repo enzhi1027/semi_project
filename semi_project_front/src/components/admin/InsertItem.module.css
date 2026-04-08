@@ -1,0 +1,134 @@
+/*상품 등록 랩(컴포넌트) -----------------------------------------------*/
+.insert_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.insert_wrap > div {
+  margin-bottom: 12px;
+}
+
+/*상품명 ----------------------------------------------------*/
+.tour_name_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/*첨부파일, 버튼 ----------------------------------------------------*/
+.button_wrap {
+  display: flex;
+  gap: 36px;
+  align-items: center;
+}
+.button_wrap > label {
+  font-size: 20px;
+}
+.button_wrap > button {
+  font-size: 16px;
+}
+
+/*첨부파일 리스트 ----------------------------------------------------------*/
+.file_wrap {
+  margin-top: 16px;
+  border: 1px solid var(--gray6);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.file_item {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-between;
+  align-items: center;
+}
+.file_item > li {
+  margin: 8px 0px;
+  display: inline-block;
+}
+.add_btn:hover {
+  cursor: pointer;
+}
+.delete_btn {
+  cursor: pointer;
+}
+
+/*가격 정보 랩 ----------------------------------------------*/
+.price_wrap {
+  display: flex;
+  gap: 36px;
+  justify-content: space-around;
+}
+.price_wrap > div {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-grow: 1;
+}
+.price_wrap > div > input {
+  width: 100%;
+}
+.price_wrap > div > label {
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+.kid_price_title label {
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
+.kid_price_title .check_box {
+  padding: 0;
+  margin: 0;
+}
+
+/*이용 가능 기간 랩 ----------------------------------------------*/
+.period_wrap {
+  display: flex;
+  gap: 36px;
+}
+
+.period_wrap > div {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+.period_wrap > div > input {
+  width: 100%;
+}
+/*장소, 계획 -------------------------------------------------------------*/
+.place_plan_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.place_wrap > .place_input_wrap {
+  display: flex;
+  gap: 24px;
+  margin: 12px 0px;
+}
+
+.place_plan_wrap > .day_title {
+  padding: 12px 0px;
+  border-top: 1px solid var(--gray6);
+}
+
+.plan_input_wrap {
+  display: flex;
+  gap: 24px;
+  margin: 12px 0px;
+}
+
+.plan_input_wrap > .text_editor {
+  width: 100%;
+  min-height: 200px;
+  flex-grow: 1;
+}
+
+.place_wrap > .place_input_wrap > img {
+  align-items: center;
+  width: 36px;
+  height: 36px;
+}

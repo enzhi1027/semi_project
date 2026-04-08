@@ -3,6 +3,7 @@ import {
   NavLink,
   Route,
   Routes,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 import useAuthStore from "../../components/utils/useAuthStore";
@@ -20,20 +21,36 @@ import AdminContent from "../../components/admin/AdminContent";
 import AdminTour from "../../components/admin/AdminTour";
 
 const Mypage = () => {
-  const { memberId, isReady } = useAuthStore();
+  const { memberId, memberGrade, isReady } = useAuthStore();
   const navigate = useNavigate();
   //아이디가 있고 isReady가 true일 때만 동작
 
+  //경로 객체 접근 / 현재 경로의 정보 사용하기 위해 필요
+  const location = useLocation();
+
   useEffect(() => {
     // isReady가 true인데 memberId가 없다면 로그인이 안 된 상태
+    // 비 로그인 사용자 차단
     if (isReady && memberId == null) {
       Swal.fire({ title: "로그인 후 이용 가능합니다.", icon: "warning" }).then(
         () => {
           navigate("/login");
         },
       );
+      //관리자 페이지 접근 제한
+      //객체 주소에 admin 포함 + 회원 등급 1 아닐 때 접근 제한
+    } else if (location.pathname.includes("admin") && memberGrade !== 1) {
+      Swal.fire({
+        title: "관리자만 접근 가능합니다.",
+        text: "관리자 아이디로 접속해주세요.",
+        icon: "error",
+        confirmButtonColor: "var(--color1)",
+        //마이페이지/내 정보로 이동
+      }).then(() => {
+        navigate("/mypage/myinfo");
+      });
     }
-  }, [isReady, memberId, navigate]);
+  }, [isReady, memberId, memberGrade, navigate]);
   return (
     isReady &&
     memberId && (

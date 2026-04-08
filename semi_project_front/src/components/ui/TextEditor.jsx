@@ -1,14 +1,14 @@
-import { EditorContent, useEditor } from '@tiptap/react';
-import styles from './TextEditor.module.css';
-import StarterKit from '@tiptap/starter-kit';
-import Image from '@tiptap/extension-image';
-import ResizeImage from 'tiptap-extension-resize-image';
-import axios from 'axios';
+import { EditorContent, useEditor } from "@tiptap/react";
+import styles from "./TextEditor.module.css";
+import StarterKit from "@tiptap/starter-kit";
+import Image from "@tiptap/extension-image";
+import ResizeImage from "tiptap-extension-resize-image";
+import axios from "axios";
 
 const TextEditor = ({ data, setData }) => {
   const editor = useEditor({
     extensions: [StarterKit, Image, ResizeImage],
-    content: data || '',
+    content: data || "",
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
       setData(editor.getHTML());
@@ -18,16 +18,16 @@ const TextEditor = ({ data, setData }) => {
   return (
     <div className={styles.editor_wrap}>
       <MenuBar editor={editor} />
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: "relative" }}>
         {!data && (
           <div
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: 10,
               left: 20,
-              color: 'gray',
-              pointerEvents: 'none',
-              userSelect: 'none',
+              color: "gray",
+              pointerEvents: "none",
+              userSelect: "none",
             }}
           >
             내용을 입력하세요.
@@ -45,9 +45,9 @@ const MenuBar = ({ editor }) => {
   }
 
   const addImage = () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
     input.click();
 
     input.onchange = () => {
@@ -56,11 +56,11 @@ const MenuBar = ({ editor }) => {
         return;
       }
       const form = new FormData();
-      form.append('image', file);
+      form.append("image", file);
       axios
         .post(`${import.meta.env.VITE_BACKSERVER}/boards/image-upload`, form, {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         })
         .then((res) => {
@@ -77,7 +77,7 @@ const MenuBar = ({ editor }) => {
     <div className={styles.menu_bar}>
       <button
         type="button"
-        className={editor.isActive('bold') ? styles.active : ''}
+        className={editor.isActive("bold") ? styles.active : ""}
         onClick={() => {
           editor.chain().focus().toggleBold().run();
         }}
@@ -86,7 +86,7 @@ const MenuBar = ({ editor }) => {
       </button>
       <button
         type="button"
-        className={editor.isActive('italic') ? styles.active : ''}
+        className={editor.isActive("italic") ? styles.active : ""}
         onClick={() => {
           editor.chain().focus().toggleItalic().run();
         }}
@@ -96,7 +96,7 @@ const MenuBar = ({ editor }) => {
       <button
         type="button"
         className={
-          editor.isActive('heading', { level: 2 }) ? styles.active : ''
+          editor.isActive("heading", { level: 2 }) ? styles.active : ""
         }
         onClick={() => {
           editor.chain().focus().toggleHeading({ level: 2 }).run();
@@ -106,7 +106,7 @@ const MenuBar = ({ editor }) => {
       </button>
       <button
         type="button"
-        className={editor.isActive('bulletList') ? styles.active : ''}
+        className={editor.isActive("bulletList") ? styles.active : ""}
         onClick={() => {
           editor.chain().focus().toggleBulletList().run();
         }}

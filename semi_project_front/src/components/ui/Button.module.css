@@ -25,6 +25,6 @@
   filter: brightness(1.1);
 }
 
-.join_btn_wrap > .join_btn:active {
+.join_btn:active {
   filter: brightness(0.9);
 }
