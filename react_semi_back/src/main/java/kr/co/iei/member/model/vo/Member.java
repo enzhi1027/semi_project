@@ -13,15 +13,15 @@ import lombok.NoArgsConstructor;
 @Data
 @Alias(value="member")
 public class Member {
-	private String memberId;
-	private String memberPw;
-	private String memberName;
-	private String memberEmail;
-	private String memberPhone;
-	private String memberAddr;
-	private String memberAddrDetail;
-	private String memberThumb;
-	private Integer memberGrade;
-	private Date enrollDate;
+	private String memberId;			//아이디
+	private String memberPw;			//비밀번호
+	private String memberName;			//이름
+	private String memberEmail;			//이메일
+	private String memberPhone;			//전화번호
+	private String memberAddr;			//주소
+	private String memberAddrDetail;	//상세 주소
+	private String memberThumb;			//유저 프로필
+	private Integer memberGrade;		//회원 등급 0 : 일반, 1 : 관리자, 2: 차단
+	private Date enrollDate;			//가입일
 	
 }

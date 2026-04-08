@@ -16,7 +16,7 @@ public class TourItemPlace {
 	private Integer tourItemDay;		//투어 일차
 	private String tourItemPlace;		//상품 설명(장소)
 	private String tourItemPlan;		//상품 설명(계획)
-	private Integer tourItemPlaceOrder;	
+	private Integer tourItemPlaceOrder;	//장소 번호(정렬 기준)
 	//설명 순서 정렬(몇번째 설명인지. 조회 시 정렬 기준 tourItemDay+tourItemOrder)
 	
 }
