@@ -6,7 +6,7 @@
   position: sticky;
   top: 0;
   box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.3);
-  z-index: 9998;
+  z-index: 9990;
 }
 .header_wrap_main {
   width: 100%;

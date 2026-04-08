@@ -58,7 +58,7 @@ const CourseItem = ({ course }) => {
   };
   useEffect(() => {
     setLike(course.isLike);
-  }, []);
+  }, [course]);
   return (
     <>
       <div className={styles.course_item}>
@@ -93,7 +93,9 @@ const CourseItem = ({ course }) => {
           {like === 0 ? (
             <FavoriteBorderIcon onClick={memberId ? likeOn : loginMsg} />
           ) : (
-            <FavoriteIcon onClick={likeOff} />
+            <>
+              <FavoriteIcon onClick={likeOff} sx={{ fill: "var(--color1)" }} />
+            </>
           )}
         </div>
       </div>

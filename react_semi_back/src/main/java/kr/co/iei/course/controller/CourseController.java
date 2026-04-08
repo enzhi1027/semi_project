@@ -1,6 +1,7 @@
 package kr.co.iei.course.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,6 +73,33 @@ public class CourseController {
 		return ResponseEntity.ok(memberName);
 	}
 	
+	//코스 생성
+	@PostMapping(value="/insert")
+	public ResponseEntity<?> insertCourse(@RequestBody Map<String, Object> request){
+		int result = courseService.insertCourse(request);
+		return ResponseEntity.ok(result);
+	}
+	
+	//코스 제목 조회
+	@GetMapping(value="/courseTitle/{courseNo}")
+	public ResponseEntity<?> selectCourseTitle(@PathVariable int courseNo){
+		String courseTitle = courseService.selectCourseTitle(courseNo);
+		return ResponseEntity.ok(courseTitle);
+	}
+	
+	//코스 삭제
+	@DeleteMapping(value="/{courseNo}")
+	public ResponseEntity<?> deleteCourse(@PathVariable int courseNo){
+		System.out.println(courseNo);
+		int result = courseService.deleteCourse(courseNo);
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value="/addr")
+	public ResponseEntity<?> selectAttractionAddr(){
+		List<String> list = courseService.selectAttractionAddr();
+		return ResponseEntity.ok(list);
+	}
 	
 }
 

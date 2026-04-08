@@ -1,6 +1,7 @@
 package kr.co.iei.course.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -24,5 +25,19 @@ public interface CourseDao {
 	List<AttractionList> selectAttractionList(AttractionSearchItem item);
 
 	String selectMemberName(String memberId);
+
+	int insertCourseNo();
+
+	int insertCourse(CourseList courseInfo);
+
+	int insertCourseAttraction(AttractionList attraction);
+
+	String selectCourseTitle(int courseNo);
+
+	int selectTotalCount();
+
+	int deleteCourse(int courseNo);
+
+	List<String> selectAttractionAddr();
 
 }

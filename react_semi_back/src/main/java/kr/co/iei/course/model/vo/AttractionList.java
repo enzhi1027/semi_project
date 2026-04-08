@@ -17,4 +17,6 @@ public class AttractionList {
 	private String attractionThumb;
 	private String attractionAddr;
 	private String attractionPhone;
+	private Integer courseIndex;
+	private Integer courseNo;
 }
