@@ -520,7 +520,7 @@ const Join = () => {
             />
           </div>
           <div className={styles.join_btn_wrap}>
-            <Button className="join-btn" type="submit">
+            <Button className="join_btn" type="submit">
               회원가입
             </Button>
           </div>

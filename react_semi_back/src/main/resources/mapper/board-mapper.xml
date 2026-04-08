@@ -3,89 +3,185 @@
 <mapper namespace="kr.co.iei.board.model.dao.BoardDao">
 
 	<select id="selectBoardList" resultType="board">
-	select 
-		board_no,
-		board_category,
-		board_title,
-		board_thumb,
-		board_writer,
-		to_char(board_date,'yyyy-mm-dd') as board_date,
-        member_thumb
-	from board_tbl 
-    join member_tbl on (board_writer = member_id)
-	where board_status = #{status}
+		select 
+			board_no,
+			board_category,
+			board_title,
+			board_thumb,
+			board_writer,
+			to_char(board_date,'yyyy-mm-dd') as board_date,
+        	member_thumb
+		from board_tbl 
+    	join member_tbl on (board_writer = member_id)
+		where board_status = #{status}
 
-	<!-- 카테고리 -->
-    <if test="category == 1">
-        and board_category = 1
-    </if>
-    <if test="category == 2">
-        and board_category = 2
-    </if>
+    	<if test="category == 1">
+        	and board_category = 1
+    	</if>
+    	<if test="category == 2">
+        	and board_category = 2
+    	</if>
 
-	<if test="searchType == 1">
-		and board_title like '%'||#{searchKeyword}||'%'
-	</if>
-	<if test="searchType == 2">
-		and board_writer = #{searchKeyword}
-	</if>
+		<if test="searchType == 1">
+			and board_title like '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchType == 2">
+			and board_writer = #{searchKeyword}
+		</if>
 
-	<if test="order == 1">
-		order by board_no desc
-	</if>
-	<if test="order == 2">
-		order by board_no asc
-	</if>
+		<if test="order == 1">
+			order by board_no desc
+		</if>
+		<if test="order == 2">
+			order by board_no asc
+		</if>
+		offset #{page} * #{size} rows fetch next #{size} rows only
+	</select>
 
-	offset #{page} * #{size} rows fetch next #{size} rows only
-</select>
+	<select id="selectBoardCount" resultType="Integer">
+		select count(*) from board_tbl
+		where board_status = #{status}
 
-<select id="selectBoardCount" resultType="Integer">
-	select count(*) from board_tbl
-	where board_status = #{status}
+    	<if test="category == 1">
+      	  	and board_category = 1
+    	</if>
+    	<if test="category == 2">
+        	and board_category = 2
+    	</if>
 
-    <if test="category == 1">
-        and board_category = 1
-    </if>
-    <if test="category == 2">
-        and board_category = 2
-    </if>
+		<if test="searchType == 1">
+			and board_title like '%'||#{searchKeyword}||'%'
+		</if>
+		<if test="searchType == 2">
+			and board_writer = #{searchKeyword}
+		</if>
+	</select>
 
-	<if test="searchType == 1">
-		and board_title like '%'||#{searchKeyword}||'%'
-	</if>
-	<if test="searchType == 2">
-		and board_writer = #{searchKeyword}
-	</if>
-</select>
+	<select id="getNewBoardNo" resultType="int">
+    	select board_seq.nextval from dual
+	</select>
 
-<select id="getNewBoardNo" resultType="int">
-    select board_seq.nextval from dual
-</select>
+	<insert id="inserBoard">
+    	insert into board_tbl (
+        	board_no,
+        	board_category,
+        	board_title,
+        	board_content,
+        	board_thumb,
+        	board_writer,
+        	board_date,
+        	board_status,
+        	attraction_no,
+        	location_no,
+        	place_name,
+        	address_name
+    	) values (
+        	#{boardNo},
+        	#{boardCategory},
+        	#{boardTitle},
+        	#{boardContent},
+        	#{boardThumb, jdbcType=VARCHAR},     #{boardWriter},
+        	sysdate,
+        	1,
+        	#{attractionNo, jdbcType=NUMERIC},   #{locationNo, jdbcType=VARCHAR},     #{placeName, jdbcType=VARCHAR},      #{addressName, jdbcType=VARCHAR}     )
+	</insert>
 
-<insert id="inserBoard">
-    insert into board_tbl (
+	<select id="selectOneBoard" resultType="board">
+    	select
+    		board_no,
+    		board_category,
+    		board_title,
+    		board_content,
+    		board_writer,
+    		to_char(board_date, 'yyyy-mm-dd') as board_date,
+			place_name,
+			address_name,
+			member_thumb
+		from board_tbl
+		join member_tbl on (board_writer = member_id)
+		where board_no = #{boardNo}
+	</select>
+
+	<delete id="deleteBoard">
+		delete from board_tbl where board_no = #{boardNo}
+	</delete>
+
+	<!-- 좋아요 -->
+	<select id="selectLikeCount" resultType="int">
+		select count(*) from board_like_tbl where board_no = #{boardNo}
+	</select>
+	
+	<select id="selectIsLike" resultType="int">
+		select count(*) from board_like_tbl
+		where board_no = #{boardNo} and member_id = #{memberId}
+	</select>
+	
+	<insert id="insertLike">
+		insert into board_like_tbl values(#{boardNo}, #{memberId})
+	</insert>
+	
+	<delete id="deleteLike">
+		delete from board_like_tbl where board_no = #{boardNo} and member_Id = #{memberId}
+	</delete>
+
+	<!-- 댓글 -->
+	<insert id="insertBoardComment">
+		insert into board_comment_tbl (
+        board_comment_no,
+        board_comment_content,
+        board_comment_writer,
         board_no,
-        board_category,
-        board_title,
-        board_content,
-        board_thumb,
-        board_writer,
-        board_date,
-        board_status,
-        attraction_no,
-        location_no,
-        place_name,
-        address_name
+        board_comment_date,
+        comment_status
     ) values (
+        #{boardCommentNo},
+        #{boardCommentContent},
+        #{boardCommentWriter},
         #{boardNo},
-        #{boardCategory},
-        #{boardTitle},
-        #{boardContent},
-        #{boardThumb, jdbcType=VARCHAR},     #{boardWriter},
         sysdate,
-        1,
-        #{attractionNo, jdbcType=NUMERIC},   #{locationNo, jdbcType=VARCHAR},     #{placeName, jdbcType=VARCHAR},      #{addressName, jdbcType=VARCHAR}     )
-</insert>
-
+        1  )
+	</insert>
+	
+	<select id="selectBoardCommentList" resultType="boardComment">
+		select
+			board_comment_no,
+			board_comment_content,
+			board_comment_writer,
+			board_no,
+			board_comment_date,
+			comment_status,
+			member_thumb
+		from board_comment_tbl
+		join member_tbl on(board_comment_writer = member_id)
+		where board_no = #{boardNo}
+		order by board_comment_no
+	</select>
+	
+	<select id="selectNewBoardCommentNo" resultType="int">
+		select board_comment_seq.nextval from dual
+	</select>
+	
+	<select id="selectOneBoardComment" resultType="boardComment">
+		select
+			board_comment_no,
+			board_comment_content,
+			board_comment_writer,
+			board_no,
+			board_comment_date,
+			comment_status,
+			member_thumb
+		from board_comment_tbl
+		join member_tbl on (board_comment_writer = member_id)
+		where board_comment_no = #{boardCommentNo}
+	</select>
+	
+	<update id="updateBoardComment">
+		update board_comment_tbl set
+			board_comment_content = #{boardCommentContent}
+		where board_comment_no = #{boardCommentNo}
+	</update>
+	
+	<delete id="deleteBoardComment">
+		delete from board_comment_tbl where board_comment_no = #{boardCommentNo}
+	</delete>
 </mapper>
