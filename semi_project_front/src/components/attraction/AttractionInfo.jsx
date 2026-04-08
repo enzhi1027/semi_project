@@ -3,7 +3,6 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 const AttractionInfo = ({ attraction, isLiked, handleWishToggle }) => {
-  console.log(attraction);
   return (
     <div className={styles.attraction_info_wrap}>
       <div className={styles.attraction_info_header}>

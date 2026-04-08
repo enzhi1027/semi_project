@@ -13,7 +13,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AttractionInfo from '../../components/attraction/AttractionInfo';
 import AttractionReview from '../../components/attraction/AttractionReview';
 
-const AttractionSearchPage = () => {
+const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
   const navigate = useNavigate();
   const location = useLocation(); // 현재 페이지의 상태값을 가져옴
   // 게시글 작성 페이지에서 왔는지 확인 (fromWrite 같은 플래그를 BoardWritePage에서 보내줘야 함)
@@ -374,6 +374,8 @@ const AttractionSearchPage = () => {
                               attractionNo: item.attractionNo, // 게시글 DB에 저장할 관광지 번호
                             },
                           });
+                        } else {
+                          setCategoryTest(0);
                         }
                       }}
                       key={'attractionList-' + index}
