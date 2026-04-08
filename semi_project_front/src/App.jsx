@@ -18,6 +18,7 @@ import BoardWritePage from "./pages/board/BoardWritePage";
 import NaverSearch from "./pages/board/NaverSearch";
 import CourseWritePage from "./pages/course/CourseWritePage";
 import AdminTourInsert from "./pages/member(admin)/AdminTourInsert";
+import TourSearchPage from "./pages/tour/TourSearchPage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -75,6 +76,7 @@ function App() {
               }
             />
             <Route path="/boardNavermap" element={<NaverSearch />} />
+            <Route path="/tour/list" element={<TourSearchPage />} />
           </Routes>
         </div>
         <Footer />

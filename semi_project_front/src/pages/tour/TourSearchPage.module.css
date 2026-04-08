@@ -1,0 +1,103 @@
+.tour_search_wrap {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.tour_search_wrap svg path {
+  color: var(--color1);
+}
+
+.tour_search_wrap input {
+  border: none;
+  outline: none;
+  padding: 4px;
+}
+
+.tour_search_wrap .menubar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tour_search_wrap .menubar .menubar_search_wrap {
+  display: flex;
+  gap: 10px;
+}
+
+.menubar_search_wrap .search_where,
+.menubar_search_wrap .search_price,
+.menubar_search_wrap .search_when {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  border: 1px solid var(--color2);
+  border-radius: 10px;
+  background-color: var(--gray8);
+  padding: 18px 10px;
+}
+
+.menubar_search_wrap .search_where > *:last-child,
+.menubar_search_wrap .search_price > *:last-child {
+  cursor: pointer;
+}
+
+.menubar_search_wrap .search_price {
+  gap: 7px;
+}
+
+.menubar_search_wrap .search_price input {
+  width: 90px;
+  text-align: right;
+}
+
+.menubar_search_wrap .search_when {
+  cursor: pointer;
+}
+
+.menubar_search_wrap .search_when .search_when_btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.menubar_search_wrap .search_when .search_when_btn > div {
+  font-size: 0.93em;
+  color: var(--gray4);
+}
+
+.tour_search_wrap .menubar .menubar_icon_wrap {
+  display: flex;
+  gap: 17px;
+}
+
+.tour_search_wrap .menubar .menubar_icon_wrap > div {
+  cursor: pointer;
+}
+
+.tour_product_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+  margin-top: 20px;
+}
+
+.tour_product_wrap > div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tour_product_wrap .product_list_title {
+  font-size: 2em;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.tour_product_wrap .produt_list_wrap {
+  width: 100%;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}

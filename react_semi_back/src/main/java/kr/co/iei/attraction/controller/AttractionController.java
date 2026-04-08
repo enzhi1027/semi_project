@@ -81,9 +81,9 @@ public class AttractionController {
 		return ResponseEntity.ok(result);
 	}
 	
-	@GetMapping(value = "/reviewList/{attractionNo}")
-	public ResponseEntity<?> selectReviewList(@PathVariable Integer attractionNo) {
-		List<Board> list = service.selectReviewList(attractionNo);
+	@GetMapping(value = "/reviewList/{attractionNo}/{reviewCategory}")
+	public ResponseEntity<?> selectReviewList(@PathVariable Integer attractionNo, @PathVariable String reviewCategory) {
+		List<Board> list = service.selectReviewList(attractionNo, reviewCategory);
 		return ResponseEntity.ok(list);
 	}
 

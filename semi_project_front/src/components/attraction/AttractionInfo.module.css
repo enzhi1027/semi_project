@@ -35,6 +35,7 @@
 .attraction_info_header .attraction_heart svg path {
   color: var(--color1);
 }
+
 .attraction_info_img {
   display: flex;
   align-items: center;

@@ -98,8 +98,8 @@ public class AttractionService {
 		return result;
 	}
 
-	public List<Board> selectReviewList(Integer attractionNo) {
-		List<Board> list = dao.selectReviewList(attractionNo);
+	public List<Board> selectReviewList(Integer attractionNo, String reviewCategory) {
+		List<Board> list = dao.selectReviewList(attractionNo, reviewCategory);
 		return list;
 	}
 }

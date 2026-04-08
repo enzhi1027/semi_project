@@ -1,11 +1,11 @@
-import styles from './AttractionList.module.css';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import useAuthStore from '../utils/useAuthStore';
-import Swal from 'sweetalert2';
+import styles from "./AttractionList.module.css";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../utils/useAuthStore";
+import Swal from "sweetalert2";
 
 const AttractionList = ({
   attractionNo,
@@ -30,7 +30,7 @@ const AttractionList = ({
             selectAttraction();
           } else {
             // 일반 리스트 보기일 경우: 기존처럼 상세보기 팝업 열기
-            setClickedAttraction(attractionNo);
+            setClickedAttractionNo(attractionNo);
           }
         }}
       >
@@ -39,7 +39,7 @@ const AttractionList = ({
             src={
               thumb
                 ? thumb
-                : 'https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg'
+                : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
             }
           />
         </div>
@@ -53,8 +53,8 @@ const AttractionList = ({
                 e.stopPropagation();
                 if (isReady && memberId == null) {
                   Swal.fire({
-                    title: '로그인 후 이용 가능합니다.',
-                    icon: 'warning',
+                    title: "로그인 후 이용 가능합니다.",
+                    icon: "warning",
                   });
                 } else {
                   handleWishToggle(attractionNo);
