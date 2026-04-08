@@ -22,9 +22,11 @@ public class Board {
 	private String boardWriter;
 	private String boardDate;
 	private Integer boardStatus;
-	
+	private String memberThumb;   // 회원 프로필
 	private Integer attractionNo; // 리뷰용 관광지 PK
     private String locationNo;    // 자유용 위치 번호
     private String placeName;     // 자유용 장소명
     private String addressName;   // 자유용 주소
+    private Integer likeCount;
+	private Integer reportCount;     
 }

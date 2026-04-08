@@ -1,30 +1,31 @@
-import "./App.css";
-import "./font.css";
-import { Route, Routes } from "react-router-dom";
-import MainPage from "./components/Commons/MainPage";
-import Header from "./components/Commons/Header";
-import Footer from "./components/Commons/Footer";
-import CourseListPage from "./pages/course/CourseListPage";
-import AttractionSearchPage from "./pages/attraction/AttractionSearchPage";
-import { useEffect, useState } from "react";
-import Login from "./pages/member/Login";
-import Join from "./pages/member/Join";
-import Mypage from "./pages/member/Mypage";
-import CourseViewPage from "./pages/course/CourseViewPage";
-import useAuthStore from "./components/utils/useAuthStore";
-import axios from "axios";
-import BoardListPage from "./pages/board/BoardListPage";
-import BoardWritePage from "./pages/board/BoardWritePage";
-import NaverSearch from "./pages/board/NaverSearch";
-import CourseWritePage from "./pages/course/CourseWritePage";
-import AdminTourInsert from "./pages/member(admin)/AdminTourInsert";
+import './App.css';
+import './font.css';
+import { Route, Routes } from 'react-router-dom';
+import MainPage from './components/Commons/MainPage';
+import Header from './components/Commons/Header';
+import Footer from './components/Commons/Footer';
+import CourseListPage from './pages/course/CourseListPage';
+import AttractionSearchPage from './pages/attraction/AttractionSearchPage';
+import { useEffect, useState } from 'react';
+import Login from './pages/member/Login';
+import Join from './pages/member/Join';
+import Mypage from './pages/member/Mypage';
+import CourseViewPage from './pages/course/CourseViewPage';
+import useAuthStore from './components/utils/useAuthStore';
+import axios from 'axios';
+import BoardListPage from './pages/board/BoardListPage';
+import BoardWritePage from './pages/board/BoardWritePage';
+import NaverSearch from './pages/board/NaverSearch';
+import CourseWritePage from './pages/course/CourseWritePage';
+import AdminTourInsert from './pages/member(admin)/AdminTourInsert';
+import BoardViewPage from './pages/board/BoardViewPage';
 
 function App() {
   const { endTime, token } = useAuthStore();
   const [categoryTest, setCategoryTest] = useState(0); // 0: 기본, 1: 커뮤니티 -> 관광
   const logout = () => {
     useAuthStore.getState().logout();
-    delete axios.defaults.headers.common["Authorization"];
+    delete axios.defaults.headers.common['Authorization'];
   };
   useEffect(() => {
     useAuthStore.getState().setReady(true);
@@ -33,7 +34,7 @@ function App() {
     }
     const timeout = endTime - Date.now();
     if (timeout > 0) {
-      axios.defaults.headers.common["Authorization"] = token;
+      axios.defaults.headers.common['Authorization'] = token;
       window.setTimeout(() => {
         logout();
       }, timeout);
@@ -75,6 +76,7 @@ function App() {
               }
             />
             <Route path="/boardNavermap" element={<NaverSearch />} />
+            <Route path="/board/view/:boardNo" element={<BoardViewPage />} />
           </Routes>
         </div>
         <Footer />

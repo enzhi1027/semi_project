@@ -37,7 +37,6 @@ const BoardListPage = () => {
         `${import.meta.env.VITE_BACKSERVER}/boards?page=${page}&size=${size}&status=1&order=${order}&searchType=${searchType}&searchKeyword=${searchKeyword}&category=${category}`,
       )
       .then((res) => {
-        console.log(res);
         setBoardList(res.data.items);
         setTotalPage(res.data.totalPage);
       })
@@ -52,7 +51,6 @@ const BoardListPage = () => {
 
       <div className={styles.list_option_wrap}>
         <div className={styles.left_option}>
-          {/* 카테고리 */}
           <select
             className={styles.select}
             value={category}
@@ -109,10 +107,8 @@ const BoardListPage = () => {
         </div>
       </div>
 
-      {/* 게시글 목록 */}
       <BoardList boardList={boardList} />
 
-      {/* 글쓰기 버튼 */}
       {memberId && (
         <div className={styles.write_btn_zone}>
           <Button
@@ -124,7 +120,6 @@ const BoardListPage = () => {
         </div>
       )}
 
-      {/* 페이지네이션 */}
       <div className={styles.board_list_pagination}>
         <Pagination
           page={page}
