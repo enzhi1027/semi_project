@@ -45,6 +45,14 @@
   left: 50%;
   z-index: 1;
 }
+.index_bar_write {
+  width: 3px;
+  height: 100%;
+  background-color: var(--color1);
+  position: absolute;
+  left: 56%;
+  z-index: 1;
+}
 .index_num {
   width: 35px;
   height: 33px;
@@ -69,7 +77,7 @@
   justify-content: center;
   align-items: center;
   position: absolute;
-  left: 15%;
+  left: 18%;
   top: 42%;
   z-index: 2;
 }
@@ -114,7 +122,6 @@
   color: var(--gray8);
   font-size: 20px;
   font-weight: 500;
-  word-break: keep-all;
   white-space: normal;
 }
 .course_write_index {

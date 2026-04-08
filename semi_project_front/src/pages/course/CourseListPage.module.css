@@ -20,8 +20,12 @@
   gap: 4px;
   text-decoration: none;
 }
+.write_course > svg {
+  font-size: 26px;
+}
 .write_course > p {
   font-weight: 600;
+  font-size: 18px;
 }
 .order {
   display: flex;
@@ -44,4 +48,7 @@
   color: var(--gray1);
   font-size: 18px;
   font-weight: 500;
+}
+.pagination {
+  margin-bottom: 24px;
 }

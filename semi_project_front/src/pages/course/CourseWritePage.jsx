@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./CourseWritePage.module.css";
 import SearchIcon from "@mui/icons-material/Search";
-import testImg from "../../assets/img/mainPage/main.jpg";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CourseInfo from "../../components/Course/CourseInfo";
 import axios from "axios";
 import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
 
 const CourseWritePage = () => {
   const [keyword, setKeyword] = useState("");
@@ -26,19 +27,52 @@ const CourseWritePage = () => {
   const [memberName, setMemberName] = useState(null);
   const [courseInfo, setCourseInfo] = useState({
     courseTitle: "",
-    courseSummary: "",
-    courseWriter: memberName,
+    courseContent: "",
+    courseWriter: memberId,
   });
   const [infoPage, setInfoPage] = useState(false);
+  const navigate = useNavigate();
 
-  const [checkState, setCheckState] = useState([]);
   const createCourse = () => {
     if (courseInfo.courseTitle === "" || courseInfo.courseSummary === "") {
       Swal.fire({
         title: "코스설명을 작성해주세요",
         icon: "warning",
       });
+      return;
     }
+    Swal.fire({
+      title: "코스를 생성하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      confirmButtonColor: "var(--color2)",
+      cancelButtonColor: "var(--danger)",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(
+            `${import.meta.env.VITE_BACKSERVER}/courses/insert`,
+            {
+              courseInfo: courseInfo,
+              attractionList: createAttractionList,
+            },
+            {
+              headers: { "Content-Type": "application/json" },
+            },
+          )
+          .then((res) => {
+            if (res.data === 0) {
+              return;
+            }
+            navigate(`/course/view/${res.data}`);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    });
   };
 
   useEffect(() => {
@@ -48,6 +82,7 @@ const CourseWritePage = () => {
       )
       .then((res) => {
         setAttractionList(res.data);
+        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -68,6 +103,7 @@ const CourseWritePage = () => {
   const addCourseList = () => {
     setCreateAttractionList((prev) => [...prev, ...addAttractionList]);
     setAddAttractionList([]);
+    console.log(createAttractionList);
   };
   return (
     <>
@@ -81,9 +117,6 @@ const CourseWritePage = () => {
                   attraction={attraction}
                   setAddAttractionList={setAddAttractionList}
                   addAttractionList={addAttractionList}
-                  index={index}
-                  checkState={checkState}
-                  setCheckState={setCheckState}
                 />
               );
             })}
@@ -283,21 +316,42 @@ const CourseWritePage = () => {
               <div className={styles.course_info_page_wrap}>
                 <div className={styles.course_info_page}>
                   <h3>설명작성</h3>
+                  <CloseIcon
+                    className={styles.close_icon}
+                    onClick={() => {
+                      setInfoPage(false);
+                    }}
+                  />
                   <div className={styles.info_input_wrap}>
-                    <label>코스제목</label>
-                    <input type="text" />
+                    <label htmlFor="courseTitle">코스제목</label>
+                    <input
+                      type="text"
+                      id="courseTitle"
+                      value={courseInfo.courseTitle}
+                      onChange={(e) => {
+                        setCourseInfo({
+                          ...courseInfo,
+                          courseTitle: e.target.value,
+                        });
+                      }}
+                    />
                   </div>
                   <div className={styles.info_input_wrap}>
                     <label>작성자</label>
-                    <input
-                      type="text"
-                      value={courseInfo.courseWriter}
-                      readOnly
-                    />
+                    <input type="text" value={memberName} disabled={true} />
                   </div>
                   <div className={styles.info_course_summary}>
-                    <p>코스설명</p>
-                    <textarea></textarea>
+                    <label htmlFor="courseSummary">코스설명</label>
+                    <textarea
+                      id="courseSummary"
+                      value={courseInfo.courseContent}
+                      onChange={(e) => {
+                        setCourseInfo({
+                          ...courseInfo,
+                          courseContent: e.target.value,
+                        });
+                      }}
+                    ></textarea>
                   </div>
                   <div
                     className={styles.info_create_btn}
@@ -321,9 +375,6 @@ const AttractionItem = ({
   attraction,
   setAddAttractionList,
   addAttractionList,
-  index,
-  checkState,
-  setCheckState,
 }) => {
   const checkbox = (e) => {
     if (e.target.checked) {
@@ -340,11 +391,26 @@ const AttractionItem = ({
     checkRef.current.click();
   };
 
+  const existsCheck = () => {
+    let data = false;
+    for (let i = 0; i < addAttractionList.length; i++) {
+      if (addAttractionList[i].attractionNo === attraction.attractionNo) {
+        data = true;
+        break;
+      }
+    }
+    return data;
+  };
   return (
     <>
       <div className={styles.attraction_wrap}>
         <div className={styles.attraction_select}>
-          <input type="checkbox" onChange={checkbox} ref={checkRef} />
+          <input
+            type="checkbox"
+            onChange={checkbox}
+            ref={checkRef}
+            checked={existsCheck()}
+          />
         </div>
         <div className={styles.attraction_img}>
           <img

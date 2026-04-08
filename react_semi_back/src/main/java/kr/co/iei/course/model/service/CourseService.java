@@ -1,10 +1,14 @@
 package kr.co.iei.course.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import kr.co.iei.course.model.dao.CourseDao;
 import kr.co.iei.course.model.vo.AttractionList;
@@ -22,7 +26,7 @@ public class CourseService {
 	//코스 리스트 조회
 	public CourseListResponse selectCourseList(CourseListItem request) {
 		List<CourseList> list = courseDao.selectCourseList(request);
-		int totalCount = list.size();
+		int totalCount = courseDao.selectTotalCount();
 		int totalPage = (int)Math.ceil(totalCount/(double)request.getSize());
 		CourseListResponse response = new CourseListResponse(list, totalPage);
 		return response;
@@ -47,15 +51,63 @@ public class CourseService {
 		int result = courseDao.insertCourseLike(request);
 		return result;
 	}
-
+	
+	//관광지 리스트 조회
 	public List<AttractionList> selectAttractionList(AttractionSearchItem item) {
 		List<AttractionList> list = courseDao.selectAttractionList(item);
 		return list;
 	}
 
+	//유저이름 조회
 	public String selectMemberName(String memberId) {
 		String memberName = courseDao.selectMemberName(memberId);
 		return memberName;
+	}
+
+	//관광지 코스 추가
+	@Transactional
+	public int insertCourse(Map<String, Object> request) {
+		ObjectMapper mapper = new ObjectMapper();
+		CourseList courseInfo = mapper.convertValue(
+				request.get("courseInfo"),
+				new TypeReference<CourseList>() {
+				}); 
+		List<AttractionList> attractionList = mapper.convertValue(
+				request.get("attractionList"),
+				new TypeReference<List<AttractionList>>() {
+				}); 
+	    int courseNo = courseDao.insertCourseNo();
+	    courseInfo.setCourseNo(courseNo);
+	    int resultCourse = courseDao.insertCourse(courseInfo);
+	    int result = 0;
+	    if(resultCourse == 1) {
+	    	for(AttractionList attraction : attractionList) {
+	    		attraction.setCourseNo(courseNo);
+	    		result += courseDao.insertCourseAttraction(attraction); 
+	    	}
+	    	if(result == attractionList.size()) {
+	    		return courseNo;
+	    	}
+	    }
+		return 0;
+	}
+
+	//코스 제목 조회
+	public String selectCourseTitle(int courseNo) {
+		String courseTitle = courseDao.selectCourseTitle(courseNo);
+		return courseTitle;
+	}
+
+	//코스 삭제
+	@Transactional
+	public int deleteCourse(int courseNo) {
+		int result = courseDao.deleteCourse(courseNo);
+		return result;
+	}
+
+	public List<String> selectAttractionAddr() {
+		List<String> list = courseDao.selectAttractionAddr();
+		return list;
 	}
 }
 

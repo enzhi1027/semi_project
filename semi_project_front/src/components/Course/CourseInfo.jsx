@@ -166,7 +166,11 @@ const AttractionInfoItem = ({
           >
             <p>{attraction.courseIndex}</p>
           </div>
-          <div className={styles.index_bar}></div>
+          <div
+            className={
+              courseWritePage ? styles.index_bar_write : styles.index_bar
+            }
+          ></div>
         </div>
         {courseWritePage && (
           <div className={styles.course_write_index}>

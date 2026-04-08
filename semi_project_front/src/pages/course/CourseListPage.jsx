@@ -13,7 +13,7 @@ const CourseListPage = () => {
   const { memberId } = useAuthStore();
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(8);
-  const [totalPage, setTotalPage] = useState(null);
+  const [totalPage, setTotalPage] = useState(0);
   useEffect(() => {
     axios
       .get(
@@ -66,12 +66,14 @@ const CourseListPage = () => {
         </div>
       </div>
       <CourseList courseList={courseList} />
-      <Pagination
-        page={page}
-        setPage={setPage}
-        totalPage={totalPage}
-        naviSize={5}
-      />
+      <div className={styles.pagination}>
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalPage={totalPage}
+          naviSize={5}
+        />
+      </div>
     </section>
   );
 };
