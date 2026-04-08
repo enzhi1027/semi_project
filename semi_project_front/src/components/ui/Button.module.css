@@ -8,11 +8,7 @@
   background-color: var(--color1);
 }
 
-.cancle {
-  background-color: var(--gray4);
-}
-
-.join_btn {
+.join-btn {
   padding: 12px;
   width: 300px;
   color: var(--gray8);
