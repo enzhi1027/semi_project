@@ -1,21 +1,21 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import styles from './Commons.module.css';
-import LoginIcon from '@mui/icons-material/Login';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import styles from "./Commons.module.css";
+import LoginIcon from "@mui/icons-material/Login";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 
-import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import useAuthStore from '../utils/useAuthStore';
-import axios from 'axios';
+import LogoutIcon from "@mui/icons-material/Logout";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import useAuthStore from "../utils/useAuthStore";
+import axios from "axios";
 
 const Header = () => {
   const location = useLocation();
-  const mainPage = location.pathname === '/';
+  const mainPage = location.pathname === "/";
   const { memberId } = useAuthStore();
   const navigate = useNavigate();
   const logout = () => {
     useAuthStore.getState().logout();
-    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers.common["Authorization"];
   };
   return (
     <>
@@ -35,7 +35,7 @@ const Header = () => {
               <Link to="/board/list">커뮤니티</Link>
             </li>
             <li>
-              <Link to="/">투어상품</Link>
+              <Link to="/tour/list">투어상품</Link>
             </li>
           </ul>
           {memberId ? (

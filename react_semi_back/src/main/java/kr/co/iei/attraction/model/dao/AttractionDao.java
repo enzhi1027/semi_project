@@ -42,5 +42,5 @@ public interface AttractionDao {
 
 	int insertWish(Map<String, Object> request);
 
-	List<Board> selectReviewList(Integer attractionNo);
+	List<Board> selectReviewList(Integer attractionNo, String reviewCategory);
 }

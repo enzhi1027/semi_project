@@ -282,3 +282,10 @@
 .detail_menubar .detail_mini > div:not(.detail_mini_active) {
   border-bottom: 1px solid var(--border);
 }
+
+.reviewCategory {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  height: 25px;
+}

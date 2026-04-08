@@ -206,13 +206,30 @@
 	
 	<select id="selectReviewList">
 		SELECT BOARD_NO
-		 	 , BOARD_TITLE
+		 	 , CASE 
+       	 			WHEN LENGTH(BOARD_TITLE) > 15 THEN RTRIM(SUBSTR(BOARD_TITLE, 1, 10)) || ' ...'
+			        ELSE BOARD_TITLE 
+			    END AS BOARD_TITLE
 			 , BOARD_THUMB
 			 , BOARD_WRITER
 			 , BOARD_DATE
-		  FROM BOARD_TBL
+		  FROM BOARD_TBL B
 		 WHERE BOARD_CATEGORY = 1
 		   AND BOARD_STATUS = 1
 		   AND ATTRACTION_NO = #{attractionNo}
+		<if test="reviewCategory == 0">
+	     ORDER
+	        BY (SELECT COUNT(*) 
+           		  FROM BOARD_LIKE_TBL L 
+                 WHERE L.BOARD_NO = B.BOARD_NO) DESC
+		</if>
+		<if test="reviewCategory == 1">
+	 	 ORDER
+	 	    BY BOARD_DATE DESC
+		</if>
+		<if test="reviewCategory == 2">
+		 ORDER
+	 	    BY BOARD_DATE ASC
+		</if>
 	</select>
 </mapper>
