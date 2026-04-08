@@ -15,7 +15,7 @@ const AttractionList = ({
   thumb,
   isLiked,
   handleWishToggle,
-  setClickedAttraction,
+  setClickedAttractionNo,
   selectAttraction,
   categoryTest,
 }) => {
@@ -26,7 +26,7 @@ const AttractionList = ({
         className={styles.content_list}
         onClick={() => {
           if (categoryTest === 0) {
-            setClickedAttraction(attractionNo);
+            setClickedAttractionNo(attractionNo);
           } else {
             selectAttraction();
           }

@@ -13,6 +13,7 @@ import kr.co.iei.attraction.model.vo.Attraction;
 import kr.co.iei.attraction.model.vo.AttractionListItem;
 import kr.co.iei.attraction.model.vo.AttractionListResponse;
 import kr.co.iei.attraction.model.vo.Sigungu;
+import kr.co.iei.board.model.vo.Board;
 
 @Service
 public class AttractionService {
@@ -95,5 +96,10 @@ public class AttractionService {
 	public int insertWish(Map<String, Object> request) {
 		int result = dao.insertWish(request);
 		return result;
+	}
+
+	public List<Board> selectReviewList(Integer attractionNo) {
+		List<Board> list = dao.selectReviewList(attractionNo);
+		return list;
 	}
 }

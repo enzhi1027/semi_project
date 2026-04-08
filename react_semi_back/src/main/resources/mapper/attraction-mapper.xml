@@ -203,4 +203,16 @@
 		     , #{attractionNo} 
 		     )
 	</insert>
+	
+	<select id="selectReviewList">
+		SELECT BOARD_NO
+		 	 , BOARD_TITLE
+			 , BOARD_THUMB
+			 , BOARD_WRITER
+			 , BOARD_DATE
+		  FROM BOARD_TBL
+		 WHERE BOARD_CATEGORY = 1
+		   AND BOARD_STATUS = 1
+		   AND ATTRACTION_NO = #{attractionNo}
+	</select>
 </mapper>

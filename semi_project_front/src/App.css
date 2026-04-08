@@ -37,6 +37,11 @@ body {
   background-color: var(--color4);
 }
 
+.swal2-container.swal2-center.swal2-backdrop-show {
+  position: fixed;
+  z-index: 2000;
+}
+
 .wrap {
   min-height: 100vh;
   display: flex;
