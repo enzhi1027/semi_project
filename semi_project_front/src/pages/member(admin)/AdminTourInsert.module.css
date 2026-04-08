@@ -1,7 +1,7 @@
-/*상품 등록 전체 랩 -------------------------------------------------*/
+/*상품 등록 랩(전체) -------------------------------------------------*/
 .tour_insert_wrap {
-  width: 1200px;
-  margin: 0 auto;
+  width: 1000px;
+  margin: 100px auto;
 }
 
 /*상품 등록 타이틀 ---------------------------------------------------*/
@@ -14,37 +14,16 @@
   border-bottom: 1px solid var(--gray6);
 }
 
-/*상품 등록 랩---------------------------------------------------*/
-.insert_wrap {
-  background-color: var(--gray6);
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/*상품 등록 랩----------------------------------------------------*/
+.main_wrap {
+  background-color: var(--gray8);
+  padding: 24px;
 }
-.insert_wrap .tour_input_wrap {
+.btn_wrap {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-/*상품명 랩---------------------------------------------------*/
-.item_name_wrap {
-  display: flex;
-  gap: 20px;
-}
-.item_name_wrap > input {
-  flex-grow: 1;
-}
-
-/*첨부파일 랩 -----------------------------------------------------*/
-
-/*요금 랩 -----------------------------------------------------*/
-.price_wrap {
-  display: flex;
+  justify-content: flex-end;
   gap: 24px;
 }
-.period_wrap {
-  display: flex;
-  gap: 24px;
+.btn_wrap > button {
+  font-size: 16px;
 }

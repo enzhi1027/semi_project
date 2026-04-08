@@ -127,8 +127,9 @@ const MyInfo = () => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-
+            //이메일 정규식
             const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+            //전화번호 정규식(010으로만 시작 가능)
             const phoneRegex = /^010-\d{3,4}-\d{4}$/;
 
             //에러 메시지가 있고, 검사식 결과가 불일치할 때는 등록 불가

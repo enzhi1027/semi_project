@@ -1,16 +1,24 @@
 .input {
-  padding: 7px;
+  padding: 8px;
   border-radius: 8px;
   border: solid 1px var(--gray5);
   outline: none;
   width: 100%;
 }
+.input:focus {
+  border: 1px solid var(--gray2);
+}
 .textarea {
   width: 100%;
+  font-size: 16px;
+  padding: 8px;
   outline: none;
   padding: 8px 4px;
-  border: 1px solid;
+  border: 1px solid var(--gray5);
   border-radius: 8px;
   min-height: 300px;
   resize: none;
+}
+.textarea:focus {
+  border: 1px solid var(--gray2);
 }
