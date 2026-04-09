@@ -24,7 +24,7 @@ function Map() {
         // );
 
         new naver.maps.Marker({
-          position: new naver.maps.LatLng(33.486284, 126.715366),
+          position: new naver.maps.LatLng(37.2625, 126.8436),
           map: map,
         });
 
