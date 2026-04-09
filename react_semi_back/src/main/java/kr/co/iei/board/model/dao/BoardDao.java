@@ -45,4 +45,8 @@ public interface BoardDao {
 
 	int deleteBoardComment(int boardCommentNo);
 
+	int updateBoard(Board board);
+	
+	int changeBoardStatus(Board board);
+
 }

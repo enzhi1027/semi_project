@@ -42,11 +42,18 @@ public class BoardService {
 		return result;
 	}
 	
-	// 게시글 상세 조회
+	//게시글 상세 조회
     public Board selectOneBoard(Integer boardNo) {
         return boardDao.selectOneBoard(boardNo);
     }
 
+    //게시글 수정
+    @Transactional
+    public int updateBoard(Board board) {
+    	int result = boardDao.updateBoard(board);
+    	return result;
+    }
+    
     //게시글 삭제
     @Transactional
     public int deleteBoard(Integer boardNo) {
@@ -121,6 +128,13 @@ public class BoardService {
   	public int deleteBoardComment(Integer boardCommentNo) {
   		int result = boardDao.deleteBoardComment(boardCommentNo);
   		return result;
+  	}
+  	
+ // 게시글 상태 변경 서비스
+  	@Transactional
+  	public int changeBoardStatus(Board board) {
+  	    int result = boardDao.changeBoardStatus(board);
+  	    return result;
   	}
   	
   	/*
