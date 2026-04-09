@@ -275,12 +275,13 @@
 
 .detail_menubar .detail_mini .detail_mini_active {
   border: 1px solid var(--border);
-  border-bottom: none;
+  border-bottom: 1px solid var(--gray8);
   border-radius: 5px 5px 0 0;
 }
 
 .detail_menubar .detail_mini > div:not(.detail_mini_active) {
   border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--gray8);
 }
 
 .reviewCategory {

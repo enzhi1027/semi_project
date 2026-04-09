@@ -9,10 +9,14 @@
     border 0.3s ease;
   cursor: pointer;
   padding: 10px 20px;
+  position: relative;
+  overflow: visible;
 }
+
 .tour_list_item_wrap:hover {
-  transform: translateY(-7px);
+  /* transform: translateY(-7px); */
   border: 1px solid var(--color2);
+  z-index: 100;
 }
 
 .tour_list_item_wrap .tour_list_item_img {
@@ -48,4 +52,84 @@
 .tour_list_item_wrap .tour_list_item_price,
 .tour_list_item_wrap .tour_list_item_schedule {
   font-size: 0.9em;
+}
+
+.tour_list_triangle {
+  background: var(--gray8);
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  bottom: 11%;
+  right: 8.5%;
+  z-index: 5;
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  transform: rotate(45deg);
+}
+
+.tour_list_mylist {
+  position: absolute;
+  background-color: var(--gray8);
+  border: 1px solid var(--border);
+  padding: 13px;
+  width: 300px;
+  z-index: 4;
+  bottom: -100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  gap: 12px;
+}
+
+.tour_list_mylist .addlist_input_div {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.tour_list_mylist .addlist_input {
+  flex: 1;
+}
+
+.tour_list_mylist .addlist_input_count {
+  font-size: 0.8em;
+  color: var(--gray3);
+}
+
+.tour_list_mylist .addlist_text1 {
+  font-size: 0.9em;
+  font-weight: 600;
+  padding-left: 3px;
+}
+
+.tour_list_mylist .addlist_emoji {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 17.38px;
+}
+
+.tour_list_mylist .addlist_emoji > * {
+  cursor: pointer;
+}
+
+.tour_list_mylist .addlist_emoji > *.selected_emoji {
+  border: 1px solid #000;
+}
+
+.tour_list_mylist .addlist_btn {
+  text-align: center;
+  align-content: center;
+  height: 30px;
+  color: var(--color4);
+  background-color: var(--color2);
+  border-radius: 10px;
+  transition: filter 0.3s ease; /* 부드러운 전환 효과 */
+  cursor: pointer;
+}
+
+.tour_list_mylist .addlist_btn:hover {
+  filter: brightness(1.1);
 }
