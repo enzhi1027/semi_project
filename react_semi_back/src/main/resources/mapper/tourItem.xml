@@ -1,4 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="kr.co.iei.touritem.model.dao.TourItemDao">
+
+	<select id="getNewTourItemNo" resultType="int">
+		select tour_item_seq.nextval from dual
+	</select>
+	
+	<insert id="insertTourItem">
+		insert into tour_item_tbl values(
+			#{tourItemNo},
+			#{tourItemName},
+			#{tourItemAdultPrice},
+			#{tourItemKidPrice},
+			#{startPeriod},
+			#{endPeriod},
+			#{tourItemDays},
+			0
+		)
+	</insert>
+	
+	<insert id="insertTourItemInfo">
+	insert into tour_item_info_tbl values(
+		tour_item_info_seq.nextval,
+		#{tourItemNo},
+		#{tourItemDay},
+		#{tourItemPlace},
+		#{tourItemPlan},
+		#{tourItemPlaceOrder}
+	)
+	</insert>
+	
+	<insert id="insertTourItemImg">
+	insert into tour_item_img_tbl values(
+		tour_item_img_seq.nextval,
+		#{tourItemNo},
+		#{tourItemImgPath},
+		#{tourItemImgOrder}
+	)
+	</insert>
+	
+	<!-- 
+	관리자 상품 관리 페이지네이션 조회용
+	trunc : 시간 자르기 시, 분, 초 단위를 자르고 날짜 데이터만 사용, 
+	&lt; = < 태그 기호와 착각할 수 있기 때문에 변환 -->
+	<select id="selectAdminTourCount" resultType="Integer">
+		select count(*) from tour_item_tbl
+			where tour_item_status = #{status}
+			<if test="status == 0 or status == 1">
+				and end_period >= trunc(sysdate)
+			</if>
+			
+			<if test="status == 2">
+				and end_period &lt; trunc(sysdate)
+			</if>
+			<!-- 서치키워드가 null이 아니면서 공백이 아닐 때 (아무것도 입력하지 않고 검색 방지용) -->
+			<if test="searchKeyword != null and searchKeyword != ''">
+				and tour_item_name like '%' || #{searchKeyword} || '%'
+			</if>
+	</select>
+	
+	<select id="selectTourItemList" resultType="tourItem">
+	
+	</select>
+	
 </mapper>

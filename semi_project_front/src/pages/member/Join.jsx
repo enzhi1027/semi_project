@@ -98,7 +98,7 @@ const Join = () => {
       checkId !== 2 ||
       checkPw !== 1 ||
       checkPhone !== 2 ||
-      checkEmail !== 3 ||
+      checkEmail !== 2 ||
       member.memberAddr === "" ||
       member.memberName === ""
     ) {
@@ -193,7 +193,7 @@ const Join = () => {
       return;
     }
 
-    if (!member.memberEmail || member.memberEmail.trim() === "") {
+    if (member.memberEmail === "") {
       setCheckEmail(3);
       return;
     }

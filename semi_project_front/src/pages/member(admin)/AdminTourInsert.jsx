@@ -52,8 +52,9 @@ const AdminTourInsert = () => {
 
   //장소명(tourItemPlace), 계획(tourItemPlan) 배열처리 --------------------
   //일차 정보, 장소 정렬 순서 저장
-  const [tourItemPlace, setTourItemPlace] = useState([
+  const [tourItemInfo, setTourItemInfo] = useState([
     {
+      id: Date.now, //아이디
       day: 1, //일차
       placeOrder: 1, //장소 정렬
       tourItemPlace: "", //장소
@@ -76,7 +77,7 @@ const AdminTourInsert = () => {
     //몇박 며칠인지 따라 배열 길이 조절-----------------------
     if (name === "tourItemDays") {
       const newCount = Number(value); //입력된 숫자
-      let newPlace = [...tourItemPlace]; //기존 배열 복사
+      let newPlace = [...tourItemInfo]; //기존 배열 복사
 
       //day 최댓값 찾기
       let currentMaxDay = 0;
@@ -90,6 +91,7 @@ const AdminTourInsert = () => {
         //일차가 증가 (입력값이 최대 일차보다 클 때)
         for (let i = currentMaxDay + 1; i <= newCount; i++) {
           newPlace.push({
+            id: Date.now() + Math.random(), //난수 결합
             day: i,
             placeOrder: 1,
             tourItemPlace: "",
@@ -99,10 +101,12 @@ const AdminTourInsert = () => {
       } else if (newCount < currentMaxDay) {
         //일차가 감소(최대 일차가 newCount보다 작거나 같을 때)
         const filteredPlace = newPlace.filter((item) => item.day <= newCount);
-        setTourItemPlace(filteredPlace);
+        setTourItemInfo(filteredPlace);
+        // tourItemDays 값도 상태에 반영해야 함
+        setTourItem({ ...tourItem, [name]: numValue });
         return;
       }
-      setTourItemPlace(newPlace);
+      setTourItemInfo(newPlace);
     }
   };
 
@@ -111,30 +115,31 @@ const AdminTourInsert = () => {
     const value = e.target.value; //입력한 장소
 
     //배열로 처리(여러개 입력받을 수 있음)
-    const newPlaceList = [...tourItemPlace]; //기존 배열
+    const newPlaceList = [...tourItemInfo]; //기존 배열
     newPlaceList[index].tourItemPlace = value; //해당 순번의 장소명만 수정
 
-    setTourItemPlace(newPlaceList); //바뀐 배열 저장
+    setTourItemInfo(newPlaceList); //바뀐 배열 저장
   };
 
   //상품 계획 입력--------------------------------------------------------
   const inputTourItemPlan = (index, data) => {
-    const newPlaceList = [...tourItemPlace];
+    const newPlaceList = [...tourItemInfo];
     newPlaceList[index].tourItemPlan = data;
-    setTourItemPlace(newPlaceList);
+    setTourItemInfo(newPlaceList);
   };
 
   //장소, 계획 추가 -------------------------------------------------------
 
   //장소, 계획 입력창 추가 -------------------------------------------------
   const addPlaceField = (index) => {
-    const newPlace = [...tourItemPlace];
+    const newPlace = [...tourItemInfo];
 
     //클릭한 입력창의 일차 정보
     const targetDay = newPlace[index].day;
 
     //새로 추가할 객체
     const newField = {
+      id: Date.now() + Math.random(), //랜덤 id 부여
       day: targetDay,
       placeOrder: 1, //일단 1로 세팅
       tourItemPlace: "",
@@ -146,14 +151,15 @@ const AdminTourInsert = () => {
     newPlace.splice(index + 1, 0, newField);
     console.log(index);
     //수정된 복사본 배열로 업데이트
-    setTourItemPlace(newPlace);
+    setTourItemInfo(newPlace);
   };
+
   //장소, 계획 입력창 삭제 -------------------------------------------------
   const deletePlaceField = (index) => {
     //해당 날짜
-    const targetDay = tourItemPlace[index].day;
+    const targetDay = tourItemInfo[index].day;
     //삭제하려는 입력창 날짜 추출
-    const dayCheck = tourItemPlace.filter((item) => item.day === targetDay);
+    const dayCheck = tourItemInfo.filter((item) => item.day === targetDay);
     if (dayCheck.length <= 1) {
       Swal.fire({
         title: "삭제할 수 없습니다!",
@@ -163,8 +169,8 @@ const AdminTourInsert = () => {
       });
       return;
     }
-    const newPlace = tourItemPlace.filter((_, i) => i !== index);
-    setTourItemPlace(newPlace);
+    const newPlace = tourItemInfo.filter((_, i) => i !== index);
+    setTourItemInfo(newPlace);
   };
 
   //첨부 파일(이미지) 첨부--------------------------------------------------
@@ -183,12 +189,15 @@ const AdminTourInsert = () => {
 
   //상품 등록 -----------------------------------------------------------
   const registTour = () => {
-    const isPlaceListValId = tourItemPlace.every(
+    //every : 배열 안의 모든 요소
+    const isPlaceListValId = tourItemInfo.every(
       (item) =>
         item.tourItemPlace.trim() !== "" && item.tourItemPlan.trim() !== "",
     );
 
     if (
+      //▽ tourItemPlace, tourItemPlan 가 공백이 아닌 지 체크
+      !isPlaceListValId ||
       tourItem.tourItemName === "" ||
       tourItem.tourItemAdultPrice === "" ||
       tourItem.startPeriod === "" ||
@@ -206,24 +215,41 @@ const AdminTourInsert = () => {
 
     const form = new FormData();
     form.append("tourItemName", tourItem.tourItemName);
-    form.append("tourItemAdultPrice", tourItem.tourItemAdultPrice);
-    form.append("tourItemKidPrice", tourItem.tourItemKidPrice || 0);
+    form.append("tourItemAdultPrice", Number(tourItem.tourItemAdultPrice));
+    form.append("tourItemKidPrice", Number(tourItem.tourItemKidPrice || 0));
     form.append("startPeriod", tourItem.startPeriod);
     form.append("endPeriod", tourItem.endPeriod);
-    form.append("tourItemDays", tourItem.tourItemDays);
+    form.append("tourItemDays", Number(tourItem.tourItemDays));
+    //공개 상태
+    form.append("tourItemStatus", 1);
 
-    //장소 번호
-    tourItemPlace.forEach((item, index) => {
-      form.append(`placeList[${index}].day`, item.day);
-      form.append(`placeList[${index}].placeOrder`, index + 1);
-      form.append(`placeList[${index}].tourItemPlace`, item.tourItemPlace);
-      form.append(`placeList[${index}].tourItemPlan`, item.tourItemPlan);
+    //장소 번호 계산---------------------------------------------
+    let lastTourDay = 0; //직전 일차 저장용
+    let newPlaceOrder = 0; //새로 계산할 순서 번호
+
+    tourItemInfo.forEach((item, index) => {
+      if (lastTourDay !== item.day) {
+        lastTourDay = item.day;
+        newPlaceOrder = 1;
+      } else {
+        //일차가 같으면 순번만 증가시킴
+        newPlaceOrder++;
+      }
+      form.append(`placeList[${index}].tourItemDay`, Number(item.day)); //일차
+      form.append(
+        //placeList : 몇번째 장소의 설명인지
+        `placeList[${index}].tourItemPlaceOrder`,
+        Number(newPlaceOrder),
+      ); //새로 계산한 번호 전송
+      form.append(`placeList[${index}].tourItemPlace`, item.tourItemPlace); //장소
+      form.append(`placeList[${index}].tourItemPlan`, item.tourItemPlan); //계획
     });
 
     //이미지 첨부 파일
     files.forEach((file, index) => {
       form.append("files", file);
-      form.append(`tourItemImgOrder[${index}]`, index + 1);
+      //이미지 인덱스 번호(첫번째 이미지 = 썸네일, 이미지 순서 정렬용)
+      form.append("tourItemImgOrder", index + 1);
     });
 
     axios
@@ -234,10 +260,33 @@ const AdminTourInsert = () => {
       })
       .then((res) => {
         console.log(res);
+        if (res.data > 0) {
+          Swal.fire({ title: "상품 등록 완료!", icon: "success" }).then(() => {
+            navigate("/tour/list");
+          });
+        }
       })
       .catch((err) => {
         console.log(err);
+        Swal.fire({ title: "상품 등록이 실패했습니다.", icon: "error" });
       });
+  };
+
+  //상품 등록 확인 메시지 출력 --------------------------------------------
+  const checkRegist = () => {
+    Swal.fire({
+      title: "상품을 등록하시겠습니까?",
+      icon: "question",
+      showCancelButton: "true",
+      confirmButtonText: "등록하기",
+      confirmButtonColor: "var(--color1)",
+      cancelButtonText: "취소",
+      cancelButtonColor: "var(--gray4)",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        registTour();
+      }
+    });
   };
 
   return (
@@ -246,7 +295,7 @@ const AdminTourInsert = () => {
       <div className={styles.main_wrap}>
         <InsertItem
           tourItem={tourItem} //상품명, 가격, 이용 가능일, 몇박며칠
-          tourItemPlace={tourItemPlace} //장소, 계획
+          tourItemInfo={tourItemInfo} //장소, 계획
           files={files} //첨부파일(이미지)
           addFiles={addFiles} //첨부파일(추가)
           deleteFile={deleteFile} //첨부파일(삭제)
@@ -257,7 +306,7 @@ const AdminTourInsert = () => {
           deletePlaceField={deletePlaceField} //장소, 계획 삭제(1개 필수)
         />
         <div className={styles.btn_wrap}>
-          <Button className="btn" onClick={registTour}>
+          <Button className="btn" onClick={checkRegist}>
             상품 등록
           </Button>
           <Button
