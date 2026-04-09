@@ -11,30 +11,60 @@ import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 
 const CourseWritePage = () => {
+  //관광지 검색할때 인풋에 들어가는 벨류 스테이트
   const [keyword, setKeyword] = useState("");
+
+  //인풋에 입력하고 폼이 서브밋 될때 요청에 실제로 들어가는 스테이트
   const [searchKeyword, setSearchKeyword] = useState("");
+
+  //관광지의 지역 정하는 스테이트
   const [category, setCategory] = useState("서울");
+
+  //전체목록이랑 찜목록 - 0:전체, 1:찜
   const [order, setOrder] = useState(0);
 
   //가져온 리스트 중 추가할 관광지 리스트 저장 할 스테이트
   const [addAttractionList, setAddAttractionList] = useState([]);
+
   //관광지 리스트 조회해서 넣어두는 스테이트
   const [attractionList, setAttractionList] = useState([]);
+
   //실제 코스 목록으로 출력되는 관광지 리스트 스테이트
   const [createAttractionList, setCreateAttractionList] = useState([]);
 
-  const { memberId } = useAuthStore();
+  //로그인상태
+  const { memberId, isReady } = useAuthStore();
+
+  //코스 설명에 들어가는 작성자이름
   const [memberName, setMemberName] = useState(null);
+
+  //코스 설명 저장할 스테이트
   const [courseInfo, setCourseInfo] = useState({
     courseTitle: "",
     courseContent: "",
     courseWriter: memberId,
   });
+
+  //설명 창 띄우고 닫기 위한 스테이트
   const [infoPage, setInfoPage] = useState(false);
+
+  //페이지이동을 위한 네비게이트
   const navigate = useNavigate();
 
+  //로그인한 상태에서만 코스생성 가능
+  useEffect(() => {
+    if (isReady && memberId == null) {
+      Swal.fire({ title: "로그인 후 이용 가능합니다.", icon: "warning" }).then(
+        () => {
+          navigate("/login");
+        },
+      );
+    }
+  }, [isReady, memberId]);
+
+  //생성하기 버튼 클릭시 설명 작성여부 확인, 확인 후 코스 생성 여부 묻고 확인 시 POST요청
   const createCourse = () => {
-    if (courseInfo.courseTitle === "" || courseInfo.courseSummary === "") {
+    if (courseInfo.courseTitle === "" || courseInfo.courseContent === "") {
       Swal.fire({
         title: "코스설명을 작성해주세요",
         icon: "warning",
@@ -75,20 +105,21 @@ const CourseWritePage = () => {
     });
   };
 
+  //관광지 리스트 가져오는 GET요청
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_BACKSERVER}/courses/attraction?keyword=${searchKeyword}&category=${category}&order=${order}`,
+        `${import.meta.env.VITE_BACKSERVER}/courses/attraction?keyword=${searchKeyword}&category=${category}&order=${order}&memberId=${memberId}`,
       )
       .then((res) => {
         setAttractionList(res.data);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [order, searchKeyword, category]);
 
+  //현재 접속한 멤버의 유저이름 가져오는 GET요청
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/courses/member/${memberId}`)
@@ -100,10 +131,10 @@ const CourseWritePage = () => {
       });
   }, []);
 
+  //추가하기 버튼 눌렀을때 밑에 코스 출력
   const addCourseList = () => {
     setCreateAttractionList((prev) => [...prev, ...addAttractionList]);
     setAddAttractionList([]);
-    console.log(createAttractionList);
   };
   return (
     <>
@@ -328,11 +359,15 @@ const CourseWritePage = () => {
                       type="text"
                       id="courseTitle"
                       value={courseInfo.courseTitle}
+                      maxLength={30}
+                      placeholder="최대 30자 입력"
                       onChange={(e) => {
-                        setCourseInfo({
-                          ...courseInfo,
-                          courseTitle: e.target.value,
-                        });
+                        if (e.target.value.length <= 30) {
+                          setCourseInfo({
+                            ...courseInfo,
+                            courseTitle: e.target.value,
+                          });
+                        }
                       }}
                     />
                   </div>
@@ -345,11 +380,15 @@ const CourseWritePage = () => {
                     <textarea
                       id="courseSummary"
                       value={courseInfo.courseContent}
+                      maxLength={300}
+                      placeholder="최대 300자 입력"
                       onChange={(e) => {
-                        setCourseInfo({
-                          ...courseInfo,
-                          courseContent: e.target.value,
-                        });
+                        if (e.target.value.length <= 300) {
+                          setCourseInfo({
+                            ...courseInfo,
+                            courseContent: e.target.value,
+                          });
+                        }
                       }}
                     ></textarea>
                   </div>
@@ -376,6 +415,7 @@ const AttractionItem = ({
   setAddAttractionList,
   addAttractionList,
 }) => {
+  //체크박스가 체크될때랑 안될때 리스트에 추가하고 삭제하는 함수
   const checkbox = (e) => {
     if (e.target.checked) {
       setAddAttractionList((prev) => [...prev, attraction]);
@@ -386,11 +426,15 @@ const AttractionItem = ({
     }
   };
 
+  //체크박스 지정하는 REF
   const checkRef = useRef();
+
+  //관광지 리스트 눌렀을때 체크박스 눌리는 함수
   const check = () => {
     checkRef.current.click();
   };
 
+  //체크박스의 체크 상태를 정하는 함수
   const existsCheck = () => {
     let data = false;
     for (let i = 0; i < addAttractionList.length; i++) {

@@ -11,7 +11,10 @@ const CourseInfo = ({
   setCreateAttractionList,
   setAddAttractionList,
 }) => {
+  //네이버맵 지정하는 REF
   const mapDivRef = useRef(null);
+
+  //네이버맵 실행을 위한 useEffect
   useEffect(() => {
     if (!mapDivRef.current || !window.naver) {
       return;
@@ -55,8 +58,8 @@ const CourseInfo = ({
                       font-weight:bold;
                       border-radius:50%;
                       border : 3px solid #ff6f61;
-                      width:30px;
-                      height:30px;
+                      width:28px;
+                      height:28px;
                       display:flex;
                       align-items:center;
                       justify-content:center;
@@ -119,11 +122,16 @@ const AttractionInfoItem = ({
   setCreateAttractionList,
   setAddAttractionList,
 }) => {
+  //코스 상세보기 페이지랑 작성페이지 구분을 위한 로케이션
   const location = useLocation();
   const courseWritePage = location.pathname === "/course/write";
+
+  //어트랙션 리스트에 관광지 코스 순서 추가
   if (courseWritePage) {
     attraction.courseIndex = index + 1;
   }
+
+  //관광지 코스순서 앞당기는 함수
   const attractionIndexDown = () => {
     if (index >= attractionList.length - 1) {
       return;
@@ -137,6 +145,8 @@ const AttractionInfoItem = ({
       return newList;
     });
   };
+
+  //관광지 코스순서 뒤로 미는 함수
   const attractionIndexUp = () => {
     if (index <= 0) {
       return;
@@ -150,6 +160,8 @@ const AttractionInfoItem = ({
       return newList;
     });
   };
+
+  //코스 생성에서 관광지 제거하는 함수
   const deleteAttraction = () => {
     setCreateAttractionList((prev) =>
       prev.filter((item) => item !== attraction),
@@ -157,7 +169,11 @@ const AttractionInfoItem = ({
   };
   return (
     <>
-      <div className={styles.info_item_wrap}>
+      <div
+        className={
+          courseWritePage ? styles.info_item_wrap_write : styles.info_item_wrap
+        }
+      >
         <div className={styles.attraction_index}>
           <div
             className={

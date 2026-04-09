@@ -9,6 +9,7 @@
   height: 455px;
 }
 .attraction_list {
+  width: 864px;
   padding: 24px;
   background-color: var(--gray8);
   flex-grow: 1;
@@ -111,6 +112,7 @@
 /*어트랙션 아이템*/
 .attraction_wrap {
   display: flex;
+  width: 800px;
   gap: 24px;
   align-items: center;
   padding: 14px 24px;
