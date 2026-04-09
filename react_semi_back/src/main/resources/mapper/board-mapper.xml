@@ -3,40 +3,34 @@
 <mapper namespace="kr.co.iei.board.model.dao.BoardDao">
 
 	<select id="selectBoardList" resultType="board">
-		select 
-			board_no,
-			board_category,
-			board_title,
-			board_thumb,
-			board_writer,
-			to_char(board_date,'yyyy-mm-dd') as board_date,
-        	member_thumb
-		from board_tbl 
-    	join member_tbl on (board_writer = member_id)
-		where board_status = #{status}
+    select 
+        board_no,
+        board_category,
+        board_title,
+        board_thumb,
+        board_writer,
+        board_status,
+        to_char(board_date,'yyyy-mm-dd') as board_date,
+        member_thumb
+    from board_tbl 
+    join member_tbl on (board_writer = member_id)
+    <where>
+        <choose>
+            <when test="memberGrade == 1">
+                board_status = #{status}
+            </when>
+            <otherwise>
+                board_status = 1
+            </otherwise>
+        </choose>
 
-    	<if test="category == 1">
-        	and board_category = 1
-    	</if>
-    	<if test="category == 2">
-        	and board_category = 2
-    	</if>
-
-		<if test="searchType == 1">
-			and board_title like '%'||#{searchKeyword}||'%'
-		</if>
-		<if test="searchType == 2">
-			and board_writer = #{searchKeyword}
-		</if>
-
-		<if test="order == 1">
-			order by board_no desc
-		</if>
-		<if test="order == 2">
-			order by board_no asc
-		</if>
-		offset #{page} * #{size} rows fetch next #{size} rows only
-	</select>
+        <if test="category == 1">
+            and board_category = 1
+        </if>
+        </where>
+    order by board_no desc
+    offset #{page} * #{size} rows fetch next #{size} rows only
+</select>
 
 	<select id="selectBoardCount" resultType="Integer">
 		select count(*) from board_tbl
@@ -86,21 +80,38 @@
         	#{attractionNo, jdbcType=NUMERIC},   #{locationNo, jdbcType=VARCHAR},     #{placeName, jdbcType=VARCHAR},      #{addressName, jdbcType=VARCHAR}     )
 	</insert>
 
-	<select id="selectOneBoard" resultType="board">
-    	select
-    		board_no,
-    		board_category,
-    		board_title,
-    		board_content,
-    		board_writer,
-    		to_char(board_date, 'yyyy-mm-dd') as board_date,
-			place_name,
-			address_name,
-			member_thumb
-		from board_tbl
-		join member_tbl on (board_writer = member_id)
-		where board_no = #{boardNo}
-	</select>
+<select id="selectOneBoard" resultType="board">
+    SELECT
+        b.board_no AS boardNo,
+        b.board_category AS boardCategory,
+        b.board_title AS boardTitle,
+        b.board_content AS boardContent,
+        b.board_writer AS boardWriter,
+        b.board_status AS boardStatus, TO_CHAR(b.board_date, 'yyyy-mm-dd') AS boardDate,
+        b.address_name AS addressName,
+        m.member_thumb AS memberThumb,
+        CASE 
+            WHEN b.board_category = 1 THEN a.attraction_title 
+            ELSE b.place_name 
+        END AS placeName
+    FROM board_tbl b
+    JOIN member_tbl m ON (b.board_writer = m.member_id)
+    LEFT JOIN attraction_tbl a ON (b.attraction_no = a.attraction_no)
+    WHERE b.board_no = #{boardNo}
+</select>
+	
+	<update id="updateBoard">
+    	update board_tbl set
+       		board_title = #{boardTitle},
+        	board_content = #{boardContent},
+        	board_thumb = #{boardThumb, jdbcType=VARCHAR},
+        	board_category = #{boardCategory},
+        	attraction_no = #{attractionNo, jdbcType=NUMERIC},
+        	location_no = #{locationNo, jdbcType=VARCHAR},
+        	place_name = #{placeName, jdbcType=VARCHAR},
+        	address_name = #{addressName, jdbcType=VARCHAR}
+   	 	where board_no = #{boardNo}
+	</update>
 
 	<delete id="deleteBoard">
 		delete from board_tbl where board_no = #{boardNo}
@@ -184,4 +195,10 @@
 	<delete id="deleteBoardComment">
 		delete from board_comment_tbl where board_comment_no = #{boardCommentNo}
 	</delete>
+	
+	<update id="changeBoardStatus" parameterType="board">
+    UPDATE board_tbl  SET board_status = #{boardStatus}
+    WHERE board_no = #{boardNo}
+	</update>
+	
 </mapper>

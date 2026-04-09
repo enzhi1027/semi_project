@@ -31,7 +31,11 @@
 /*어트랙션인포아이템*/
 .info_item_wrap {
   display: flex;
-  gap: 16px;
+  gap: 46px;
+}
+.info_item_wrap_write {
+  display: flex;
+  gap: 12px;
 }
 .attraction_index {
   width: 50px;
@@ -92,7 +96,7 @@
   text-align: center;
 }
 .attraction_img_wrap {
-  width: 270px;
+  width: 225px;
   height: calc((500px - 48px) / 3);
   position: relative;
   margin: 12px 0;

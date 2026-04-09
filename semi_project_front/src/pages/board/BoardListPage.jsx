@@ -114,6 +114,10 @@ const BoardListPage = () => {
           <Button
             className="btn primary"
             onClick={() => navigate('/board/write')}
+            style={{
+              width: '80px',
+              fontSize: '14px',
+            }}
           >
             글쓰기
           </Button>

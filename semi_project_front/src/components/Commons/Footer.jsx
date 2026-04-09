@@ -9,10 +9,10 @@ const Footer = () => {
           <div className={styles.site_info}>
             <h4 className={styles.footer_title}>사이트소개</h4>
             <ul className={styles.footer_ul}>
-              <li>사이트 소개글~~~~</li>
-              <li>사이트 소개글~~~~</li>
-              <li>사이트 소개글~~~~</li>
-              <li>사이트 소개글~~~~</li>
+              <li>자연을 지키는 생태관광 여행</li>
+              <li>함께 경험하는 생태관광 코스</li>
+              <li>다같이 나누는 생태관광 이야기</li>
+              <li>즐겁게 보내는 생태관광 투어</li>
             </ul>
           </div>
           <div className={styles.footer_nav}>

@@ -19,9 +19,16 @@ const CourseList = ({ courseList }) => {
 };
 
 const CourseItem = ({ course }) => {
+  //코스 좋아요 화면에 바로 적용하기 위한 스테이트
   const [like, setLike] = useState(0);
+
+  //로그인상태
   const { memberId } = useAuthStore();
+
+  //페이지이동을 위한 네비게이트
   const navigate = useNavigate();
+
+  //좋아요 해제하는 함수 - 좋아요 삭제하는 DELETE요청
   const likeOff = () => {
     axios
       .delete(
@@ -36,6 +43,8 @@ const CourseItem = ({ course }) => {
         console.log(err);
       });
   };
+
+  //좋아요 하는 함수 - 좋아요 추가하는 POST요청
   const likeOn = () => {
     axios
       .post(
@@ -50,12 +59,16 @@ const CourseItem = ({ course }) => {
         console.log(err);
       });
   };
+
+  //로그인 했을때만 좋아요 누를 수 있도록 알림
   const loginMsg = () => {
     Swal.fire({
       title: "로그인 후 이용 가능합니다.",
       icon: "info",
     });
   };
+
+  //좋아요 상태변경
   useEffect(() => {
     setLike(course.isLike);
   }, [course]);
