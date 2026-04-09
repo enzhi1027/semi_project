@@ -62,10 +62,17 @@ function App() {
                 />
               }
             />
+
+            {/*로그인, 회원가입 마이페이지------------------------------- */}
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/mypage/*" element={<Mypage />} />
-            <Route path="/admintour/insertitem" element={<AdminTourInsert />} />
+            <Route
+              path="/admin/tour/insertitem"
+              element={<AdminTourInsert />}
+            />
+            {/*로그인, 회원가입 마이페이지------------------------------- */}
+
             <Route path="/board/list" element={<BoardListPage />} />
             <Route
               path="/board/write"

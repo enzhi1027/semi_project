@@ -60,7 +60,25 @@
 	</select>
 	
 	<select id="selectTourItemList" resultType="tourItem">
-	
+		select
+			tour_item_no,
+			tour_item_name,
+			tour_item_adult_price,
+			start_period,
+			end_period,
+			tour_item_days,
+			tour_item_status,
+				(select tour_item_img_path
+					from tour_item_img_tbl
+				where tour_item_no = item_tbl.tour_item_no
+					and tour_item_img_order = (
+						select min(tour_item_img_order)
+						from tour_item_img_tbl
+						where tour_item_no = item_tbl.tour_item_no
+					)
+				) as tour_item_img_path
+		from tour_item_tbl item_tbl
+			order by item_tbl.tour_item_no desc
 	</select>
 	
 </mapper>

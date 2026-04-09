@@ -26,6 +26,7 @@ public class TourItem {
 	private Integer tourItemDays;			//몇박 며칠
 	private Integer tourItemStatus;			//공개/비공개(0, 1)
 	
+	private String tourItemImgPath;			//썸네일 이미지 경로
 	
 	private List<TourItemInfo> placeList;	//장소, 계획 저장 리스트
 }

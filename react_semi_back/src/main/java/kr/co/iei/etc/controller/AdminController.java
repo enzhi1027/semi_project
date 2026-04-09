@@ -1,4 +1,4 @@
-package kr.co.iei.touritem.controller;
+package kr.co.iei.etc.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +22,13 @@ import kr.co.iei.board.model.vo.ListResponse;
 import kr.co.iei.touritem.model.service.TourItemService;
 import kr.co.iei.touritem.model.vo.TourItem;
 import kr.co.iei.touritem.model.vo.TourItemImg;
+import kr.co.iei.touritem.model.vo.TourListResponse;
 import kr.co.iei.utils.FileUtils;
 
 @CrossOrigin(value = "*")
 @RestController
-@RequestMapping(value = "tourItems")
-public class TourItemController {
+@RequestMapping(value = "admin")
+public class AdminController {
 	@Autowired
 	private TourItemService tourItemService;
 	@Value("${file.root}")
@@ -74,7 +75,8 @@ public class TourItemController {
 	//상품 조회 ----------------------------------------------------------------
 	@GetMapping
 	public ResponseEntity<?> selectTourItemList(@ModelAttribute ListItem request) {
-		ListResponse response = tourItemService.selectTourItemList(request);
+		TourListResponse response = tourItemService.selectTourItemList(request);
+		System.out.println(response);
 		return ResponseEntity.ok(response);
 	}
 	

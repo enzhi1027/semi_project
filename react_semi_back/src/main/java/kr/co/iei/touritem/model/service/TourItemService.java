@@ -12,6 +12,7 @@ import kr.co.iei.touritem.model.dao.TourItemDao;
 import kr.co.iei.touritem.model.vo.TourItem;
 import kr.co.iei.touritem.model.vo.TourItemImg;
 import kr.co.iei.touritem.model.vo.TourItemInfo;
+import kr.co.iei.touritem.model.vo.TourListResponse;
 
 @Service
 public class TourItemService {
@@ -50,12 +51,13 @@ public class TourItemService {
 		return result;
 	}
 
-	public ListResponse selectTourItemList(ListItem request) {
+	public TourListResponse selectTourItemList(ListItem request) {
 		Integer totalCount = tourItemDao.selectAdminTourCount(request);
-		int totalpage = (int)Math.ceil(totalCount/(double)request.getSize());
+		int totalPage = (int)Math.ceil(totalCount/(double)request.getSize());
 		
 		List<TourItem> list = tourItemDao.selectTourItemList(request);
-		return null;
+		TourListResponse response = new TourListResponse(list, totalPage);
+		return response;
 	}
 	
 	

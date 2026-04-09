@@ -32,10 +32,12 @@ const AdminTour = () => {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_BACKSERVER}/tourItems?page=${page}&size=${size}&order=${order}&status=${status}&searchKeyword=${searchKeyword}`,
+        `${import.meta.env.VITE_BACKSERVER}/admin/tour?page=${page}&size=${size}&order=${order}&status=${status}&searchKeyword=${searchKeyword}`,
       )
       .then((res) => {
         console.log(res);
+        setTourItemList(res.data.items);
+        setTotalPage(res.data.totalPage);
       })
       .catch((err) => {
         console.log(err);
@@ -44,7 +46,7 @@ const AdminTour = () => {
 
   //상품 등록 페이지 이동 ---------------------------------------------------
   const isnertItem = () => {
-    navigate("/admintour/insertitem");
+    navigate("/admin/tour/insertitem");
   };
 
   return (
@@ -88,7 +90,23 @@ const AdminTour = () => {
         {/*공개 상태 변경 */}
         {tourItemList.map((tourItem, index) => {
           const changeStatus = () => {
-            const status = tourItem.tourS;
+            //상태가 0일 때는 1로, 1일 때는 0으로
+            const status = tourItem.tourStatus === 0 ? 1 : 0;
+            const obj = {
+              tourItemNo: tourItem.tourItemNo,
+              tourItemStatus: status,
+            };
+            axios
+              .patch(
+                `${import.meta.env.VITE_BACKSERVER}/admin/tourItems/${tourItem.tourItemNo}`,
+                obj,
+              )
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           };
         })}
       </div>
