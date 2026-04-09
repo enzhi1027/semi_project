@@ -61,6 +61,9 @@
 	<if test="keyword != null and keyword != ''">
 		and attraction_title like '%'||#{keyword}||'%' 
 	</if>
+	<if test="order == 1">
+		and attraction_no in (select attraction_no from attraction_wish_tbl where member_id = #{memberId})
+	</if>
   </select>
   
   <select id="selectMemberName" resultType="String">
