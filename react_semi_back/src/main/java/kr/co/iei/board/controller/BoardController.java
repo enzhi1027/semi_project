@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -31,6 +32,7 @@ import kr.co.iei.board.model.vo.BoardComment;
 import kr.co.iei.board.model.vo.ListItem;
 import kr.co.iei.board.model.vo.ListResponse;
 import kr.co.iei.utils.FileUtils;
+import kr.co.iei.utils.JwtUtils;
 
 @CrossOrigin("*")
 @RequestMapping("/boards")
@@ -42,13 +44,24 @@ public class BoardController {
 	private String root;
 	@Autowired
 	private FileUtils fileUtil; 
+	@Autowired
+    private JwtUtils jwtUtils;
 	
 	//게시글 목록 조회
 	@GetMapping
-	public ResponseEntity<?> selectBoardList(@ModelAttribute ListItem request){
-		ListResponse response = boardService.selectBoardList(request);
-		return ResponseEntity.ok(response);
-	}
+    public ResponseEntity<?> selectBoardList(@ModelAttribute ListItem request, 
+                                            @RequestHeader(required = false, name="Authorization") String token) {
+        // 토큰이 있으면 유저 등급을 꺼내서 request에 세팅 (MyBatis에서 권한 체크용)
+        if (token != null && !token.equals("null")) {
+            kr.co.iei.member.model.vo.LoginMember loginMember = jwtUtils.checkToken(token);
+            request.setMemberGrade(loginMember.getMemberGrade()); 
+        } else {
+            request.setMemberGrade(0); // 비회원
+        }
+        
+        ListResponse response = boardService.selectBoardList(request);
+        return ResponseEntity.ok(response);
+    }
 	
 	//이미지 업로드
 	@PostMapping("/image-upload")
@@ -72,11 +85,40 @@ public class BoardController {
 	}
 	
 	// 게시글 상세 조회
-    @GetMapping("/{boardNo}")
-    public ResponseEntity<?> selectOneBoard(@PathVariable Integer boardNo) {
-        // Service 내부에서 JOIN을 통해 작성자 프로필 이미지(memberThumb)를 포함한 board 객체를 반환
+	@GetMapping("/{boardNo}")
+    public ResponseEntity<?> selectOneBoard(@PathVariable Integer boardNo,
+                                            @RequestHeader(required = false, name="Authorization") String token) {
         Board board = boardService.selectOneBoard(boardNo);
+        
+        // 게시글이 존재하지 않을 때
+        if(board == null) return ResponseEntity.status(404).build();
+        
+        // 비공개 글(0)인 경우 권한 체크
+        if(board.getBoardStatus() == 0) {
+            if(token == null || token.equals("null")) {
+                return ResponseEntity.status(403).body("비공개 게시글입니다.");
+            }
+            
+            kr.co.iei.member.model.vo.LoginMember loginMember = jwtUtils.checkToken(token);
+            boolean isAdmin = (loginMember.getMemberGrade() == 1); // 관리자 등급 확인
+            boolean isWriter = loginMember.getMemberId().equals(board.getBoardWriter()); // 본인 확인
+            
+            if(!isAdmin && !isWriter) {
+                return ResponseEntity.status(403).body("접근 권한이 없습니다.");
+            }
+        }
         return ResponseEntity.ok(board);
+    }
+    // 게시글 수정
+    @PutMapping("/{boardNo}")
+    public ResponseEntity<?> updateBoard(@ModelAttribute Board board, @PathVariable Integer boardNo) {
+        board.setBoardNo(boardNo);
+        Document doc = Jsoup.parse(board.getBoardContent());
+        Element firstImg = doc.selectFirst("img");
+        String boardThumb = firstImg == null ? null : firstImg.attr("src");
+        board.setBoardThumb(boardThumb);
+        int result = boardService.updateBoard(board);
+        return ResponseEntity.ok(result);
     }
 
     // 게시글 삭제
@@ -91,7 +133,7 @@ public class BoardController {
   	public ResponseEntity<?> selectLikeInfo(@PathVariable Integer boardNo,
   											@RequestHeader(required = false , name="Authorization")String token){
   		Map<String, Object> result = boardService.selectLikeInfo(boardNo, token);
-  		return ResponseEntity.ok(result); //서비스에서 전체 좋아요 수, 내가 눌렀는지 여부 가져옴
+  		return ResponseEntity.ok(result); 
   	}
   	//좋아요 누르기
   	@PostMapping("/{boardNo}/likes")
@@ -99,7 +141,7 @@ public class BoardController {
   	public ResponseEntity<?> likeOn(@PathVariable Integer boardNo, 
   			                        @RequestHeader (name="Authorization")String token){
   		int result = boardService.insertLike(boardNo,token);
-  		return ResponseEntity.ok(result); //결과: 1->성공, 0->실패
+  		return ResponseEntity.ok(result); 
   	}
   	//좋아요 취소
   	@DeleteMapping("/{boardNo}/likes")
@@ -134,6 +176,15 @@ public class BoardController {
   	    return ResponseEntity.ok(result);
   	}
   
+ // BoardController.java에 추가
+
+  	@PatchMapping("/{boardNo}/status")
+  	public ResponseEntity<?> changeBoardStatus(@PathVariable Integer boardNo, @RequestBody Board board) {
+  	    // 리액트에서 보낸 boardStatus 값을 객체에 세팅
+  	    board.setBoardNo(boardNo);
+  	    int result = boardService.changeBoardStatus(board);
+  	    return ResponseEntity.ok(result);
+  	}
   	/*
   	 // 사용자 관련 기능(마이페이지용): 내가 좋아요 한 글 보기
   	@GetMapping("/{memberId}/like-board")
