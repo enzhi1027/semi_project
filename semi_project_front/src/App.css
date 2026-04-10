@@ -96,7 +96,6 @@ label.radio {
   font-size: 14px;
 }
 
-/* 가짜 라디오 버튼(동그라미 외곽선) */
 label.radio::before {
   content: "";
   position: absolute;
@@ -105,7 +104,7 @@ label.radio::before {
   transform: translateY(-50%);
   width: 14px;
   height: 14px;
-  border: 1px solid #ccc; /* 기본 테두리 색 */
+  border: 1px solid #ccc;
   border-radius: 50%;
   background: #fff;
   transition: all 0.3s;

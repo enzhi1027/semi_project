@@ -4,19 +4,12 @@ import SellIcon from "@mui/icons-material/Sell";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useState, useRef } from "react";
-import TourList from "../../components/tour/TourList";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
+import TourProductList from "../../components/tour/TourProductList";
+import axios from "axios";
 
 const TourSearchPage = () => {
   const navigate = useNavigate();
@@ -27,53 +20,19 @@ const TourSearchPage = () => {
   const [searchPriceMax, setSearchPriceMax] = useState("");
   const [searchWhen, setSearchWhen] = useState("");
 
-  const ProductList = () => {
-    const prevRef = useRef(null);
-    const nextRef = useRef(null);
+  const [wishlistList, setWishlistList] = useState([]);
 
-    return (
-      <div className={styles.swiper_container}>
-        <NavigateBeforeIcon ref={prevRef} className={styles.btn_prev} />
-        <NavigateNextIcon ref={nextRef} className={styles.btn_next} />
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={20}
-          slidesPerView={4}
-          navigation={{ prevEl: prevRef, nextEl: nextRef }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
-          }}
-          className={styles.produt_list_wrap}
-        >
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-        </Swiper>
-      </div>
-    );
-  };
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/wishlistList/${memberId}`)
+      .then((res) => {
+        console.log(res.data);
+        setWishlistList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <>
@@ -146,11 +105,19 @@ const TourSearchPage = () => {
         <div className={styles.tour_product_wrap}>
           <div className={styles.tour_product_recommend}>
             <div className={styles.product_list_title}>추천 상품</div>
-            <ProductList />
+            <TourProductList
+              memberId={memberId}
+              wishlistList={wishlistList}
+              setWishlistList={setWishlistList}
+            />
           </div>
           <div className={styles.tour_product_all}>
             <div className={styles.product_list_title}>전체 상품</div>
-            <ProductList />
+            <TourProductList
+              memberId={memberId}
+              wishlistList={wishlistList}
+              setWishlistList={setWishlistList}
+            />
           </div>
         </div>
       </section>
