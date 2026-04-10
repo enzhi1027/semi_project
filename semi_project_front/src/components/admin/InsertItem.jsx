@@ -55,7 +55,7 @@ const InsertItem = ({
       </div>
 
       {/*첨부파일 -------------------------------------------------------- */}
-      <div className={`${styles.add_file_wrap}`}>
+      <div className={styles.add_file_wrap}>
         <div className={styles.button_wrap}>
           <label htmlFor="file">첨부파일</label>
           <Button className="btn" onClick={imgbuttonClick}>

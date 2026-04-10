@@ -45,18 +45,19 @@
 	&lt; = < 태그 기호와 착각할 수 있기 때문에 변환 -->
 	<select id="selectAdminTourCount" resultType="Integer">
 		select count(*) from tour_item_tbl
-			where tour_item_status = #{status}
-			<if test="status == 0 or status == 1">
-				and end_period >= trunc(sysdate)
-			</if>
-			
-			<if test="status == 2">
-				and end_period &lt; trunc(sysdate)
-			</if>
+			<where>
+				<if test="status == 0 or status == 1">
+					tour_item_status = #{status}
+					and end_period >= trunc(sysdate)
+				</if>
+				<if test="status == 2">
+					and end_period &lt; trunc(sysdate)
+				</if>
 			<!-- 서치키워드가 null이 아니면서 공백이 아닐 때 (아무것도 입력하지 않고 검색 방지용) -->
-			<if test="searchKeyword != null and searchKeyword != ''">
-				and tour_item_name like '%' || #{searchKeyword} || '%'
-			</if>
+				<if test="searchKeyword != null and searchKeyword != ''">
+					and tour_item_name like '%' || #{searchKeyword} || '%'
+				</if>
+			</where>
 	</select>
 	
 	<select id="selectTourItemList" resultType="tourItem">
@@ -64,10 +65,11 @@
 			tour_item_no,
 			tour_item_name,
 			tour_item_adult_price,
-			start_period,
-			end_period,
+			to_char(start_period, 'yyyy-MM-dd') as start_period,
+			to_char(end_period, 'yyyy-MM-dd') as end_period,
 			tour_item_days,
 			tour_item_status,
+				<!-- 상품 썸네일 조회 -->
 				(select tour_item_img_path
 					from tour_item_img_tbl
 				where tour_item_no = item_tbl.tour_item_no
@@ -78,7 +80,32 @@
 					)
 				) as tour_item_img_path
 		from tour_item_tbl item_tbl
-			order by item_tbl.tour_item_no desc
+			<where>
+				<if test="status == 0 or status == 1">
+					tour_item_status = #{status}
+					and end_period >= trunc(sysdate)
+				</if>
+				<if test="status == 2">
+					tour_item_status = 1
+					and end_period &lt; trunc(sysdate)
+				</if>
+				<!-- 서치키워드가 null이 아니면서 공백이 아닐 때 (아무것도 입력하지 않고 검색 방지용) -->
+				<if test="searchKeyword != null and searchKeyword != ''">
+					and tour_item_name like '%' || #{searchKeyword} || '%'
+				</if>
+			</where>
+			
+			<if test="order == 1">
+				order by item_tbl.tour_item_no desc
+			</if>
+			<if test="order == 2">
+				order by item_tbl.tour_item_no asc
+			</if>
 	</select>
 	
+	<update id="changeTourItemStatus">
+		update tour_item_tbl set
+			tour_item_status = #{tourItemStatus}
+		where tour_item_no = #{tourItemNo}
+	</update>
 </mapper>
