@@ -22,6 +22,11 @@ public class WebConfig implements WebMvcConfigurer {
 		registry
 		.addResourceHandler("/member/thumb/**")		//요청패턴
 		.addResourceLocations("file:///"+root+"member/");	//실제경로
+		
+		//(관리자)투어 상품 이미지
+		registry
+		.addResourceHandler("/tourItemImg/**")		//요청 주소 패턴
+		.addResourceLocations("file:///" + root + "tourItemImg/");	//실제 경로
 	}
 	
 }

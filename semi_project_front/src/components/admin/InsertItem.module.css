@@ -16,6 +16,11 @@
 }
 
 /*첨부파일, 버튼 ----------------------------------------------------*/
+.add_file_wrap {
+  display: flex;
+  flex-direction: column;
+}
+
 .button_wrap {
   display: flex;
   gap: 36px;

@@ -24,4 +24,6 @@ public interface TourItemDao {
 
 	List<TourItem> selectTourItemList(ListItem request);
 
+	int changeTourItemStatus(TourItem tourItem);
+
 }

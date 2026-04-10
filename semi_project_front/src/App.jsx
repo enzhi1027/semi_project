@@ -20,8 +20,9 @@ import CourseWritePage from "./pages/course/CourseWritePage";
 import AdminTourInsert from "./pages/member(admin)/AdminTourInsert";
 import TourSearchPage from "./pages/tour/TourSearchPage";
 import BoardViewPage from "./pages/board/BoardViewPage";
-import BoardModifyPage from './pages/board/BoardModifyPage';
+import BoardModifyPage from "./pages/board/BoardModifyPage";
 import TourMyPage from "./pages/tour/TourMyPage";
+import AdminModifyTour from "./pages/member(admin)/AdminModifyTour";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -72,6 +73,10 @@ function App() {
             <Route
               path="/admin/tour/insertitem"
               element={<AdminTourInsert />}
+            />
+            <Route
+              path="/admin/tour/modifytour"
+              element={<AdminModifyTour />}
             />
             {/*로그인, 회원가입 마이페이지------------------------------- */}
 

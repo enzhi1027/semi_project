@@ -89,7 +89,8 @@ const MyPw = () => {
     <div className={styles.my_pw_wrap}>
       {/*기존 비밀번호 확인-------------------------------------- */}
       <div className={styles.check_pw_wrap}>
-        <h3>기존 비밀번호 확인</h3>
+        <h3 className={styles.my_pw_title}>비밀번호 변경</h3>
+        <h3 className={styles.check_pw_title}>기존 비밀번호 확인</h3>
         <div className={`${styles.input_wrap} ${styles.check_pw}`}>
           <>
             <Input

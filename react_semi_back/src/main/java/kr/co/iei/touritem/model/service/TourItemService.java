@@ -60,5 +60,11 @@ public class TourItemService {
 		return response;
 	}
 	
+	@Transactional
+	public int changeTourItemStatus(TourItem tourItem) {
+		int result = tourItemDao.changeTourItemStatus(tourItem);
+		return result;
+	}
+	
 	
 }

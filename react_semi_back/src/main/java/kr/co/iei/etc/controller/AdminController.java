@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -73,11 +75,17 @@ public class AdminController {
 	}
 	
 	//상품 조회 ----------------------------------------------------------------
-	@GetMapping
+	@GetMapping(value = "/tour")
 	public ResponseEntity<?> selectTourItemList(@ModelAttribute ListItem request) {
 		TourListResponse response = tourItemService.selectTourItemList(request);
-		System.out.println(response);
 		return ResponseEntity.ok(response);
+	}
+	//상품 상태 전환 -------------------------------------------------------------
+	@PatchMapping(value = "/tourItems/{tourItemNo}")
+	public ResponseEntity<?> changeTourItemStatus(@RequestBody TourItem tourItem){
+		System.out.println(tourItem);
+		int result = tourItemService.changeTourItemStatus(tourItem);
+		return ResponseEntity.ok(result);
 	}
 	
 	
