@@ -8,6 +8,10 @@
   color: var(--color1);
 }
 
+.tour_search_wrap svg circle {
+  color: var(--color1);
+}
+
 .tour_search_wrap input {
   border: none;
   outline: none;
@@ -100,4 +104,33 @@
   display: flex;
   gap: 15px;
   justify-content: center;
+}
+
+.swiper_container {
+  position: relative;
+  overflow: visible;
+}
+
+.swiper_container .btn_prev,
+.swiper_container .btn_next {
+  font-size: 4em;
+  position: absolute;
+  top: 37%;
+  cursor: pointer;
+}
+
+.swiper_container .btn_prev {
+  left: -70px;
+  z-index: 2;
+}
+
+.swiper_container .btn_next {
+  right: -70px;
+  z-index: 2;
+}
+
+.btn_next:global(.swiper-button-disabled),
+.btn_prev:global(.swiper-button-disabled) {
+  cursor: auto;
+  opacity: 0.5;
 }

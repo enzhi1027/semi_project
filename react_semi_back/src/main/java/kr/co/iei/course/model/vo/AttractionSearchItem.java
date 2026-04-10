@@ -11,4 +11,5 @@ public class AttractionSearchItem {
 	private String keyword;
 	private String category;
 	private Integer order;
+	private String memberId;
 }

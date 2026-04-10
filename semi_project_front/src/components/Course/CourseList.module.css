@@ -48,6 +48,13 @@
   cursor: pointer;
 }
 .course_title {
+  width: 258px;
+  height: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
   font-size: 20px;
   font-weight: 600;
   color: var(--color1);
@@ -56,6 +63,11 @@
   height: 75px;
   margin: 8px 0;
   overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  font-weight: 500;
 }
 .course_writer {
   display: flex;

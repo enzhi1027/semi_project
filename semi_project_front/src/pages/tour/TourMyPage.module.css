@@ -1,0 +1,27 @@
+.tour_mypage_wrap {
+  width: 1200px;
+  margin: 0 auto;
+  padding: 30px 0;
+}
+
+.tour_mypage_wrap .tour_mypage_header {
+  width: 100%;
+  display: flex;
+  transition: border 0.3ms ease;
+}
+
+.tour_mypage_wrap .tour_mypage_header > div {
+  padding: 10px 15px;
+  font-weight: 600;
+}
+
+.tour_mypage_wrap .tour_mypage_header > div.tour_mypage_header_active {
+  border: 1px solid var(--color2);
+  border-bottom: 1px solid var(--color4);
+  border-radius: 7px 7px 0 0;
+}
+
+.tour_mypage_wrap .tour_mypage_header > div:not(.tour_mypage_header_active) {
+  border-bottom: 1px solid var(--color2);
+  border-top: 1px solid var(--color4);
+}

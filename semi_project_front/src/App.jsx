@@ -20,6 +20,8 @@ import CourseWritePage from "./pages/course/CourseWritePage";
 import AdminTourInsert from "./pages/member(admin)/AdminTourInsert";
 import TourSearchPage from "./pages/tour/TourSearchPage";
 import BoardViewPage from "./pages/board/BoardViewPage";
+import BoardModifyPage from './pages/board/BoardModifyPage';
+import TourMyPage from "./pages/tour/TourMyPage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -86,6 +88,11 @@ function App() {
             <Route path="/boardNavermap" element={<NaverSearch />} />
             <Route path="/tour/list" element={<TourSearchPage />} />
             <Route path="/board/view/:boardNo" element={<BoardViewPage />} />
+            <Route path="/tour/mypage" element={<TourMyPage />} />
+            <Route
+              path="/board/modify/:boardNo"
+              element={<BoardModifyPage />}
+            />
           </Routes>
         </div>
         <Footer />

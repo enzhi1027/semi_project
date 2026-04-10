@@ -16,4 +16,5 @@ public class ListItem {
 	private String searchKeyword;
 	private Integer category;
 	private String memberId;
+	private int memberGrade;
 }
