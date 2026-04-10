@@ -1,12 +1,12 @@
 .input {
   padding: 8px;
   border-radius: 8px;
-  border: solid 1px var(--gray5);
+  border: solid 1px var(--color3);
   outline: none;
   width: 100%;
 }
 .input:focus {
-  border: 1px solid var(--gray2);
+  border: 1px solid var(--color2);
 }
 .textarea {
   width: 100%;

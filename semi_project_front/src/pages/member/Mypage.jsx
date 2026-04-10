@@ -87,9 +87,9 @@ const Mypage = () => {
               />
               <Route path="myactive" element={<MyActive /> /*내 활동 관리 */} />
               <Route path="mypayment" element={<Mypayment /> /*결제 내역 */} />
-              <Route path="admincontent" element={<AdminContent />} />
+              <Route path="admin/content" element={<AdminContent />} />
               <Route
-                path="admintour"
+                path="admin/tour"
                 element={<AdminTour /> /*투어 상품 관리 */}
               />
               /
@@ -180,7 +180,7 @@ const SideMenu = () => {
                   className={({ isActive }) =>
                     isActive ? styles.active_menu : ""
                   }
-                  to="/mypage/admincontent"
+                  to="/mypage/admin/content"
                 >
                   회원, 게시글 관리
                 </NavLink>
@@ -190,7 +190,7 @@ const SideMenu = () => {
                   className={({ isActive }) =>
                     isActive ? styles.active_menu : ""
                   }
-                  to="/mypage/admintour"
+                  to="/mypage/admin/tour"
                 >
                   투어 상품 관리
                 </NavLink>

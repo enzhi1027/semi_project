@@ -5,11 +5,11 @@ import Button from "../ui/Button";
 import addBox from "../../assets/img/insertTourItem/add_box.png";
 import deleteImg from "../../assets/img/insertTourItem/delete.png";
 import Checkbox from "@mui/material/Checkbox";
-import TextEditor from "../ui/TextEditor";
+import TourItemTextEditor from "../ui/TourItemTextEditor";
 
 const InsertItem = ({
   tourItem,
-  tourItemPlace,
+  tourItemInfo,
   files,
   addFiles,
   deleteFile,
@@ -29,23 +29,29 @@ const InsertItem = ({
   //체크박스 상태 관리 스테이트(기본 체크 상태 유지할거니 true)
   const [isKidEnabled, setIsKidEnabled] = useState(true);
   useEffect(() => {
-    if (isKidEnabled && tourItem.adultPrice) {
+    if (isKidEnabled && tourItem.tourItemAdultPrice) {
       //숫자 타입 변환 후 성인가 * 0.8
-      const rawKidPrice = Number(tourItem.adultPrice) * 0.8;
+      const rawKidPrice = Number(tourItem.tourItemAdultPrice) * 0.8;
       //1원 단위 버리기
-      const autoKidPrice = Math.floor(rawKidPrice / 10) * 10;
+      const autoTourItemKidPrice = Math.floor(rawKidPrice / 10) * 10;
       inputTourItem({
-        target: { name: "kidPrice", value: autoKidPrice },
+        target: { name: "tourItemKidPrice", value: autoTourItemKidPrice },
       });
     }
-  }, [tourItem.adultPrice, isKidEnabled]);
+  }, [tourItem.tourItemAdultPrice, isKidEnabled]);
 
   return (
     <div className={styles.insert_wrap}>
       {/*상품명 --------------------------------------------------------- */}
       <div className={`${styles.tour_name_wrap}`}>
         <label htmlFor="itemName">상품명</label>
-        <Input />
+        {/* || "" = 값이 없으면 빈 문자열 삽입*/}
+        <Input
+          name="tourItemName"
+          id="tourItemName"
+          value={tourItem.tourItemName || ""}
+          onChange={inputTourItem}
+        />
       </div>
 
       {/*첨부파일 -------------------------------------------------------- */}
@@ -104,9 +110,9 @@ const InsertItem = ({
           */}
           <Input
             type="text"
-            name="adultPrice"
-            id="adultPrice"
-            value={tourItem.adultPrice || ""}
+            name="tourItemAdultPrice"
+            id="tourItemAdultPrice"
+            value={tourItem.tourItemAdultPrice || ""}
             onChange={inputTourItem}
           />
         </div>
@@ -127,7 +133,9 @@ const InsertItem = ({
                   console.log(isChecked);
                   setIsKidEnabled(e.target.checked);
                   if (!isChecked) {
-                    inputTourItem({ target: { name: "kidPrice", value: "" } });
+                    inputTourItem({
+                      target: { name: "tourItemKidPrice", value: "" },
+                    });
                   }
                 }}
                 size="small"
@@ -137,9 +145,9 @@ const InsertItem = ({
           </div>
           <Input
             type="text"
-            name="kidPrice"
-            id="kidPrice"
-            value={tourItem.kidPrice || ""}
+            name="tourItemKidPrice"
+            id="tourItemKidPrice"
+            value={tourItem.tourItemKidPrice || ""}
             disabled={!isKidEnabled}
             placeholder={isKidEnabled ? "" : "선택불가"}
             onChange={inputTourItem}
@@ -189,12 +197,12 @@ const InsertItem = ({
       </div>
 
       {/*장소, 계획 ------------------------------------------------------- */}
-      {tourItemPlace.map((item, index) => {
+      {tourItemInfo.map((item, index) => {
         const dayCheck =
-          index === 0 || tourItemPlace[index - 1].day !== item.day;
+          index === 0 || tourItemInfo[index - 1].day !== item.day;
 
         return (
-          <div key={index} className={styles.place_plan_wrap}>
+          <div key={item.id} className={styles.place_plan_wrap}>
             {dayCheck && <h3 className={styles.day_title}>{item.day}일차</h3>}
             <div className={styles.place_wrap}>
               <label htmlFor="place">장소</label>
@@ -202,7 +210,7 @@ const InsertItem = ({
                 <Input
                   type="text"
                   placeholder={`${item.day}일차 장소를 입력하세요`}
-                  value={item.inputTourItemPlace}
+                  value={item.tourItemPlace || ""}
                   onChange={(e) => inputTourItemPlace(index, e)}
                 ></Input>
                 <img
@@ -220,13 +228,16 @@ const InsertItem = ({
             <div className={styles.plan_wrap}>
               <label htmlFor="plan">계획</label>
               <div className={styles.plan_input_wrap}>
-                <TextEditor
-                  className={styles.text_editor}
+                <TourItemTextEditor
+                  className={styles.plan_text_editor}
                   type="text"
+                  data={item.tourItemPlan}
+                  setData={(val) => {
+                    //css 좀 처 먹으라고 참 더러운 녀석아
+                    inputTourItemPlan(index, val);
+                  }}
                   placeholder={`${item.day}일차 상세 일정을 입력하세요`}
-                  value={item.inputTourItemPlan}
-                  onChange={(e) => inputTourItemPlace(index, e.target.value)}
-                ></TextEditor>
+                ></TourItemTextEditor>
               </div>
             </div>
           </div>
@@ -240,7 +251,7 @@ const InsertItem = ({
 const FileItem = ({ file, deleteFile }) => {
   return (
     <ul className={styles.file_item}>
-      <li className={styles.file_name}>{file.name || file.tourItmeFileName}</li>
+      <li className={styles.file_name}>{file.name || file.tourItemFileName}</li>
       <li>
         {/*삭제 아이콘*/}
         <img

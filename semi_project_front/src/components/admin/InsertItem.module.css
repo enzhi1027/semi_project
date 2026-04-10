@@ -102,6 +102,18 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+}
+
+.plan_input_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 12px 0px;
+  width: 100%;
+}
+.plan_input_wrap > .plan_text_editor {
+  min-height: 200px;
 }
 
 .place_wrap > .place_input_wrap {
@@ -112,19 +124,7 @@
 
 .place_plan_wrap > .day_title {
   padding: 12px 0px;
-  border-top: 1px solid var(--gray6);
-}
-
-.plan_input_wrap {
-  display: flex;
-  gap: 24px;
-  margin: 12px 0px;
-}
-
-.plan_input_wrap > .text_editor {
-  width: 100%;
-  min-height: 200px;
-  flex-grow: 1;
+  border-top: 2px solid var(--gray4);
 }
 
 .place_wrap > .place_input_wrap > img {
