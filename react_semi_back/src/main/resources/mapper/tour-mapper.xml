@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="kr.co.iei.tour.model.dao.TourDao">
+	<select id="selectEmojiList" resultType="emoji">
+		SELECT EMOJI_NO
+		     , EMOJI_NAME
+		  FROM EMOJI_TBL
+		 ORDER
+		    BY EMOJI_NO
+	</select>
+	
+	<select id="selectWishlistList" resultType="wishlist">
+		SELECT TOUR_WISHLIST_NO
+		     , TOUR_WISHLIST_NAME
+		     , EMOJI_NO
+		  FROM TOUR_WISHLIST_TBL
+		 WHERE MEMBER_ID = #{memberId}
+		 ORDER
+		    BY TOUR_WISHLIST_NO DESC
+	</select>
+	
+	<insert id="insertWishlist">
+		INSERT
+		  INTO TOUR_WISHLIST_TBL
+		VALUES
+		     (
+		       TOUR_WISHLIST_SEQ.NEXTVAL
+		     , #{tourWishlistName}
+		     , #{memberId}
+		     , #{emojiNo}
+		     )
+	</insert>
+</mapper>
