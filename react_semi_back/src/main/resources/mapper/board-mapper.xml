@@ -27,8 +27,30 @@
         <if test="category == 1">
             and board_category = 1
         </if>
-        </where>
-    order by board_no desc
+         <if test="category == 2">
+            and board_category = 2
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 1">
+                    and board_title like '%'||#{searchKeyword}||'%'
+                </when>
+                <when test="searchType == 2">
+                    and board_writer = #{searchKeyword}
+                </when>
+            </choose>
+        </if>
+    </where>
+
+    <choose>
+        <when test="order == 2">
+            order by board_no asc
+        </when>
+        <otherwise>
+            order by board_no desc
+        </otherwise>
+    </choose>
+    
     offset #{page} * #{size} rows fetch next #{size} rows only
 </select>
 
@@ -73,7 +95,7 @@
         	#{boardNo},
         	#{boardCategory},
         	#{boardTitle},
-        	#{boardContent},
+        	#{boardContent, jdbcType=CLOB},
         	#{boardThumb, jdbcType=VARCHAR},     #{boardWriter},
         	sysdate,
         	1,
@@ -103,7 +125,7 @@
 	<update id="updateBoard">
     	update board_tbl set
        		board_title = #{boardTitle},
-        	board_content = #{boardContent},
+        	board_content = #{boardContent, jdbcType=CLOB},
         	board_thumb = #{boardThumb, jdbcType=VARCHAR},
         	board_category = #{boardCategory},
         	attraction_no = #{attractionNo, jdbcType=NUMERIC},
@@ -201,4 +223,9 @@
     WHERE board_no = #{boardNo}
 	</update>
 	
+	<update id="changeCommentStatus" parameterType="boardComment">
+    	update board_comment_tbl set
+     		comment_status = #{commentStatus}
+    	where board_comment_no = #{boardCommentNo}
+	</update>
 </mapper>

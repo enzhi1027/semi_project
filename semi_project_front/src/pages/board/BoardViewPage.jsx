@@ -21,7 +21,6 @@ const BoardViewPage = () => {
   const isAdmin = memberGrade === 1; // 관리자: 1
   const isBlocked = memberGrade === 2; // 차단유저: 2
 
-  // 게시글 정보 가져오기
   useEffect(() => {
     if (!isReady) return;
 
@@ -63,7 +62,7 @@ const BoardViewPage = () => {
 
   // 관리자 전용: 게시글 공개/비공개 상태 변경
   const changeBoardStatus = () => {
-    const newStatus = board.boardStatus === 1 ? 0 : 1; // 1이면 비공개(0)로, 0이면 공개(1)로
+    const newStatus = board.boardStatus === 1 ? 0 : 1; // 1이면 비공개(0), 0이면 공개(1)
     axios
       .patch(`${import.meta.env.VITE_BACKSERVER}/boards/${boardNo}/status`, {
         boardStatus: newStatus,
@@ -168,9 +167,9 @@ const BoardViewPage = () => {
                     <Button
                       className="btn info"
                       onClick={changeBoardStatus}
-                      style={{ width: '85px', fontSize: '14px' }}
+                      style={{ width: '70px', fontSize: '14px' }}
                     >
-                      {board.boardStatus === 1 ? '비공개처리' : '공개처리'}
+                      {board.boardStatus === 1 ? '비공개' : '공개'}
                     </Button>
                   )}
 
@@ -191,7 +190,10 @@ const BoardViewPage = () => {
                     <Button
                       className="btn primary outline"
                       onClick={deleteBoard}
-                      style={{ width: '70px', fontSize: '14px' }}
+                      style={{
+                        width: '70px',
+                        fontSize: '14px',
+                      }}
                     >
                       삭제
                     </Button>
@@ -203,8 +205,6 @@ const BoardViewPage = () => {
           {/* 댓글 컴포넌트에 관리자/차단 정보 전달 */}
           <BoardCommentComponent
             boardNo={boardNo}
-            isAdmin={isAdmin}
-            isBlocked={isBlocked}
             isAdmin={isAdmin}
             isBlocked={isBlocked}
           />
@@ -265,7 +265,11 @@ const Like = ({ boardNo }) => {
   };
   //로그인 안했을 때
   const loginMsg = () => {
-    Swal.fire({ title: '로그인 후 이용 가능합니다.', icon: 'info' });
+    Swal.fire({
+      title: '로그인 후 이용 가능합니다.',
+      icon: 'info',
+      confirmButtonColor: 'var(--color1)',
+    });
   };
 
   return (
@@ -294,7 +298,7 @@ const BoardCommentComponent = ({ boardNo, isAdmin, isBlocked }) => {
   });
   //댓글 목록
   const [boardCommentList, setBoardCommentList] = useState([]);
-  useEffect(() => {
+  const getCommentList = () => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/boards/${boardNo}/comments`)
       .then((res) => {
@@ -303,7 +307,36 @@ const BoardCommentComponent = ({ boardNo, isAdmin, isBlocked }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    getCommentList();
+  }, [boardNo]);
+
+  //관리자 전용: 댓글 상태(공개/숨김) 변경 함수
+  const changeCommentStatus = (boardCommentNo, currentStatus) => {
+    const newStatus = currentStatus === 1 ? 0 : 1;
+    const statusText = newStatus === 0 ? '숨김' : '공개';
+
+    axios
+      .patch(
+        `${import.meta.env.VITE_BACKSERVER}/boards/comments/${boardCommentNo}/status`,
+        {
+          commentStatus: newStatus,
+        },
+      )
+      .then((res) => {
+        if (res.data === 1) {
+          Swal.fire({
+            title: `댓글이 ${statusText} 처리되었습니다.`,
+            icon: 'success',
+            confirmButtonColor: 'var(--color1)',
+          });
+          getCommentList(); // 목록 새로고침하여 즉시 반영
+        }
+      })
+      .catch((err) => console.error(err));
+  };
 
   const updateComment = (modifyComment, index) => {
     axios
@@ -340,9 +373,21 @@ const BoardCommentComponent = ({ boardNo, isAdmin, isBlocked }) => {
   };
 
   const registComment = () => {
+    // 차단된 회원인지 체크
+    if (isBlocked) {
+      Swal.fire({
+        title: '차단된 회원은 댓글을 작성할 수 없습니다.',
+        icon: 'warning',
+        confirmButtonColor: 'var(--color1)',
+        width: '600px',
+      });
+      return;
+    }
+    // 내용이 비어있는지 체크
     if (boardComment.boardCommentContent === '') {
       return;
     }
+    // 차단회원X + 내용이 있으면 정상 등록
     axios
       .post(`${import.meta.env.VITE_BACKSERVER}/boards/comments`, boardComment)
       .then((res) => {
@@ -359,8 +404,7 @@ const BoardCommentComponent = ({ boardNo, isAdmin, isBlocked }) => {
   };
   return (
     <div className={styles.comment_wrap}>
-      {/* 차단유저가 아닐 때만 댓글 등록창 노출 */}
-      {memberId && !isBlocked && (
+      {memberId && (
         <div className={styles.comment_regist_wrap}>
           <h3>댓글 등록</h3>
           <div className={styles.input_item}>
@@ -390,6 +434,7 @@ const BoardCommentComponent = ({ boardNo, isAdmin, isBlocked }) => {
               deleteComment={deleteComment}
               isAdmin={isAdmin}
               isBlocked={isBlocked}
+              changeCommentStatus={changeCommentStatus}
             />
           );
         })}
@@ -406,6 +451,7 @@ const BoardComment = ({
   deleteComment,
   isAdmin,
   isBlocked,
+  changeCommentStatus,
 }) => {
   const { memberId } = useAuthStore();
   const [isModifyMode, setIsModifyMode] = useState(false);
@@ -461,9 +507,26 @@ const BoardComment = ({
                 </Button>
               </>
             ) : (
-              /* 일반 모드일 때 */
               <>
-                {/* 1. 수정 버튼: 오직 작성자 본인에게만 노출 */}
+                {isAdmin && (
+                  <Button
+                    className={
+                      comment.commentStatus === 1
+                        ? 'btn info sm'
+                        : 'btn secondary sm'
+                    }
+                    onClick={() =>
+                      changeCommentStatus(
+                        comment.boardCommentNo,
+                        comment.commentStatus,
+                      )
+                    }
+                    style={{ width: '70px', fontSize: '14px' }}
+                  >
+                    {comment.commentStatus === 1 ? '비공개' : '공개'}
+                  </Button>
+                )}
+                {/* 수정 버튼: 작성자 본인에게만 보임 */}
                 {memberId === comment.boardCommentWriter && (
                   <Button
                     className="btn primary"
@@ -474,7 +537,7 @@ const BoardComment = ({
                   </Button>
                 )}
 
-                {/* 2. 삭제 버튼: 작성자 본인 이거나 관리자(isAdmin)일 때 노출 */}
+                {/* 삭제 버튼: 작성자 본인이거나 관리자(isAdmin)일 때 보임 */}
                 {(memberId === comment.boardCommentWriter || isAdmin) && (
                   <Button
                     className="btn primary outline sm"
@@ -504,16 +567,38 @@ const BoardComment = ({
         )}
       </li>
       <li className={styles.comment_content}>
-        <TextArea
-          value={modifyComment.boardCommentContent}
-          onChange={(e) => {
-            setModifyComment({
-              ...modifyComment,
-              boardCommentContent: e.target.value,
-            });
-          }}
-          disabled={!isModifyMode}
-        ></TextArea>
+        {/* 공개 상태(1)이거나 관리자인 경우: 기존 UI 유지 */}
+        {comment.commentStatus === 1 ||
+        isAdmin ||
+        memberId === comment.boardCommentWriter ? (
+          <div
+            className={
+              comment.commentStatus === 0 ? styles.comment_hidden_admin : ''
+            }
+          >
+            <TextArea
+              value={modifyComment.boardCommentContent}
+              onChange={(e) => {
+                setModifyComment({
+                  ...modifyComment,
+                  boardCommentContent: e.target.value,
+                });
+              }}
+              disabled={!isModifyMode}
+            ></TextArea>
+
+            {isAdmin && comment.commentStatus === 0 && (
+              <p className={styles.admin_notice}>
+                * 이 댓글은 현재 일반 사용자에게 비공개 상태입니다.
+              </p>
+            )}
+          </div>
+        ) : (
+          /* 일반 사용자가 비공개 댓글을 볼 때: 기존 textarea 높이와 동일하게 맞춤 */
+          <div className={styles.comment_blocked_msg}>
+            관리자에 의해 비공개 처리된 댓글입니다.
+          </div>
+        )}
       </li>
     </ul>
   );

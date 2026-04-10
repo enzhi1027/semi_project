@@ -7,11 +7,13 @@ import { Input } from '../../components/ui/Form';
 import Button from '../../components/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import useAuthStore from '../../components/utils/useAuthStore';
+import Swal from 'sweetalert2';
+import { height } from '@mui/system';
 
 // 게시글 목록 페이지
 const BoardListPage = () => {
   const navigate = useNavigate();
-  const { memberId } = useAuthStore();
+  const { memberId, memberGrade } = useAuthStore();
 
   const [boardList, setBoardList] = useState([]); //게시글 목록 저장
   const [page, setPage] = useState(0); //현재 페이지 번호
@@ -29,6 +31,19 @@ const BoardListPage = () => {
   // 실제 검색값
   const [searchType, setSearchType] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState('');
+
+  const handleWriteClick = () => {
+    if (memberGrade === 2) {
+      Swal.fire({
+        title: '차단된 회원은 게시글을 작성할 수 없습니다.',
+        icon: 'warning',
+        confirmButtonColor: 'var(--color1)',
+        width: '600px',
+      });
+    } else {
+      navigate('/board/write');
+    }
+  };
 
   // 게시글 목록 조회
   useEffect(() => {
@@ -89,7 +104,16 @@ const BoardListPage = () => {
               onChange={(e) => setKeyword(e.target.value)}
             />
 
-            <Button type="submit" className="btn primary sm">
+            <Button
+              type="submit"
+              className="btn primary"
+              style={{
+                width: '60px',
+                height: '30px',
+                fontSize: '14px',
+                lineHeight: '1',
+              }}
+            >
               검색
             </Button>
           </form>
@@ -113,7 +137,7 @@ const BoardListPage = () => {
         <div className={styles.write_btn_zone}>
           <Button
             className="btn primary"
-            onClick={() => navigate('/board/write')}
+            onClick={handleWriteClick}
             style={{
               width: '80px',
               fontSize: '14px',
