@@ -200,13 +200,13 @@
   align-items: center;
   padding: 12px 0;
   gap: 4px;
-  border-bottom: 1px solid var(--gray7);
 }
 
 /* 지도 마커 아이콘 */
 .location_icon {
   font-size: 28px !important;
-  color: var(--color1);
+  fill: var(--color1) !important; /* color 대신 fill 사용 */
+  color: var(--color1) !important;
   display: flex;
   align-items: center;
   user-select: none;
@@ -235,4 +235,36 @@
   overflow-wrap: break-word;
   white-space: pre-wrap;
   line-height: 1.6;
+}
+
+.comment_content > div {
+  width: 100%;
+}
+/* 관리자가 보는 비공개 댓글 (흐릿하게) */
+.comment_hidden_admin {
+  opacity: 0.5;
+}
+/* 관리자 안내 문구 */
+.admin_notice {
+  color: #ff0000;
+  font-size: 12px;
+  margin-top: 5px;
+}
+/* 일반 유저가 보는 비공개 박스*/
+.comment_blocked_msg {
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--gray7);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text2);
+  font-size: 14px;
+  font-style: italic;
+}
+/* 구조 변경으로 인한 높이 해결 */
+.comment_content textarea {
+  width: 100% !important;
+  min-height: 100px; /* 높이 고정 */
 }

@@ -2,7 +2,7 @@
   width: 1200px;
   margin: 50px auto;
   border-radius: 10px;
-  background-color: var(--gray8);
+  background-color: var(--gray8); /* 기존 배경색 유지 */
   padding: 32px;
 }
 
@@ -14,7 +14,7 @@
   margin: 10px 0 50px;
 }
 
-/* 카테고리 & 지도 영역 (게시글 작성용) */
+/* 카테고리 & 지도 영역 (기존 스타일 유지) */
 .category_wrap {
   width: 800px;
   margin: 0 auto 16px;
@@ -32,14 +32,15 @@
 .select {
   outline: none;
   appearance: none;
+  -webkit-appearance: none;
   width: 80px;
   text-align: center;
   padding: 6px 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  background-color: #fff;
 }
 
-/* 지도 아이콘 스타일 */
 .location_icon {
   font-size: 30px;
   color: var(--color1);
@@ -53,19 +54,6 @@
   transform: scale(1.1);
 }
 
-/* 비활성화된 아이콘 (Review 카테고리일 때 적용) 
-.disabled_icon {
-  color: var(--gray6) !important;
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.disabled_icon:hover {
-  transform: none;
-}
-*/
-
-/* 선택된 장소 이름 (마커 옆에 밀착 및 선 제거) */
 .selected_place_name {
   font-size: 15px;
   color: var(--color1);
@@ -78,7 +66,7 @@
   vertical-align: middle;
 }
 
-/* 게시판 목록용 옵션 영역 (기존 유지) */
+/* 게시판 목록용 옵션 영역 (기존 코드 100% 복구) */
 .list_option_wrap {
   margin-top: 32px;
   display: flex;
@@ -103,15 +91,22 @@
 }
 
 .search_wrap > input {
-  width: 200px;
+  width: 220px;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
 }
 
 .search_wrap > button {
   width: 80px;
+  /* 버튼 스타일은 전역 클래스 btn을 따른다고 가정하거나 필요시 추가 */
 }
 
 .board_list_pagination {
   margin-top: 30px;
+  display: flex;
+  justify-content: center;
 }
 
 .write_btn_zone {
@@ -120,7 +115,7 @@
   margin: 12px 0px;
 }
 
-/* 작성 페이지 하단 버튼 영역 */
+/* 작성 페이지 하단 버튼 영역 (기존 크기 100% 유지) */
 .btn_wrap {
   width: 800px;
   margin: 50px auto;
