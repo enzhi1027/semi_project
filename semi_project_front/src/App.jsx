@@ -75,7 +75,7 @@ function App() {
               element={<AdminTourInsert />}
             />
             <Route
-              path="/admin/tour/modifytour"
+              path="/admin/tour/modifytour/:tourItemNo"
               element={<AdminModifyTour />}
             />
             {/*로그인, 회원가입 마이페이지------------------------------- */}

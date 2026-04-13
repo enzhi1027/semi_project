@@ -1,8 +1,13 @@
 package kr.co.iei.member.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.board.model.vo.ListItem;
 import kr.co.iei.member.model.vo.Member;
+import kr.co.iei.member.model.vo.MemberListItem;
+import kr.co.iei.touritem.model.vo.TourItem;
 
 @Mapper
 public interface MemberDao {
@@ -22,5 +27,15 @@ public interface MemberDao {
 	Member selectOneMemberEmail(String memberEmail);
 
 	Member selectOneMemberPhone(String memberPhone);
+
+	Integer selectMemberTotalCount(MemberListItem request);
+
+	List<Member> selectMemberList(MemberListItem request);
+
+	int changeMemberGrade(Member member);
+
+
+
+
 	
 }

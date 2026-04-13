@@ -1,5 +1,6 @@
 package kr.co.iei.etc.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,10 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import kr.co.iei.board.model.vo.ListItem;
-import kr.co.iei.board.model.vo.ListResponse;
+import kr.co.iei.member.model.service.MemberService;
+import kr.co.iei.member.model.vo.Member;
+import kr.co.iei.member.model.vo.MemberListItem;
+import kr.co.iei.member.model.vo.MemberListResponse;
 import kr.co.iei.touritem.model.service.TourItemService;
 import kr.co.iei.touritem.model.vo.TourItem;
 import kr.co.iei.touritem.model.vo.TourItemImg;
+import kr.co.iei.touritem.model.vo.TourItemInfo;
 import kr.co.iei.touritem.model.vo.TourListResponse;
 import kr.co.iei.utils.FileUtils;
 
@@ -37,6 +44,8 @@ public class AdminController {
 	private String root;
 	@Autowired
 	private FileUtils fileUtils;
+	@Autowired
+	private MemberService memberService;
 	
 	//상품 등록--------------------------------------------------------
 	@PostMapping
@@ -88,5 +97,70 @@ public class AdminController {
 		return ResponseEntity.ok(result);
 	}
 	
+	//상품 1개 조회 --------------------------------------------------------------
+	@GetMapping(value = "{tourItemNo}")
+	public ResponseEntity<?> selectOneTourItem(@PathVariable Integer tourItemNo){
+		TourItem tourItem = tourItemService.selectOneTourItem(tourItemNo);
+		System.out.println(tourItem);
+		
+		if(tourItem != null) {
+			List<TourItemInfo> placeList = tourItemService.selectPlaceList(tourItemNo);
+			tourItem.setPlaceList(placeList);
+			
+			List<TourItemImg> fileList = tourItemService.selectImgList(tourItemNo);
+			tourItem.setFileList(fileList);
+		}
+		System.out.println(tourItem);
+		return ResponseEntity.ok(tourItem);
+	}
+	//상품 수정 -----------------------------------------------------------------
+	@PutMapping(value="/{tourItemNo}")
+	public ResponseEntity<?> updateTourItem(@PathVariable Integer tourItemNo,
+											@ModelAttribute TourItem tourItem,
+											@RequestParam(value = "files",required = false) 
+											List<MultipartFile> files){
+		//경로로 들어온 tourItemNo를 tourItem객체에 대입
+		tourItem.setTourItemNo(tourItemNo);
+		
+		//이미지 파일 처리
+		List<TourItemImg> addImgList = new ArrayList<>();
+		if(files != null) {
+			String savepath = root + "tourItemImg/";
+			for(MultipartFile file : files) {
+				if(!file.isEmpty()) {
+					String tourItemImgPath = fileUtils.upload(savepath, file);
+					TourItemImg img = new TourItemImg();
+					img.setTourItemImgPath(tourItemImgPath);
+					img.setTourItemNo(tourItemNo);
+					addImgList.add(img);
+				}
+			}
+		}
+		// 수정 결과
+		int result = tourItemService.updateTourItem(tourItem, addImgList);
+		
+		if(result > 0 && tourItem.getDeleteFilePath() != null) {
+			String savepath = root + "tourItemImg/";
+			for(String deletePath : tourItem.getDeleteFilePath()) {
+				File deleteFile = new File(savepath + deletePath);
+				if (deleteFile.exists()) {
+					deleteFile.delete();
+				}
+			}
+		}
+		return ResponseEntity.ok(result);
+	}
 	
+	//회원 전체 조회 -----------------------------------------------------------
+	@GetMapping(value = "memberList")
+	public ResponseEntity<?> selectMemberList(@ModelAttribute MemberListItem request) {
+		MemberListResponse response = memberService.selectMemberList(request);
+		System.out.println(response);
+		return ResponseEntity.ok(response);
+	}
+	@PatchMapping(value = "/changeMemberGrade")
+	public ResponseEntity<?> changeMemberGrade(@RequestBody Member member){
+		int result = memberService.changeMemberGrade(member);
+		return ResponseEntity.ok(result);
+	}
 }
