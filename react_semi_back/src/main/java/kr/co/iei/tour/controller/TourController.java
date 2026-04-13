@@ -87,6 +87,7 @@ public class TourController {
 			@RequestParam(required = false) String searchPriceMin,
 			@RequestParam(required = false) String searchPriceMax, @RequestParam(required = false) String searchWhen) {
 		List<TourItem> list = service.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, searchWhen);
+		System.out.println(list);
 		return ResponseEntity.ok(list);
 	}
 }
