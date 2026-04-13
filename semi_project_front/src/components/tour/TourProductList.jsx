@@ -8,24 +8,40 @@ import "swiper/css/scrollbar";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import TourList from "./TourList";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import axios from "axios";
 
-const TourProductList = ({ memberId, wishlistList, setWishlistList }) => {
+const ListPage = ({
+  memberId,
+  isReady,
+  wishlistList,
+  setWishlistList,
+  order,
+  recommendItemList,
+  setRecommendItemList,
+  allItemList,
+  setAllItemList,
+  openIndex,
+  setOpenIndex,
+}) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
 
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const tours = [
-    { id: 1, isLiked: true },
-    { id: 2, isLiked: false },
-    { id: 3, isLiked: true },
-    { id: 4, isLiked: false },
-    { id: 5, isLiked: false },
-    { id: 6, isLiked: false },
-    { id: 7, isLiked: false },
-    { id: 8, isLiked: true },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/itemList/${order}`)
+      .then((res) => {
+        if (order) {
+          // 0: 추천 상품, 1: 전체 상품
+          setAllItemList(res.data);
+        } else {
+          setRecommendItemList(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className={styles.swiper_container}>
@@ -42,24 +58,131 @@ const TourProductList = ({ memberId, wishlistList, setWishlistList }) => {
         }}
         className={styles.produt_list_wrap}
       >
-        {tours.map((tour, index) => {
-          return (
-            <SwiperSlide key={"tour-" + tour.id}>
-              <TourList
-                isLiked={tour.isLiked}
-                isOpen={openIndex === index}
-                onToggle={() => {
-                  setOpenIndex(openIndex === index ? null : index);
-                }}
-                memberId={memberId}
-                wishlistList={wishlistList}
-                setWishlistList={setWishlistList}
-              />
-            </SwiperSlide>
-          );
-        })}
+        {order === 0
+          ? recommendItemList.map((item, index) => {
+              return (
+                <SwiperSlide key={"item-" + item.tourItemNo}>
+                  <TourList
+                    isLiked={false}
+                    isOpen={openIndex === index}
+                    onToggle={() => {
+                      setOpenIndex(openIndex === index ? null : index);
+                    }}
+                    memberId={memberId}
+                    isReady={isReady}
+                    wishlistList={wishlistList}
+                    setWishlistList={setWishlistList}
+                    item={item}
+                  />
+                </SwiperSlide>
+              );
+            })
+          : allItemList.map((item, index) => {
+              return (
+                <SwiperSlide key={"item-" + item.tourItemNo}>
+                  <TourList
+                    isLiked={false}
+                    isOpen={openIndex === index}
+                    onToggle={() => {
+                      setOpenIndex(openIndex === index ? null : index);
+                    }}
+                    memberId={memberId}
+                    isReady={isReady}
+                    wishlistList={wishlistList}
+                    setWishlistList={setWishlistList}
+                    item={item}
+                  />
+                </SwiperSlide>
+              );
+            })}
       </Swiper>
     </div>
+  );
+};
+
+const SearchPage = ({
+  memberId,
+  isReady,
+  wishlistList,
+  setWishlistList,
+  searchItemList,
+  setSearchItemList,
+  openIndex,
+  setOpenIndex,
+}) => {
+  return (
+    <div className={styles.search_page_container}>
+      {searchItemList.length != 0 ? (
+        searchItemList.map((item, index) => {
+          return (
+            <>
+              <div
+                className={styles.search_page_item_wrap}
+                key={"item-" + item.tourItemNo}
+              >
+                <TourList
+                  isLiked={false}
+                  isOpen={openIndex === index}
+                  onToggle={() => {
+                    setOpenIndex(openIndex === index ? null : index);
+                  }}
+                  memberId={memberId}
+                  isReady={isReady}
+                  wishlistList={wishlistList}
+                  setWishlistList={setWishlistList}
+                  item={item}
+                />
+              </div>
+            </>
+          );
+        })
+      ) : (
+        <div className={styles.none_result}>검색 결과가 존재하지 않습니다.</div>
+      )}
+    </div>
+  );
+};
+
+const TourProductList = ({
+  memberId,
+  isReady,
+  wishlistList,
+  setWishlistList,
+  order,
+  recommendItemList,
+  setRecommendItemList,
+  allItemList,
+  setAllItemList,
+  searchItemList,
+  setSearchItemList,
+  type,
+}) => {
+  const [openIndex, setOpenIndex] = useState(null);
+  return type === "list" ? (
+    <ListPage
+      memberId={memberId}
+      isReady={isReady}
+      wishlistList={wishlistList}
+      setWishlistList={setWishlistList}
+      order={order}
+      recommendItemList={recommendItemList}
+      setRecommendItemList={setRecommendItemList}
+      allItemList={allItemList}
+      setAllItemList={setAllItemList}
+      openIndex={openIndex}
+      setOpenIndex={setOpenIndex}
+    />
+  ) : (
+    <SearchPage
+      memberId={memberId}
+      isReady={isReady}
+      wishlistList={wishlistList}
+      setWishlistList={setWishlistList}
+      searchItemList={searchItemList}
+      setSearchItemList={setSearchItemList}
+      openIndex={openIndex}
+      setOpenIndex={setOpenIndex}
+    />
   );
 };
 

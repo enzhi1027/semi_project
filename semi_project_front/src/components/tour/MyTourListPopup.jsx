@@ -64,7 +64,13 @@ const EMOJI_COMPONENTS = {
   Filter9Icon,
 };
 
-const AddList = ({ onComplete, setWishlistList, memberId, emojiList }) => {
+const AddList = ({
+  onComplete,
+  wishlistList,
+  setWishlistList,
+  memberId,
+  emojiList,
+}) => {
   const [newListName, setNewListName] = useState("");
   const [selectedEmojiId, setSelectedEmojiId] = useState(null);
   const [selectedEmojiNo, setSelectedEmojiNo] = useState(null);
@@ -73,6 +79,18 @@ const AddList = ({ onComplete, setWishlistList, memberId, emojiList }) => {
     if (newListName.length === 0) {
       Swal.fire({
         title: "1글자 이상 입력해주세요",
+        icon: "warning",
+      });
+    } else if (selectedEmojiNo === null) {
+      Swal.fire({
+        title: "이모지를 선택해주세요",
+        icon: "warning",
+      });
+    } else if (
+      wishlistList.some((wishlist) => wishlist.tourWishlistName === newListName)
+    ) {
+      Swal.fire({
+        title: "이미 존재하는 리스트입니다",
         icon: "warning",
       });
     } else {
@@ -84,7 +102,10 @@ const AddList = ({ onComplete, setWishlistList, memberId, emojiList }) => {
         })
         .then((res) => {
           if (res.data !== 0) {
-            setWishlistList((prev) => [...prev, res.data]);
+            setWishlistList((prev) => [
+              { tourWishlistName: newListName, emojiNo: selectedEmojiNo },
+              ...prev,
+            ]);
             onComplete();
           }
         })
@@ -123,15 +144,15 @@ const AddList = ({ onComplete, setWishlistList, memberId, emojiList }) => {
       </div>
       <div className={styles.addlist_text1}>이모지 선택</div>
       <div className={styles.addlist_emoji}>
-        {emojiList.map((item, index) => {
-          const IconComponent = EMOJI_COMPONENTS[item.emojiName];
+        {emojiList.map((emoji, index) => {
+          const IconComponent = EMOJI_COMPONENTS[emoji.emojiName];
 
           return IconComponent ? (
             <div
               key={"emoji-" + index}
               onClick={() => {
                 setSelectedEmojiId(IconComponent);
-                setSelectedEmojiNo(item.emojiNo);
+                setSelectedEmojiNo(emoji.emojiNo);
               }}
               className={`${selectedEmojiId === IconComponent && styles.selectedEmoji} ${styles.emoji_wrap}`}
             >
@@ -152,30 +173,128 @@ const AddList = ({ onComplete, setWishlistList, memberId, emojiList }) => {
   );
 };
 
-const ShowList = ({ onAddClick, wishlistList, emojiList }) => {
+const ShowList = ({ onAddClick, wishlistList, emojiList, memberId, item }) => {
+  const [clickedList, setClickedList] = useState([]);
+
+  useEffect(() => {
+    const tourItemNo = item.tourItemNo;
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/tours/wishlistNoList/${memberId}/${tourItemNo}`,
+      )
+      .then((res) => {
+        setClickedList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   return (
     <>
-      <div className={styles.add_list_header} onClick={onAddClick}>
+      <div className={styles.show_list_header} onClick={onAddClick}>
         <AddCircleOutlineIcon />
         <div>리스트 추가</div>
       </div>
 
-      {wishlistList.map((item) => {
-        const targetEmoji = emojiList.find((e) => e.emojiNo === item.emojiNo);
+      <div className={styles.show_list_wrap}>
+        {wishlistList.map((wishlist) => {
+          const targetEmoji = emojiList.find(
+            (e) => e.emojiNo === wishlist.emojiNo,
+          );
 
-        const emojiName = targetEmoji?.emojiName;
+          const emojiName = targetEmoji?.emojiName;
 
-        const IconComponent = EMOJI_COMPONENTS[emojiName];
+          const IconComponent = EMOJI_COMPONENTS[emojiName];
 
-        return (
-          <div key={item.tourWishlistNo} className={styles.wishlist_row}>
-            <div className={styles.wishlist_icon_box}>
-              {IconComponent ? <IconComponent /> : <StarIcon />}
+          return (
+            <div
+              key={wishlist.tourWishlistNo}
+              className={`${styles.wishlist_row} ${clickedList.includes(wishlist.tourWishlistNo) ? styles.wishlist_clicked : ""}`}
+              onClick={() => {
+                if (clickedList.includes(wishlist.tourWishlistNo)) {
+                  // delete
+                  axios
+                    .delete(`${import.meta.env.VITE_BACKSERVER}/tours/wish`, {
+                      data: {
+                        memberId: memberId,
+                        tourWishlistName: wishlist.tourWishlistName,
+                        tourWishlistNo:
+                          wishlist.tourWishlistNo != null
+                            ? wishlist.tourWishlistNo
+                            : 0,
+                        tourItemNo: item.tourItemNo,
+                      },
+                    })
+                    .then((res) => {
+                      console.log(res.data);
+                      if (res.data) {
+                        // delete 성공
+                        setClickedList((prev) =>
+                          prev.filter((id) => id !== wishlist.tourWishlistNo),
+                        );
+                      } else {
+                        // delete 실패
+                        Swal.fire({
+                          title: "잠시 후 다시 시도해주세요",
+                          icon: "error",
+                        });
+                      }
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      Swal.fire({
+                        title: "잠시 후 다시 시도해주세요",
+                        icon: "error",
+                      });
+                    });
+                } else {
+                  // insert
+                  axios
+                    .post(`${import.meta.env.VITE_BACKSERVER}/tours/wish`, {
+                      memberId: memberId,
+                      tourWishlistName: wishlist.tourWishlistName,
+                      tourWishlistNo:
+                        wishlist.tourWishlistNo != null
+                          ? wishlist.tourWishlistNo
+                          : 0,
+                      tourItemNo: item.tourItemNo,
+                    })
+                    .then((res) => {
+                      console.log(res.data);
+                      if (res.data) {
+                        // insert 성공
+                        setClickedList((prev) => [
+                          ...prev,
+                          wishlist.tourWishlistNo,
+                        ]);
+                      } else {
+                        // insert 실패
+                        Swal.fire({
+                          title: "잠시 후 다시 시도해주세요",
+                          icon: "error",
+                        });
+                      }
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      Swal.fire({
+                        title: "잠시 후 다시 시도해주세요",
+                        icon: "error",
+                      });
+                    });
+                }
+              }}
+            >
+              <div className={styles.wishlist_icon_box}>
+                {IconComponent ? <IconComponent /> : <StarIcon />}
+              </div>
+              <div className={styles.wishlist_name}>
+                {wishlist.tourWishlistName}
+              </div>
             </div>
-            <div className={styles.wishlist_name}>{item.tourWishlistName}</div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </>
   );
 };
@@ -186,6 +305,7 @@ const MyTourListPopup = ({
   setWishlistList,
   onToggle,
   memberId,
+  item,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [emojiList, setEmojiList] = useState([]);
@@ -195,6 +315,7 @@ const MyTourListPopup = ({
       return (
         <AddList
           onComplete={() => setIsAdding(false)}
+          wishlistList={wishlistList}
           setWishlistList={setWishlistList}
           memberId={memberId}
           emojiList={emojiList}
@@ -206,6 +327,8 @@ const MyTourListPopup = ({
         onAddClick={() => setIsAdding(true)}
         wishlistList={wishlistList}
         emojiList={emojiList}
+        memberId={memberId}
+        item={item}
       />
     );
   };

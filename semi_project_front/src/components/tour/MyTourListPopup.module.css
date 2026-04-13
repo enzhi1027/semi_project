@@ -67,8 +67,8 @@
   box-shadow: 0 0 7px var(--color1);
 }
 
-.tour_list_mylist .addlist_emoji svg path,
-.tour_list_mylist .addlist_emoji svg circle {
+.tour_list_mylist svg path,
+.tour_list_mylist svg circle {
   color: var(--color1);
 }
 
@@ -93,4 +93,51 @@
 
 .tour_list_mylist .addlist_btn:hover {
   filter: brightness(1.1);
+}
+
+.tour_list_mylist .show_list_header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+.tour_list_mylist .wishlist_row {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    box-shadow 0.3s ease,
+    border 0.3s ease;
+  gap: 7px;
+}
+
+.tour_list_mylist .wishlist_row:hover {
+  border: 1px solid var(--color2);
+  box-shadow: 0 0 7px var(--color2);
+}
+
+.tour_list_mylist .wishlist_row.wishlist_clicked {
+  border: 1px solid var(--color2);
+  background-color: var(--color2);
+}
+
+.tour_list_mylist .wishlist_row.wishlist_clicked svg path,
+.tour_list_mylist .wishlist_row.wishlist_clicked div {
+  color: var(--gray8);
+}
+
+.tour_list_mylist .wishlist_icon_box {
+  display: flex;
+}
+
+.tour_list_mylist .show_list_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 200px;
+  overflow-y: auto;
 }
