@@ -8,9 +8,25 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
-  const { memberId } = useAuthStore();
+  const { memberId, memberGrade, isReady } = useAuthStore();
   const navigate = useNavigate();
   const location = useLocation();
+
+  //페이지 진입 시 차단 유저인지 체크
+  useEffect(() => {
+    if (isReady) {
+      if (Number(memberGrade) === 2) {
+        Swal.fire({
+          title: '접근 제한',
+          text: '차단된 회원은 게시글 작성 페이지에 접근할 수 없습니다.',
+          icon: 'error',
+          confirmButtonColor: 'var(--color1)',
+        }).then(() => {
+          navigate('/board/list'); // 목록으로 강제 이동
+        });
+      }
+    }
+  }, [isReady, memberGrade, navigate]);
 
   useEffect(() => {
     setCategoryTest(1);
@@ -63,9 +79,10 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
   };
 
   const registBoard = () => {
-    const finalPlaceName = board.placeName || board.locationName || '';
+    // board.placeName 이나 board.locationName 중 하나라도 있는지 확인
+    const currentPlaceName = board.placeName || board.locationName;
 
-    //유효성 검사
+    //제목/내용 유효성 검사
     if (board.boardTitle === '' || board.boardContent === '') {
       Swal.fire({
         title: '제목과 내용을 입력해주세요.',
@@ -75,12 +92,15 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
       return;
     }
 
-    if (finalPlaceName === '') {
+    //장소명 유효성 검사 강화
+    // null, undefined, "" 모두 체크
+    if (!currentPlaceName || currentPlaceName.toString().trim() === '') {
       Swal.fire({
         title: '장소를 선택해주세요.',
         text: '지도 아이콘을 클릭하여 장소를 지정해야 합니다.',
         icon: 'warning',
         confirmButtonColor: 'var(--color1)',
+        width: '600px',
       });
       return;
     }
@@ -90,17 +110,21 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
     form.append('boardTitle', board.boardTitle);
     form.append('boardContent', board.boardContent);
     form.append('boardWriter', board.boardWriter);
-    form.append('boardCategory', board.category);
+    form.append('boardCategory', Number(board.category));
 
-    form.append('placeName', finalPlaceName);
-    form.append('addressName', board.addressName || '');
+    if (Number(board.category) === 1) {
+      //리뷰 게시글
+      // attractionNo가 null이면 안되므로 0 또는 실제 값 전송
+      form.append('attractionNo', board.attractionNo || 0);
+      form.append('addressName', board.addressName || '');
+    } else {
+      //자유 게시글
+      form.append('placeName', currentPlaceName || '');
+      form.append('addressName', board.addressName || '');
 
-    // 카테고리별 추가 데이터 (값이 있을 때만 전송)
-    if (board.attractionNo) {
-      form.append('attractionNo', board.attractionNo); // 리뷰용
-    }
-    if (board.locationNo) {
-      form.append('locationNo', board.locationNo); // 자유용
+      if (board.locationNo) {
+        form.append('locationNo', board.locationNo);
+      }
     }
 
     axios
@@ -118,21 +142,26 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
   return (
     <section className={styles.board_wrap}>
       <h3 className={styles.page_title}>게시글 작성</h3>
-
-      {/* 카테고리 및 장소 선택 UI */}
       <div className={styles.category_wrap}>
         <div className={styles.select_wrap}>
           <select
             className={styles.select}
             name="category"
             value={board.category}
-            onChange={(e) =>
+            onChange={(e) => {
+              const newCategory = Number(e.target.value);
+
+              // 카테고리를 변경하면 기존에 선택했던 모든 장소 정보 초기화
               setBoard({
                 ...board,
-                category: Number(e.target.value),
-                locationName: '',
-              })
-            }
+                category: newCategory,
+                locationName: '', // 화면에 표시되는 이름 초기화
+                placeName: '', // DB 전송용 이름 초기화
+                attractionNo: null, // 리뷰용 관광지 번호 초기화
+                addressName: '', // 주소 초기화
+                locationNo: null, // 자유게시판용 위치 번호 초기화
+              });
+            }}
           >
             <option value={1}>Review</option>
             <option value={2}>Forum</option>

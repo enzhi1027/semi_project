@@ -4,77 +4,86 @@ import SellIcon from "@mui/icons-material/Sell";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useState, useRef } from "react";
-import TourList from "../../components/tour/TourList";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
+import TourProductList from "../../components/tour/TourProductList";
+import axios from "axios";
 
 const TourSearchPage = () => {
   const navigate = useNavigate();
   const { memberId, isReady } = useAuthStore();
 
   const [searchWhere, setSearchWhere] = useState("");
-  const [searchPriceMin, setSeachPriceMin] = useState("");
+  const [searchPriceMin, setSearchPriceMin] = useState("");
   const [searchPriceMax, setSearchPriceMax] = useState("");
   const [searchWhen, setSearchWhen] = useState("");
 
-  const ProductList = () => {
-    const prevRef = useRef(null);
-    const nextRef = useRef(null);
+  const [wishlistList, setWishlistList] = useState([]);
 
-    return (
-      <div className={styles.swiper_container}>
-        <NavigateBeforeIcon ref={prevRef} className={styles.btn_prev} />
-        <NavigateNextIcon ref={nextRef} className={styles.btn_next} />
-        <Swiper
-          modules={[Navigation, Pagination, Autoplay]}
-          spaceBetween={20}
-          slidesPerView={4}
-          navigation={{ prevEl: prevRef, nextEl: nextRef }}
-          onBeforeInit={(swiper) => {
-            swiper.params.navigation.prevEl = prevRef.current;
-            swiper.params.navigation.nextEl = nextRef.current;
-          }}
-          className={styles.produt_list_wrap}
-        >
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={false} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-          <SwiperSlide>
-            <TourList isLiked={true} />
-          </SwiperSlide>
-        </Swiper>
-      </div>
-    );
-  };
+  const [recommendItemList, setRecommendItemList] = useState([]);
+  const [allItemList, setAllItemList] = useState([]);
 
+  const [searchItemList, setSearchItemList] = useState([]);
+
+  const [priceMin, setPriceMin] = useState();
+  const [priceMax, setPriceMax] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/wishlistList/${memberId}`)
+      .then((res) => {
+        setWishlistList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/priceMin`)
+      .then((res) => {
+        setPriceMin(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/priceMax`)
+      .then((res) => {
+        setPriceMax(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/searchItem`, {
+        params: {
+          searchWhere: searchWhere,
+          searchPriceMin: searchPriceMin,
+          searchPriceMax: searchPriceMax,
+          searchWhen: searchWhen,
+        },
+      })
+      .then((res) => {
+        setSearchItemList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchWhere, searchPriceMin, searchPriceMax, searchWhen]);
+
+  useEffect(() => {
+    console.log(searchPriceMin);
+  }, [searchPriceMin]);
   return (
     <>
       <section className={styles.tour_search_wrap}>
@@ -95,20 +104,20 @@ const TourSearchPage = () => {
               <SellIcon />
               <input
                 type="text"
-                placeholder="130,000"
+                placeholder={priceMin && priceMin.toLocaleString()}
                 value={searchPriceMin}
                 onChange={(e) => {
-                  setSeachPriceMin(e.target.value);
+                  setSearchPriceMin(e.target.value.replace(/\D/g, ""));
                 }}
                 className={styles.price_min}
               />
               <div>~</div>
               <input
                 type="text"
-                placeholder="130,000,000"
+                placeholder={priceMax && priceMax.toLocaleString()}
                 value={searchPriceMax}
                 onChange={(e) => {
-                  setSearchPriceMax(e.target.value);
+                  setSearchPriceMax(e.target.value.replace(/\D/g, ""));
                 }}
                 className={styles.price_max}
               />
@@ -144,14 +153,56 @@ const TourSearchPage = () => {
         </div>
 
         <div className={styles.tour_product_wrap}>
-          <div className={styles.tour_product_recommend}>
-            <div className={styles.product_list_title}>추천 상품</div>
-            <ProductList />
-          </div>
-          <div className={styles.tour_product_all}>
-            <div className={styles.product_list_title}>전체 상품</div>
-            <ProductList />
-          </div>
+          {searchWhere === "" &&
+          searchPriceMin === "" &&
+          searchPriceMax === "" ? (
+            <>
+              <div className={styles.tour_product_recommend}>
+                <div className={styles.product_list_title}>추천 상품</div>
+                <TourProductList
+                  memberId={memberId}
+                  isReady={isReady}
+                  wishlistList={wishlistList}
+                  setWishlistList={setWishlistList}
+                  order={0}
+                  recommendItemList={recommendItemList}
+                  setRecommendItemList={setRecommendItemList}
+                  allItemList={allItemList}
+                  setAllItemList={setAllItemList}
+                  type="list"
+                />
+              </div>
+              <div className={styles.tour_product_all}>
+                <div className={styles.product_list_title}>전체 상품</div>
+                <TourProductList
+                  memberId={memberId}
+                  isReady={isReady}
+                  wishlistList={wishlistList}
+                  setWishlistList={setWishlistList}
+                  order={1}
+                  recommendItemList={recommendItemList}
+                  setRecommendItemList={setRecommendItemList}
+                  allItemList={allItemList}
+                  setAllItemList={setAllItemList}
+                  type="list"
+                />
+              </div>
+            </>
+          ) : (
+            <div>
+              <div className={styles.product_list_title}>검색 결과</div>
+              <TourProductList
+                memberId={memberId}
+                isReady={isReady}
+                wishlistList={wishlistList}
+                setWishlistList={setWishlistList}
+                order={1}
+                searchItemList={searchItemList}
+                setSearchItemList={setSearchItemList}
+                type="search"
+              />
+            </div>
+          )}
         </div>
       </section>
     </>

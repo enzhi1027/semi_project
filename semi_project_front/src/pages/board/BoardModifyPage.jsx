@@ -12,11 +12,8 @@ const BoardModifyPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   const boardNo = params.boardNo;
-
-  // 게시글 상태
   const [board, setBoard] = useState(null);
 
-  // 기존 게시글 데이터 불러오기
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/boards/${boardNo}`)
@@ -46,14 +43,18 @@ const BoardModifyPage = () => {
     form.append('boardNo', board.boardNo);
     form.append('boardTitle', board.boardTitle);
     form.append('boardContent', board.boardContent);
-    // 카테고리와 장소 정보는 기존 값을 그대로 유지하여 전송
     form.append('boardCategory', board.boardCategory);
-    form.append('placeName', board.placeName || '');
-    form.append('addressName', board.addressName || '');
 
-    if (board.attractionNo) form.append('attractionNo', board.attractionNo);
-    if (board.locationNo) form.append('locationNo', board.locationNo);
-
+    if (Number(board.boardCategory) === 1) {
+      //리뷰 게시글
+      form.append('attractionNo', board.attractionNo || 0);
+      form.append('addressName', board.addressName || '');
+    } else {
+      //자유 게시글
+      form.append('placeName', board.placeName || '');
+      form.append('addressName', board.addressName || '');
+      form.append('locationNo', board.locationNo || '');
+    }
     axios
       .put(`${import.meta.env.VITE_BACKSERVER}/boards/${boardNo}`, form)
       .then((res) => {

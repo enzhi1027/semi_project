@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useLocation } from "react-router-dom";
+import { useLocation, useMatch } from "react-router-dom";
 
 const CourseInfo = ({
   attractionList,
@@ -125,9 +125,11 @@ const AttractionInfoItem = ({
   //코스 상세보기 페이지랑 작성페이지 구분을 위한 로케이션
   const location = useLocation();
   const courseWritePage = location.pathname === "/course/write";
+  const courseUpdatePage = location.pathname === "/course/update/*";
+  const match = useMatch("/course/update/*");
 
   //어트랙션 리스트에 관광지 코스 순서 추가
-  if (courseWritePage) {
+  if (courseWritePage || match) {
     attraction.courseIndex = index + 1;
   }
 
@@ -171,24 +173,30 @@ const AttractionInfoItem = ({
     <>
       <div
         className={
-          courseWritePage ? styles.info_item_wrap_write : styles.info_item_wrap
+          courseWritePage || match
+            ? styles.info_item_wrap_write
+            : styles.info_item_wrap
         }
       >
         <div className={styles.attraction_index}>
           <div
             className={
-              courseWritePage ? styles.index_num_write : styles.index_num
+              courseWritePage || match
+                ? styles.index_num_write
+                : styles.index_num
             }
           >
             <p>{attraction.courseIndex}</p>
           </div>
           <div
             className={
-              courseWritePage ? styles.index_bar_write : styles.index_bar
+              courseWritePage || match
+                ? styles.index_bar_write
+                : styles.index_bar
             }
           ></div>
         </div>
-        {courseWritePage && (
+        {(courseWritePage || match) && (
           <div className={styles.course_write_index}>
             {listLength !== 1 && attraction.courseIndex === 1 && (
               <KeyboardArrowDownIcon onClick={attractionIndexDown} />
@@ -218,7 +226,7 @@ const AttractionInfoItem = ({
             {attraction.attractionTitle}
           </p>
         </div>
-        {courseWritePage && (
+        {(courseWritePage || match) && (
           <div className={styles.course_write_delete}>
             <ClearIcon onClick={deleteAttraction} />
           </div>

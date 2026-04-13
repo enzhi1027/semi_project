@@ -74,6 +74,22 @@ const CourseViewPage = () => {
     });
   };
 
+  const courseUpdate = () => {
+    Swal.fire({
+      title: "코스를 수정하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "확인",
+      cancelButtonText: "취소",
+      confirmButtonColor: "var(--color2)",
+      cancelButtonColor: "var(--danger)",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        navigate(`/course/update/${courseNo}`);
+      }
+    });
+  };
+
   return (
     <section className={styles.course_view_wrap}>
       <h3 className={styles.page_title}>{courseTitle}</h3>
@@ -87,9 +103,14 @@ const CourseViewPage = () => {
       {attractionList.length !== 0 && (
         <div className={styles.delete_btn}>
           {memberId === attractionList[0].courseWriter && (
-            <Button className="btn danger sm" onClick={deleteCourse}>
-              코스 삭제하기
-            </Button>
+            <>
+              <Button className="btn cancle" onClick={deleteCourse}>
+                코스 삭제하기
+              </Button>
+              <Button className="btn" onClick={courseUpdate}>
+                코스 수정하기
+              </Button>
+            </>
           )}
         </div>
       )}

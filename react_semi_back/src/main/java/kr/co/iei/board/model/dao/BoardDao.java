@@ -49,4 +49,6 @@ public interface BoardDao {
 	
 	int changeBoardStatus(Board board);
 
+	int changeCommentStatus(BoardComment comment);
+
 }

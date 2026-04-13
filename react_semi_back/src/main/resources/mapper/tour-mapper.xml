@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="kr.co.iei.tour.model.dao.TourDao">
+	<select id="selectEmojiList" resultType="emoji">
+		SELECT EMOJI_NO
+		     , EMOJI_NAME
+		  FROM EMOJI_TBL
+		 ORDER
+		    BY EMOJI_NO
+	</select>
+	
+	<select id="selectWishlistList" resultType="wishlist">
+		SELECT TOUR_WISHLIST_NO
+		     , TOUR_WISHLIST_NAME
+		     , EMOJI_NO
+		  FROM TOUR_WISHLIST_TBL
+		 WHERE MEMBER_ID = #{memberId}
+		 ORDER
+		    BY TOUR_WISHLIST_NO DESC
+	</select>
+	
+	<insert id="insertWishlist">
+		INSERT
+		  INTO TOUR_WISHLIST_TBL
+		VALUES
+		     (
+		       TOUR_WISHLIST_SEQ.NEXTVAL
+		     , #{tourWishlistName}
+		     , #{memberId}
+		     , #{emojiNo}
+		     )
+	</insert>
+	
+	<select id="selectTourItemList" resultType="tourItem">
+		SELECT T.TOUR_ITEM_NO
+		     , T.TOUR_ITEM_NAME
+		     , T.TOUR_ITEM_ADULT_PRICE
+		     , T.TOUR_ITEM_KID_PRICE
+		     , T.START_PERIOD
+		     , T.END_PERIOD
+		     , T.TOUR_ITEM_DAYS
+		     , T.TOUR_ITEM_STATUS
+		     , (SELECT I.TOUR_ITEM_IMG_PATH
+		          FROM TOUR_ITEM_IMG_TBL I
+		         WHERE I.TOUR_ITEM_NO = T.TOUR_ITEM_NO
+		           AND I.TOUR_ITEM_IMG_ORDER = 1) AS TOUR_ITEM_IMG_PATH
+		<if test="order == 0">
+			 , COUNT(W.TOUR_ITEM_NO) AS WISH_COUNT
+		</if>
+		  FROM TOUR_ITEM_TBL T
+	    <if test="order == 0">
+		  LEFT
+		  JOIN TOUR_WISH_TBL W ON T.TOUR_ITEM_NO = W.TOUR_ITEM_NO
+		 GROUP
+		    BY T.TOUR_ITEM_NO
+		     , T.TOUR_ITEM_NAME
+		     , T.TOUR_ITEM_ADULT_PRICE
+		     , T.TOUR_ITEM_KID_PRICE
+		     , T.START_PERIOD
+		     , T.END_PERIOD
+		     , T.TOUR_ITEM_DAYS
+		     , T.TOUR_ITEM_STATUS
+		 ORDER
+            BY WISH_COUNT DESC
+		</if>
+		<if test="order == 1">
+		ORDER
+   		   BY START_PERIOD, TOUR_ITEM_NO
+    	</if>
+	</select>
+	
+	<delete id="deleteTourWish">
+		DELETE
+		  FROM TOUR_WISH_TBL
+		 WHERE TOUR_WISHLIST_NO = #{tourWishlistNo}
+		   AND TOUR_ITEM_NO = #{tourItemNo}
+	</delete>
+	
+	<insert id="insertTourWish">
+		INSERT
+		  INTO TOUR_WISH_TBL
+		VALUES
+		     (
+		       TOUR_WISH_SEQ.NEXTVAL
+		     , #{tourItemNo}
+		     , #{tourWishlistNo}
+		     )
+	</insert>
+	
+	<select id="selectTourWishlistNo" resultType="Integer">
+		SELECT TOUR_WISHLIST_NO
+		  FROM TOUR_WISHLIST_TBL
+		 WHERE MEMBER_ID = #{memberId}
+		   AND TOUR_WISHLIST_NAME = #{tourWishlistName}
+	</select>
+	
+	<select id="selectWishlistNoList" resultType="Integer">
+		SELECT TOUR_WISHLIST_NO
+		  FROM TOUR_WISH_TBL
+		  JOIN TOUR_WISHLIST_TBL USING (TOUR_WISHLIST_NO)
+		 WHERE MEMBER_ID = #{memberId}
+		   AND TOUR_ITEM_NO = #{tourItemNo}
+	</select>
+	
+	<select id="selectPriceMin" resultType="Integer">
+		SELECT MIN(TOUR_ITEM_ADULT_PRICE)
+  		  FROM TOUR_ITEM_TBL
+	</select>
+	
+	<select id="selectPriceMax" resultType="Integer">
+		SELECT MAX(TOUR_ITEM_ADULT_PRICE)
+  		  FROM TOUR_ITEM_TBL
+    </select>
+    
+    <select id="searchTourItemList" resultType="tourItem">
+	    SELECT TOUR_ITEM_NO
+         , TOUR_ITEM_NAME
+         , TOUR_ITEM_ADULT_PRICE
+         , TOUR_ITEM_KID_PRICE
+         , START_PERIOD
+         , END_PERIOD
+         , TOUR_ITEM_DAYS
+         , TOUR_ITEM_STATUS
+         , (SELECT I.TOUR_ITEM_IMG_PATH
+	          FROM TOUR_ITEM_IMG_TBL I
+	         WHERE I.TOUR_ITEM_NO = T.TOUR_ITEM_NO
+	           AND I.TOUR_ITEM_IMG_ORDER = 1) AS TOUR_ITEM_IMG_PATH
+      FROM TOUR_ITEM_TBL T
+    <where>
+        <if test="searchWhere != null and searchWhere != ''">
+            AND TOUR_ITEM_NAME LIKE '%' || #{searchWhere} || '%'
+        </if>
+        
+        <if test="searchPriceMin != null and searchPriceMin != ''">
+            <![CDATA[ AND TOUR_ITEM_ADULT_PRICE >= #{searchPriceMin} ]]>
+        </if>
+        
+        <if test="searchPriceMax != null and searchPriceMax != ''">
+            <![CDATA[ AND TOUR_ITEM_ADULT_PRICE <= #{searchPriceMax} ]]>
+        </if>
+    </where>
+   </select>
+</mapper>

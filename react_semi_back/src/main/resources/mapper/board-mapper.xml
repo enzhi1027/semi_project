@@ -27,8 +27,30 @@
         <if test="category == 1">
             and board_category = 1
         </if>
-        </where>
-    order by board_no desc
+         <if test="category == 2">
+            and board_category = 2
+        </if>
+        <if test="searchKeyword != null and searchKeyword != ''">
+            <choose>
+                <when test="searchType == 1">
+                    and board_title like '%'||#{searchKeyword}||'%'
+                </when>
+                <when test="searchType == 2">
+                    and board_writer = #{searchKeyword}
+                </when>
+            </choose>
+        </if>
+    </where>
+
+    <choose>
+        <when test="order == 2">
+            order by board_no asc
+        </when>
+        <otherwise>
+            order by board_no desc
+        </otherwise>
+    </choose>
+    
     offset #{page} * #{size} rows fetch next #{size} rows only
 </select>
 
@@ -55,30 +77,30 @@
     	select board_seq.nextval from dual
 	</select>
 
-	<insert id="inserBoard">
-    	insert into board_tbl (
-        	board_no,
-        	board_category,
-        	board_title,
-        	board_content,
-        	board_thumb,
-        	board_writer,
-        	board_date,
-        	board_status,
-        	attraction_no,
-        	location_no,
-        	place_name,
-        	address_name
-    	) values (
-        	#{boardNo},
-        	#{boardCategory},
-        	#{boardTitle},
-        	#{boardContent},
-        	#{boardThumb, jdbcType=VARCHAR},     #{boardWriter},
-        	sysdate,
-        	1,
-        	#{attractionNo, jdbcType=NUMERIC},   #{locationNo, jdbcType=VARCHAR},     #{placeName, jdbcType=VARCHAR},      #{addressName, jdbcType=VARCHAR}     )
-	</insert>
+<insert id="inserBoard">
+    insert into board_tbl (
+        board_no, board_category, board_title, board_content,
+        board_thumb, board_writer, board_date, board_status,
+        attraction_no, location_no, place_name, address_name
+    ) values (
+        #{boardNo}, #{boardCategory}, #{boardTitle}, #{boardContent, jdbcType=CLOB},
+        #{boardThumb, jdbcType=VARCHAR}, #{boardWriter}, sysdate, 1,
+        <choose>
+            <when test="boardCategory == 1">
+                #{attractionNo, jdbcType=NUMERIC}, 
+                NULL, 
+                NULL, 
+                #{addressName, jdbcType=VARCHAR}
+            </when>
+            <otherwise>
+                NULL, 
+                #{locationNo, jdbcType=VARCHAR}, 
+                #{placeName, jdbcType=VARCHAR}, 
+                #{addressName, jdbcType=VARCHAR}
+            </otherwise>
+        </choose>
+    )
+</insert>
 
 <select id="selectOneBoard" resultType="board">
     SELECT
@@ -100,18 +122,34 @@
     WHERE b.board_no = #{boardNo}
 </select>
 	
-	<update id="updateBoard">
-    	update board_tbl set
-       		board_title = #{boardTitle},
-        	board_content = #{boardContent},
-        	board_thumb = #{boardThumb, jdbcType=VARCHAR},
-        	board_category = #{boardCategory},
-        	attraction_no = #{attractionNo, jdbcType=NUMERIC},
-        	location_no = #{locationNo, jdbcType=VARCHAR},
-        	place_name = #{placeName, jdbcType=VARCHAR},
-        	address_name = #{addressName, jdbcType=VARCHAR}
-   	 	where board_no = #{boardNo}
-	</update>
+<update id="updateBoard">
+    UPDATE board_tbl
+    <set>
+        board_title = #{boardTitle},
+        board_content = #{boardContent, jdbcType=CLOB},
+        board_thumb = #{boardThumb, jdbcType=VARCHAR},
+        board_category = #{boardCategory},
+        <choose>
+            <when test="boardCategory == 1">
+                <if test="attractionNo != null and attractionNo != 0">
+                    attraction_no = #{attractionNo},
+                </if>
+                <if test="addressName != null">
+                    address_name = #{addressName},
+                </if>
+                place_name = NULL,
+                location_no = NULL
+            </when>
+            <when test="boardCategory == 2">
+                place_name = #{placeName, jdbcType=VARCHAR},
+                location_no = #{locationNo, jdbcType=VARCHAR},
+                address_name = #{addressName, jdbcType=VARCHAR},
+                attraction_no = NULL
+            </when>
+        </choose>
+    </set>
+    WHERE board_no = #{boardNo}
+</update>
 
 	<delete id="deleteBoard">
 		delete from board_tbl where board_no = #{boardNo}
@@ -201,4 +239,9 @@
     WHERE board_no = #{boardNo}
 	</update>
 	
+	<update id="changeCommentStatus" parameterType="boardComment">
+    	update board_comment_tbl set
+     		comment_status = #{commentStatus}
+    	where board_comment_no = #{boardCommentNo}
+	</update>
 </mapper>

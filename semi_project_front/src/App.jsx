@@ -23,6 +23,7 @@ import BoardViewPage from "./pages/board/BoardViewPage";
 import BoardModifyPage from "./pages/board/BoardModifyPage";
 import TourMyPage from "./pages/tour/TourMyPage";
 import AdminModifyTour from "./pages/member(admin)/AdminModifyTour";
+import CourseUpdatePage from "./pages/course/CourseUpdatePage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -56,6 +57,10 @@ function App() {
             <Route path="/course/list" element={<CourseListPage />} />
             <Route path="/course/view/:courseNo" element={<CourseViewPage />} />
             <Route path="/course/write" element={<CourseWritePage />} />
+            <Route
+              path="/course/update/:courseNo"
+              element={<CourseUpdatePage />}
+            />
             <Route
               path="/attraction/list"
               element={
