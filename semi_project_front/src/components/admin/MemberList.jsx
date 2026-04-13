@@ -47,86 +47,91 @@ const MemberItem = ({ member }) => {
 
   return (
     <li className={styles.member_item}>
-      <div
-        className={
-          member.memberThumb ? styles.member_thumb_exists : styles.member_thumb
-        }
-      >
-        <img
-          src={
+      <div className={styles.member_info_wrap}>
+        <div
+          className={
             member.memberThumb
-              ? `${import.meta.env.VITE_BACKSERVER}/member/thumb/${member.memberThumb}`
-              : userImg
+              ? styles.member_thumb_exists
+              : styles.member_thumb
           }
-        />
-      </div>
-      <div className={styles.member_info}>
-        <div className={styles.id_name_wrap}>
-          <p>{member.memberName}</p>
-          <p>{member.memberId}</p>
+        >
+          <img
+            src={
+              member.memberThumb
+                ? `${import.meta.env.VITE_BACKSERVER}/member/thumb/${member.memberThumb}`
+                : userImg
+            }
+          />
         </div>
-        <div className={styles.grade_wrap}>
-          <p>
-            {member.memberGrade === 0
-              ? "일반 회원"
-              : member.memberGrade === 1
-                ? "관리자"
-                : "차단 회원"}
-          </p>
-          <div className={styles.grade_change_wrap}>
-            <span>회원 등급 변경</span>
-            <select
-              className={styles.grade_select}
-              value={member.memberGrade}
-              onChange={changeGrade}
-            >
-              <option value={0}>일반</option>
-              <option value={1}>관리자</option>
-              <option value={2}>차단</option>
-            </select>
+        <div className={styles.member_info}>
+          <div className={styles.id_name_wrap}>
+            <p>이름 : {member.memberName}</p>
+            <p>아이디 : {member.memberId}</p>
           </div>
-        </div>
-
-        {/*상세 정보 영역 ------------------------------------ */}
-        <div className={styles.detail_wrap}>
-          <div
-            className={styles.detail_toffle_btn}
-            onClick={() => setIsShow(!isShow)}
-          >
-            {isShow ? "상세 정보 접기 △" : "상세 정보 보기 ▽"}
-          </div>
-          {isShow && (
-            <div className={styles.member_detail_info_wrap}>
-              <div className={styles.detail_row}>
-                <p>이름 : {member.memberName}</p>
-                <p>아이디 : {member.memberId}</p>
-              </div>
-              <div className={styles.detail_row}>
-                <p>이메일 : {member.memberEmail}</p>
-                <p>전화번호 : {member.memberPhone}</p>
-              </div>
-              <div className={styles.detail_row}>
-                <p>주소 : {member.memberAddr}</p>
-                <p>
-                  회원 등급 :{" "}
-                  {member.memberGrade === 0
-                    ? "일반 회원"
-                    : member.memberGrade === 1
-                      ? "관리자"
-                      : "차단 회원"}
-                </p>
-              </div>
-              <div className={styles.detail_row}>
-                <p>
-                  상세 주소 :{" "}
-                  {member.memberAddrDetail ? member.memberAddrDetail : "없음"}
-                </p>
-                <p>가입일 : {member.enrollDate.split(" ")[0]}</p>
-              </div>
+          <div className={styles.grade_wrap}>
+            <p>
+              회원 등급 :
+              {member.memberGrade === 0
+                ? " 일반 회원"
+                : member.memberGrade === 1
+                  ? " 관리자"
+                  : " 차단 회원"}
+            </p>
+            <div className={styles.grade_change_wrap}>
+              <span>회원 등급 변경</span>
+              <select
+                className={styles.grade_select}
+                value={member.memberGrade}
+                onChange={changeGrade}
+              >
+                <option value={0}>일반</option>
+                <option value={1}>관리자</option>
+                <option value={2}>차단</option>
+              </select>
             </div>
-          )}
+          </div>
+
+          {/*상세 정보 접기/펼치기 ------------------------------------ */}
+          <div className={styles.detail_wrap}>
+            <div className={styles.detail_toffle_btn}>
+              <p onClick={() => setIsShow(!isShow)}>
+                {isShow ? "상세 정보 접기 △" : "상세 정보 보기 ▽"}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
+      {/*상세 정보 ------------------------------------------------ */}
+      {isShow && (
+        <div className={styles.member_detail_info_wrap}>
+          <div className={styles.detail_row}>
+            <p>이름 : {member.memberName}</p>
+            <p>아이디 : {member.memberId}</p>
+          </div>
+          <div className={styles.detail_row}>
+            <p>이메일 : {member.memberEmail}</p>
+            <p>전화번호 : {member.memberPhone}</p>
+          </div>
+          <div className={styles.detail_row}>
+            <p>주소 : {member.memberAddr}</p>
+            <p>
+              회원 등급 :{" "}
+              {member.memberGrade === 0
+                ? "일반 회원"
+                : member.memberGrade === 1
+                  ? "관리자"
+                  : "차단 회원"}
+            </p>
+          </div>
+          <div className={styles.detail_row}>
+            <p>
+              상세 주소 :{" "}
+              {member.memberAddrDetail ? member.memberAddrDetail : "없음"}
+            </p>
+            <p>가입일 : {member.enrollDate.substring(0, 10)}</p>
+          </div>
+        </div>
+      )}
     </li>
   );
 };

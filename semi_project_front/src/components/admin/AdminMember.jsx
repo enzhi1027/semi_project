@@ -63,28 +63,30 @@ const AdminMember = () => {
             </Button>
           </div>
         </form>
-        <select
-          className={styles.order_select}
-          value={order}
-          onChange={changeOrder}
-        >
-          <option value={0}>이름 오름차순</option>
-          <option value={1}>이름 내림차순</option>
-          <option value={2}>최근 가입순</option>
-          <option value={3}>가입순</option>
-        </select>
-        <select
-          className={styles.grade_select}
-          value={grade}
-          onChange={(e) => {
-            setGrade(e.target.value);
-          }}
-        >
-          <option value={0}>전체 조회</option>
-          <option value={1}>일반 회원</option>
-          <option value={2}>관리자</option>
-          <option value={3}>차단 회원</option>
-        </select>
+        <div className={styles.select_wrap}>
+          <select
+            className={styles.order_select}
+            value={order}
+            onChange={changeOrder}
+          >
+            <option value={0}>이름 오름차순</option>
+            <option value={1}>이름 내림차순</option>
+            <option value={2}>최근 가입순</option>
+            <option value={3}>가입순</option>
+          </select>
+          <select
+            className={styles.grade_select}
+            value={grade}
+            onChange={(e) => {
+              setGrade(e.target.value);
+            }}
+          >
+            <option value={0}>전체 조회</option>
+            <option value={1}>일반 회원</option>
+            <option value={2}>관리자</option>
+            <option value={3}>차단 회원</option>
+          </select>
+        </div>
       </div>
       <MemberList memberList={memberList} />
       <div className={styles.member_list_pagination}>
