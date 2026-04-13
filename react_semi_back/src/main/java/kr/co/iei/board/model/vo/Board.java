@@ -28,5 +28,4 @@ public class Board {
     private String placeName;     // 자유용 장소명
     private String addressName;   // 자유용 주소
     private Integer likeCount;
-	private Integer reportCount;     
 }

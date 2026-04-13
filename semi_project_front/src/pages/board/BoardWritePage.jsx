@@ -110,17 +110,21 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
     form.append('boardTitle', board.boardTitle);
     form.append('boardContent', board.boardContent);
     form.append('boardWriter', board.boardWriter);
-    form.append('boardCategory', board.category);
+    form.append('boardCategory', Number(board.category));
 
-    form.append('placeName', currentPlaceName);
-    form.append('addressName', board.addressName || '');
+    if (Number(board.category) === 1) {
+      //리뷰 게시글
+      // attractionNo가 null이면 안되므로 0 또는 실제 값 전송
+      form.append('attractionNo', board.attractionNo || 0);
+      form.append('addressName', board.addressName || '');
+    } else {
+      //자유 게시글
+      form.append('placeName', currentPlaceName || '');
+      form.append('addressName', board.addressName || '');
 
-    // 카테고리별 추가 데이터 (값이 있을 때만 전송)
-    if (board.attractionNo) {
-      form.append('attractionNo', board.attractionNo); // 리뷰용
-    }
-    if (board.locationNo) {
-      form.append('locationNo', board.locationNo); // 자유용
+      if (board.locationNo) {
+        form.append('locationNo', board.locationNo);
+      }
     }
 
     axios

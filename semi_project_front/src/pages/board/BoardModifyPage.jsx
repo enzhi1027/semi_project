@@ -44,12 +44,17 @@ const BoardModifyPage = () => {
     form.append('boardTitle', board.boardTitle);
     form.append('boardContent', board.boardContent);
     form.append('boardCategory', board.boardCategory);
-    form.append('placeName', board.placeName || '');
-    form.append('addressName', board.addressName || '');
 
-    if (board.attractionNo) form.append('attractionNo', board.attractionNo);
-    if (board.locationNo) form.append('locationNo', board.locationNo);
-
+    if (Number(board.boardCategory) === 1) {
+      //리뷰 게시글
+      form.append('attractionNo', board.attractionNo || 0);
+      form.append('addressName', board.addressName || '');
+    } else {
+      //자유 게시글
+      form.append('placeName', board.placeName || '');
+      form.append('addressName', board.addressName || '');
+      form.append('locationNo', board.locationNo || '');
+    }
     axios
       .put(`${import.meta.env.VITE_BACKSERVER}/boards/${boardNo}`, form)
       .then((res) => {

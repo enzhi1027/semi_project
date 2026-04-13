@@ -151,14 +151,6 @@ const BoardViewPage = () => {
           <div className={styles.board_action_wrap}>
             <Like boardNo={boardNo} />
             <div className={styles.right_actions}>
-              <Button
-                className="btn secondary outline"
-                onClick={() => navigate('/board/list')}
-                style={{ width: '75px', fontSize: '14px' }}
-              >
-                목록으로
-              </Button>
-
               {/* 차단유저(2)가 아닐 때만 노출되는 버튼 구역 */}
               {!isBlocked && (
                 <div style={{ display: 'flex', gap: '5px' }}>
@@ -313,10 +305,10 @@ const BoardCommentComponent = ({ boardNo, isAdmin, isBlocked }) => {
     getCommentList();
   }, [boardNo]);
 
-  //관리자 전용: 댓글 상태(공개/숨김) 변경 함수
+  //관리자 전용: 댓글 상태(공개/비공개) 변경 함수
   const changeCommentStatus = (boardCommentNo, currentStatus) => {
     const newStatus = currentStatus === 1 ? 0 : 1;
-    const statusText = newStatus === 0 ? '숨김' : '공개';
+    const statusText = newStatus === 0 ? '비공개' : '공개';
 
     axios
       .patch(
@@ -567,7 +559,7 @@ const BoardComment = ({
         )}
       </li>
       <li className={styles.comment_content}>
-        {/* 공개 상태(1)이거나 관리자인 경우: 기존 UI 유지 */}
+        {/* 공개 상태(1)이거나 관리자인 경우 */}
         {comment.commentStatus === 1 ||
         isAdmin ||
         memberId === comment.boardCommentWriter ? (
@@ -576,6 +568,20 @@ const BoardComment = ({
               comment.commentStatus === 0 ? styles.comment_hidden_admin : ''
             }
           >
+            {comment.commentStatus === 0 && (
+              <p
+                className={styles.admin_notice}
+                style={{
+                  color: 'red',
+                  fontWeight: 'bold',
+                  marginBottom: '5px',
+                }}
+              >
+                {isAdmin
+                  ? '* 이 댓글은 현재 일반 사용자에게 비공개 상태입니다.'
+                  : '* 이 댓글은 관리자에 의해 비공개 처리되었습니다.'}
+              </p>
+            )}
             <TextArea
               value={modifyComment.boardCommentContent}
               onChange={(e) => {
@@ -586,15 +592,9 @@ const BoardComment = ({
               }}
               disabled={!isModifyMode}
             ></TextArea>
-
-            {isAdmin && comment.commentStatus === 0 && (
-              <p className={styles.admin_notice}>
-                * 이 댓글은 현재 일반 사용자에게 비공개 상태입니다.
-              </p>
-            )}
           </div>
         ) : (
-          /* 일반 사용자가 비공개 댓글을 볼 때: 기존 textarea 높이와 동일하게 맞춤 */
+          /* 일반 사용자가 비공개 댓글을 볼 때 */
           <div className={styles.comment_blocked_msg}>
             관리자에 의해 비공개 처리된 댓글입니다.
           </div>
