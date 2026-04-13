@@ -40,4 +40,10 @@ public interface CourseDao {
 
 	List<String> selectAttractionAddr();
 
+	CourseList selectCourse(int courseNo);
+
+	List<AttractionList> selectUpdateCourseAttractionList(int courseNo);
+
+	List<CourseList> selectCourseLikeList(int courseNo);
+
 }

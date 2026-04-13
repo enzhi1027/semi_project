@@ -16,6 +16,7 @@
 
 .delete_btn {
   display: flex;
+  gap: 8px;
   justify-content: end;
   margin: 32px 0;
 }

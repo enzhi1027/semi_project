@@ -1,0 +1,33 @@
+.main_wrap {
+  width: 1200px;
+  margin: 0 auto;
+  margin-top: 42px;
+}
+
+.courseInfo_wrap {
+  margin: 24px 0;
+  background-color: var(--gray8);
+  padding: 18px;
+  border-radius: 10px;
+}
+
+.create_btn_wrap {
+  display: flex;
+  justify-content: end;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary_btn {
+  padding: 6px 36px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.create_btn {
+  padding: 6px 36px;
+  background-color: var(--color2);
+  color: var(--gray8);
+  border-radius: 10px;
+  cursor: pointer;
+}
