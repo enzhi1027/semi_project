@@ -1,5 +1,6 @@
 package kr.co.iei.touritem.model.service;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,52 @@ public class TourItemService {
 	@Transactional
 	public int changeTourItemStatus(TourItem tourItem) {
 		int result = tourItemDao.changeTourItemStatus(tourItem);
+		return result;
+	}
+
+	public TourItem selectOneTourItem(Integer tourItemNo) {
+		TourItem tourItem = tourItemDao.selectOneTourItem(tourItemNo);
+		return tourItem;
+	}
+	
+	
+	public List<TourItemInfo> selectPlaceList(Integer tourItemNo) {
+		List<TourItemInfo> placeList = tourItemDao.selectPlaceList(tourItemNo);
+		return placeList;
+	}
+
+	public List<TourItemImg> selectImgList(Integer tourItemNo) {
+		List<TourItemImg> fileList = tourItemDao.selectImgList(tourItemNo);
+		return fileList;
+	}
+	
+	@Transactional
+	public int updateTourItem(TourItem tourItem, List<TourItemImg> addImgList) {
+		//제목, 가격(성인, 아동), 이용 가능 기간(시작, 종료), 몇박 일정 수정
+		int result = tourItemDao.updateTourItem(tourItem);
+		
+		if(result > 0) {
+			//장소 정보(장소, 계획) 수정: 기존 리스트 지우고 새 리스트 삽입
+			tourItemDao.deleteTourItemInfo(tourItem.getTourItemNo());
+			if (tourItem.getPlaceList() != null) {
+				for(TourItemInfo info : tourItem.getPlaceList()) {
+					info.setTourItemNo(tourItem.getTourItemNo());
+					tourItemDao.insertTourItemInfo(info);
+				}
+				// 기존 이미지 중 삭제 선택된 파일 DB에서 삭제
+				if(tourItem.getDeleteFilePath() != null && !tourItem.getDeleteFilePath().isEmpty()) {
+					tourItemDao.deleteTourItemImg(tourItem.getDeleteFilePath());
+				}
+				if(addImgList != null && !addImgList.isEmpty()) {
+					for(TourItemImg img : addImgList) {
+						img.setTourItemNo(tourItem.getTourItemNo());
+						tourItemDao.insertTourItemImg(img);
+					}
+				}
+				
+			}
+		}
+		
 		return result;
 	}
 	

@@ -18,6 +18,7 @@ const InsertItem = ({
   inputTourItemPlan,
   addPlaceField,
   deletePlaceField,
+  addDeleteFileList,
 }) => {
   //상품 이미지 추가 버튼 첨부파일 인풋과 연결
   const inputRef = useRef(null);
@@ -82,7 +83,11 @@ const InsertItem = ({
             tourItem.fileList.map((file, index) => {
               //기존 파일
               return (
-                <FileItem key={"old-file-item-" + index} file={file}></FileItem>
+                <FileItem
+                  key={"old-file-item-" + index}
+                  file={file}
+                  deleteFile={addDeleteFileList}
+                ></FileItem>
               );
             })}
 
@@ -233,7 +238,6 @@ const InsertItem = ({
                   type="text"
                   data={item.tourItemPlan}
                   setData={(val) => {
-                    //css 좀 처 먹으라고 참 더러운 녀석아
                     inputTourItemPlan(index, val);
                   }}
                   placeholder={`${item.day}일차 상세 일정을 입력하세요`}
@@ -249,9 +253,11 @@ const InsertItem = ({
 
 //첨부 파일 삭제 -------------------------------------------------------------------
 const FileItem = ({ file, deleteFile }) => {
+  const fileName =
+    file.name || file.tourItemImgName || file.tourItemImgPath || "기존 이미지";
   return (
     <ul className={styles.file_item}>
-      <li className={styles.file_name}>{file.name || file.tourItemFileName}</li>
+      <li className={styles.file_name}>{fileName}</li>
       <li>
         {/*삭제 아이콘*/}
         <img

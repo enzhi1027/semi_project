@@ -53,4 +53,64 @@
 	<select id="selectOneMemberPhone" resultType="member">
 		select * from member_tbl where member_phone = #{memberPhone}
 	</select>
+	
+	<select id="selectMemberTotalCount" resultType="Integer">
+		select count(*) from member_tbl
+			<where>
+				<if test="grade != 0">
+					and member_grade = #{grade} - 1
+				</if>
+				<if test="searchKeyword != null and searchKeyword != ''">
+				and (member_id like '%' || #{searchKeyword} || '%' 
+					or member_name like '%' || #{searchKeyword} || '%')
+			</if>
+			</where>
+	</select>
+	
+	<select id="selectMemberList" resultType="member">
+		select
+			member_id,
+			member_name,
+			member_email,
+			member_phone,
+			member_addr,
+			member_addr_detail,
+			member_thumb,
+			member_grade,
+			enroll_date
+		from member_tbl
+		<where>
+			<if test="grade != 0">
+				and member_grade = #{grade} - 1
+			</if>
+			<if test="searchKeyword != null and searchKeyword != ''">
+				and (member_id like '%' || #{searchKeyword} || '%' 
+					or member_name like '%' || #{searchKeyword} || '%')
+			</if>
+		</where>
+		order by
+		<if test="order == 0">
+		member_name asc
+		</if>
+		<if test="order == 1">
+		member_name desc
+		</if>
+		<if test="order == 2">
+		enroll_date desc
+		</if>
+		<if test="order == 3">
+		enroll_date asc
+		</if>
+		<if test="order == null or (order != 0 and order != 1 and order != 2 and order != 3)">
+        	enroll_date desc
+    	</if>
+    	
+		offset #{page} * #{size} rows fetch next #{size} rows only
+	</select>
+	
+	<update id="changeMemberGrade">
+		update member_tbl set
+			member_grade = #{memberGrade}
+		where member_id = #{memberId}
+	</update>
 </mapper>

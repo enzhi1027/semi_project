@@ -1,13 +1,20 @@
 package kr.co.iei.member.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kr.co.iei.board.model.vo.ListItem;
+import kr.co.iei.board.model.vo.ListResponse;
 import kr.co.iei.member.model.dao.MemberDao;
 import kr.co.iei.member.model.vo.LoginMember;
 import kr.co.iei.member.model.vo.Member;
+import kr.co.iei.member.model.vo.MemberListItem;
+import kr.co.iei.member.model.vo.MemberListResponse;
+import kr.co.iei.touritem.model.vo.TourItem;
 import kr.co.iei.utils.JwtUtils;
 
 @Service
@@ -99,6 +106,26 @@ public class MemberService {
 		Member m = memberDao.selectOneMemberPhone(memberPhone);
 		return m;
 	}
+	//회원 전체 조회 ---------------------------------------------------
+
+	public MemberListResponse selectMemberList(MemberListItem request) {
+		Integer totalCount = memberDao.selectMemberTotalCount(request);
+		int totalPage = (int)Math.ceil(totalCount/(double)request.getSize());
+		System.out.println(totalPage);
+		
+		List<Member> list = memberDao.selectMemberList(request);
+		MemberListResponse response = new MemberListResponse(list, totalPage);
+		
+		return response;
+	}
+
+	public int changeMemberGrade(Member member) {
+		int result = memberDao.changeMemberGrade(member);
+		return result;
+	}
+
+
+
 	
 	
 	

@@ -52,8 +52,8 @@ const AdminTour = () => {
     navigate("/admin/tour/insertitem");
   };
   //상품 수정 페이지 이동 ------------------------------------------------
-  const modifyTour = () => {
-    navigate("/admin/tour/modifytour");
+  const modifyTour = (tourItemNo) => {
+    navigate(`/admin/tour/modifytour/${tourItemNo}`);
   };
 
   return (
@@ -236,7 +236,7 @@ const AdminTour = () => {
                         <div>
                           <span
                             className={`${styles.modify} ${styles.btn}`}
-                            onClick={modifyTour}
+                            onClick={() => modifyTour(tourItem.tourItemNo)}
                           >
                             수정
                           </span>

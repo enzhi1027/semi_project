@@ -1,0 +1,88 @@
+/*프로필 이미지 ------------------------------------------------*/
+.member_thumb {
+  width: 140px;
+  height: 140px;
+  background-color: var(--gray6);
+  border-radius: 50%;
+  padding: 16px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+
+  /* 하단 패딩을 0으로 설정해서 바닥에 붙임 */
+  padding: 16px 16px 0px 16px;
+}
+.member_thumb > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  margin-bottom: -8px;
+}
+.member_thumb_exists {
+  width: 140px;
+  height: 140px;
+  background-color: var(--gray6);
+  border-radius: 50%;
+  overflow: hidden;
+}
+.member_thumb_exists > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/*회원 리스트------------------------------------------------------*/
+.member_list_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 12px;
+}
+
+.member_item {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border: 1px solid var(--gray6);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+/*회원 정보 ----------------------------------------*/
+.member_info_wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.member_info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 12px;
+}
+
+.id_name_wrap {
+  display: flex;
+  gap: 24px;
+}
+
+.grade_wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.deail_grade_wrap {
+  display: flex;
+}
+.member_detail_info_wrap {
+  display: flex;
+  flex-direction: column;
+}
+.member_detail_info_wrap div {
+  display: flex;
+  gap: 24px;
+}

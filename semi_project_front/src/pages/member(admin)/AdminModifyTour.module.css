@@ -1,0 +1,34 @@
+/* AdminModifyTour.module.css */
+
+.tour_insert_wrap {
+  width: 1000px;
+  margin: 100px auto;
+}
+
+.insert_title {
+  margin: 50px auto;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--gray6);
+}
+
+.main_wrap {
+  background-color: var(--gray8);
+  padding: 40px; /* 내부 여백을 조금 더 주었습니다 */
+  border-radius: 8px;
+}
+
+.btn_wrap {
+  display: flex;
+  justify-content: center; /* 버튼을 가운데로 */
+  margin-top: 40px;
+}
+
+.btn_wrap > button {
+  width: 200px; /* 버튼 크기 고정 */
+  height: 50px;
+  font-size: 18px;
+  font-weight: 600;
+}

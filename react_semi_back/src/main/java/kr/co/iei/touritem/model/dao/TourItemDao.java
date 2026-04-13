@@ -26,4 +26,18 @@ public interface TourItemDao {
 
 	int changeTourItemStatus(TourItem tourItem);
 
+	TourItem selectOneTourItem(Integer tourItemNo);
+
+	List<TourItemImg> selectImgList(Integer tourItemNo);
+
+	List<TourItemInfo> selectPlaceList(Integer tourItemNo);
+
+	int updateTourItem(TourItem tourItem);
+
+	void deleteTourItemInfo(Integer tourItemNo);
+
+	void deleteTourItemImg(List<String> deleteFilePath);
+
+
+
 }
