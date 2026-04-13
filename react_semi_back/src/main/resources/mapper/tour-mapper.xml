@@ -135,7 +135,7 @@
             <![CDATA[ AND TOUR_ITEM_ADULT_PRICE >= #{searchPriceMin} ]]>
         </if>
         
-        <if test="searchPriceMax != null and searchWhere != ''">
+        <if test="searchPriceMax != null and searchPriceMax != ''">
             <![CDATA[ AND TOUR_ITEM_ADULT_PRICE <= #{searchPriceMax} ]]>
         </if>
     </where>
