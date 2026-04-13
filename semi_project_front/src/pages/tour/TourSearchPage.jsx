@@ -4,7 +4,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
@@ -16,17 +16,24 @@ const TourSearchPage = () => {
   const { memberId, isReady } = useAuthStore();
 
   const [searchWhere, setSearchWhere] = useState("");
-  const [searchPriceMin, setSeachPriceMin] = useState("");
+  const [searchPriceMin, setSearchPriceMin] = useState("");
   const [searchPriceMax, setSearchPriceMax] = useState("");
   const [searchWhen, setSearchWhen] = useState("");
 
   const [wishlistList, setWishlistList] = useState([]);
 
+  const [recommendItemList, setRecommendItemList] = useState([]);
+  const [allItemList, setAllItemList] = useState([]);
+
+  const [searchItemList, setSearchItemList] = useState([]);
+
+  const [priceMin, setPriceMin] = useState();
+  const [priceMax, setPriceMax] = useState();
+
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/tours/wishlistList/${memberId}`)
       .then((res) => {
-        console.log(res.data);
         setWishlistList(res.data);
       })
       .catch((err) => {
@@ -34,6 +41,49 @@ const TourSearchPage = () => {
       });
   }, []);
 
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/priceMin`)
+      .then((res) => {
+        setPriceMin(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/priceMax`)
+      .then((res) => {
+        setPriceMax(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/tours/searchItem`, {
+        params: {
+          searchWhere: searchWhere,
+          searchPriceMin: searchPriceMin,
+          searchPriceMax: searchPriceMax,
+          searchWhen: searchWhen,
+        },
+      })
+      .then((res) => {
+        setSearchItemList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchWhere, searchPriceMin, searchPriceMax, searchWhen]);
+
+  useEffect(() => {
+    console.log(searchPriceMin);
+  }, [searchPriceMin]);
   return (
     <>
       <section className={styles.tour_search_wrap}>
@@ -54,20 +104,20 @@ const TourSearchPage = () => {
               <SellIcon />
               <input
                 type="text"
-                placeholder="130,000"
+                placeholder={priceMin && priceMin.toLocaleString()}
                 value={searchPriceMin}
                 onChange={(e) => {
-                  setSeachPriceMin(e.target.value);
+                  setSearchPriceMin(e.target.value.replace(/\D/g, ""));
                 }}
                 className={styles.price_min}
               />
               <div>~</div>
               <input
                 type="text"
-                placeholder="130,000,000"
+                placeholder={priceMax && priceMax.toLocaleString()}
                 value={searchPriceMax}
                 onChange={(e) => {
-                  setSearchPriceMax(e.target.value);
+                  setSearchPriceMax(e.target.value.replace(/\D/g, ""));
                 }}
                 className={styles.price_max}
               />
@@ -103,22 +153,56 @@ const TourSearchPage = () => {
         </div>
 
         <div className={styles.tour_product_wrap}>
-          <div className={styles.tour_product_recommend}>
-            <div className={styles.product_list_title}>추천 상품</div>
-            <TourProductList
-              memberId={memberId}
-              wishlistList={wishlistList}
-              setWishlistList={setWishlistList}
-            />
-          </div>
-          <div className={styles.tour_product_all}>
-            <div className={styles.product_list_title}>전체 상품</div>
-            <TourProductList
-              memberId={memberId}
-              wishlistList={wishlistList}
-              setWishlistList={setWishlistList}
-            />
-          </div>
+          {searchWhere === "" &&
+          searchPriceMin === "" &&
+          searchPriceMax === "" ? (
+            <>
+              <div className={styles.tour_product_recommend}>
+                <div className={styles.product_list_title}>추천 상품</div>
+                <TourProductList
+                  memberId={memberId}
+                  isReady={isReady}
+                  wishlistList={wishlistList}
+                  setWishlistList={setWishlistList}
+                  order={0}
+                  recommendItemList={recommendItemList}
+                  setRecommendItemList={setRecommendItemList}
+                  allItemList={allItemList}
+                  setAllItemList={setAllItemList}
+                  type="list"
+                />
+              </div>
+              <div className={styles.tour_product_all}>
+                <div className={styles.product_list_title}>전체 상품</div>
+                <TourProductList
+                  memberId={memberId}
+                  isReady={isReady}
+                  wishlistList={wishlistList}
+                  setWishlistList={setWishlistList}
+                  order={1}
+                  recommendItemList={recommendItemList}
+                  setRecommendItemList={setRecommendItemList}
+                  allItemList={allItemList}
+                  setAllItemList={setAllItemList}
+                  type="list"
+                />
+              </div>
+            </>
+          ) : (
+            <div>
+              <div className={styles.product_list_title}>검색 결과</div>
+              <TourProductList
+                memberId={memberId}
+                isReady={isReady}
+                wishlistList={wishlistList}
+                setWishlistList={setWishlistList}
+                order={1}
+                searchItemList={searchItemList}
+                setSearchItemList={setSearchItemList}
+                type="search"
+              />
+            </div>
+          )}
         </div>
       </section>
     </>

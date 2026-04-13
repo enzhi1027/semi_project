@@ -32,3 +32,21 @@
   cursor: auto;
   opacity: 0.5;
 }
+
+.search_page_container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.search_page_item_wrap {
+  width: calc(100% / 4 - 7.5px);
+}
+
+.none_result {
+  width: 100%;
+  text-align: center;
+  height: 500px;
+  align-content: center;
+  font-size: 1.4em;
+}

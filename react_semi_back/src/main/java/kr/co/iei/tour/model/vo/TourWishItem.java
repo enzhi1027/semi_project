@@ -9,8 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Alias(value = "emoji")
-public class Emoji {
-	private Integer emojiNo;
-	private String emojiName;
+@Alias(value = "tourWishItem")
+public class TourWishItem {
+	private Integer tourItemNo;
+	private Integer tourWishlistNo;
+	private String memberId;
+	private String tourWishlistName;
 }
