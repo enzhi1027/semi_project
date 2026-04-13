@@ -32,7 +32,7 @@
 	    attraction_summary,
 	    attraction_thumb,
 	    attraction_addr,
-	    rownum as courseIndex
+	    course_index
 	from course_attraction_tbl
 	where course_no = #{courseNo}
 	order by course_index asc
@@ -53,7 +53,8 @@
 	    attraction_thumbnail as attraction_thumb,
 	    attraction_summary,
 	    attraction_phone,
-	    attraction_title
+	    attraction_title,
+	    (select count(*) from attraction_wish_tbl where member_id = #{memberId} and attraction_no = a.attraction_no) as is_like
 	from attraction_tbl a
 	where
 	    (select area_no from area_tbl where area_name = #{category}) = 
@@ -113,6 +114,28 @@
   
   <select id="selectAttractionAddr" resultType="String">
   	select attraction_addr from attraction_tbl
+  </select>
+  
+  <select id="selectCourse" resultType="courseList">
+  	select course_no, course_title, course_content from course_tbl where course_no = #{corseNo} 
+  </select>
+  
+  <select id="selectUpdateCourseAttractionList" resultType="attractionList">
+  	select 
+  		course_no,
+  		course_index,
+  		attraction_no,
+  		attraction_title,
+  		attraction_summary,
+  		attraction_thumb,
+  		attraction_addr
+  	from course_attraction_tbl
+  	where course_no = #{courseNo}
+  	order by course_index asc 
+  </select>
+  
+  <select id="selectCourseLikeList" resultType="courseList">
+  	select * from course_like_tbl where course_no = #{courseNo}
   </select>
 </mapper>
 

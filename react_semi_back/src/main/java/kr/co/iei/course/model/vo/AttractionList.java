@@ -19,4 +19,5 @@ public class AttractionList {
 	private String attractionPhone;
 	private Integer courseIndex;
 	private Integer courseNo;
+	private Integer isLike;
 }

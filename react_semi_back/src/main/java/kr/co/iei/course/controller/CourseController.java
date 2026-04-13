@@ -101,6 +101,27 @@ public class CourseController {
 		return ResponseEntity.ok(list);
 	}
 	
+	//업데이트할 코스 정보 조회
+	@GetMapping(value="/update/{courseNo}")
+	public ResponseEntity<?> selectCourse(@PathVariable int courseNo){
+		CourseList course = courseService.selectCourse(courseNo);
+		return ResponseEntity.ok(course);
+	}
+	
+	//업데이트할 코스 관광지 리스트 조회
+	@GetMapping(value="/update/attraction/{courseNo}")
+	public ResponseEntity<?> selectUpdateCourseAttractionList(@PathVariable int courseNo){
+		List<AttractionList> list = courseService.selectUpdateCourseAttractionList(courseNo);
+		return ResponseEntity.ok(list);
+	}
+	
+	//코스 업데이트
+	@PostMapping(value="/update")
+	public ResponseEntity<?> updateCourse(@RequestBody Map<String, Object> request){
+		int result = courseService.updateCourse(request);
+		return ResponseEntity.ok(result);
+	}
+	
 }
 
 

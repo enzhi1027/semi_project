@@ -109,6 +109,59 @@ public class CourseService {
 		List<String> list = courseDao.selectAttractionAddr();
 		return list;
 	}
+
+	//코스 조회
+	public CourseList selectCourse(int courseNo) {
+		CourseList course = courseDao.selectCourse(courseNo);
+		return course;
+	}
+
+	//코스 관광지 조회
+	public List<AttractionList> selectUpdateCourseAttractionList(int courseNo) {
+		List<AttractionList> list = courseDao.selectUpdateCourseAttractionList(courseNo);
+		return list;
+	}
+
+	//코스 업데이트
+	@Transactional
+	public int updateCourse(Map<String, Object> request1) {
+		ObjectMapper mapper = new ObjectMapper();
+		CourseList courseInfo = mapper.convertValue(
+				request1.get("courseInfo"),
+				new TypeReference<CourseList>() {
+				}); 
+		List<AttractionList> attractionList = mapper.convertValue(
+				request1.get("attractionList"),
+				new TypeReference<List<AttractionList>>() {
+				});
+		int courseNo = courseInfo.getCourseNo();
+		List<CourseList> courseLikeList = courseDao.selectCourseLikeList(courseNo);
+		int likeResult = 0;
+		int result = courseDao.deleteCourse(courseInfo.getCourseNo());
+		if(result > 0) {
+			result = 0;
+			int resultCourse = courseDao.insertCourse(courseInfo);
+			if(resultCourse == 1) {
+				if(courseLikeList.size() != 0) {
+					for(CourseList request : courseLikeList) {
+						likeResult += courseDao.insertCourseLike(request);
+					}
+				}
+				if(courseLikeList.size() != likeResult) {
+					return 0;
+				}
+				for(AttractionList attraction : attractionList) {
+					attraction.setCourseNo(courseNo);
+					result += courseDao.insertCourseAttraction(attraction); 
+				}
+				if(result == attractionList.size()) {
+					return 1;
+				}
+			}
+		}
+		
+		return 0;
+	}
 }
 
 

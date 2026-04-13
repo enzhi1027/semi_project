@@ -135,191 +135,26 @@ const CourseWritePage = () => {
   const addCourseList = () => {
     setCreateAttractionList((prev) => [...prev, ...addAttractionList]);
     setAddAttractionList([]);
+    console.log(createAttractionList);
   };
   return (
     <>
       <div className={styles.main_wrap}>
-        <section className={styles.attraction_search_wrap}>
-          <div className={styles.attraction_list}>
-            {attractionList.map((attraction, index) => {
-              return (
-                <AttractionItem
-                  key={"key-" + index}
-                  attraction={attraction}
-                  setAddAttractionList={setAddAttractionList}
-                  addAttractionList={addAttractionList}
-                />
-              );
-            })}
-          </div>
-          <div className={styles.attraction_search}>
-            <div className={styles.search_content_wrap}>
-              <div className={styles.search_wrap}>
-                <form
-                  className={styles.input_wrap}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setSearchKeyword(keyword);
-                  }}
-                >
-                  <input
-                    type="text"
-                    value={keyword}
-                    onChange={(e) => {
-                      setKeyword(e.target.value);
-                    }}
-                  />
-                  <button className={styles.search_btn} type="submit">
-                    <SearchIcon />
-                  </button>
-                </form>
-              </div>
-              <div className={styles.category_wrap}>
-                <p
-                  className={category === "서울" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("서울");
-                  }}
-                >
-                  #서울
-                </p>
-                <p
-                  className={category === "부산" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("부산");
-                  }}
-                >
-                  #부산
-                </p>
-                <p
-                  className={category === "대구" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("대구");
-                  }}
-                >
-                  #대구
-                </p>
-                <p
-                  className={category === "인천" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("인천");
-                  }}
-                >
-                  #인천
-                </p>
-                <p
-                  className={category === "대전" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("대전");
-                  }}
-                >
-                  #대전
-                </p>
-                <p
-                  className={category === "울산" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("울산");
-                  }}
-                >
-                  #울산
-                </p>
-                <p
-                  className={category === "경기도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("경기도");
-                  }}
-                >
-                  #경기
-                </p>
-                <p
-                  className={category === "강원특별자치도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("강원특별자치도");
-                  }}
-                >
-                  #강원
-                </p>
-                <p
-                  className={category === "충청북도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("충청북도");
-                  }}
-                >
-                  #충북
-                </p>
-                <p
-                  className={category === "충청남도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("충청남도");
-                  }}
-                >
-                  #충남
-                </p>
-                <p
-                  className={category === "경상북도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("경상북도");
-                  }}
-                >
-                  #경북
-                </p>
-                <p
-                  className={category === "경상남도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("경상남도");
-                  }}
-                >
-                  #경남
-                </p>
-                <p
-                  className={category === "전북특별자치도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("전북특별자치도");
-                  }}
-                >
-                  #전북
-                </p>
-                <p
-                  className={category === "전라남도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("전라남도");
-                  }}
-                >
-                  #전남
-                </p>
-                <p
-                  className={category === "제주특별자치도" ? styles.active : ""}
-                  onClick={() => {
-                    setCategory("제주특별자치도");
-                  }}
-                >
-                  #제주
-                </p>
-              </div>
-              <div className={styles.order_wrap}>
-                <div
-                  className={order === 0 ? styles.order_active : ""}
-                  onClick={() => {
-                    setOrder(0);
-                  }}
-                >
-                  전체목록
-                </div>
-                <div
-                  className={order === 1 ? styles.order_active : ""}
-                  onClick={() => {
-                    setOrder(1);
-                  }}
-                >
-                  찜목록
-                </div>
-              </div>
-            </div>
-            <div className={styles.button_wrap} onClick={addCourseList}>
-              <div>추가하기</div>
-            </div>
-          </div>
-        </section>
+        <AttractionSearchItem
+          attractionList={attractionList}
+          addAttractionList={addAttractionList}
+          setAddAttractionList={setAddAttractionList}
+          setCreateAttractionList={setCreateAttractionList}
+          addCourseList={addCourseList}
+          keyword={keyword}
+          setKeyword={setKeyword}
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          category={category}
+          setCategory={setCategory}
+          order={order}
+          setOrder={setOrder}
+        />
         {createAttractionList.length !== 0 && (
           <>
             <section className={styles.courseInfo_wrap}>
@@ -344,67 +179,282 @@ const CourseWritePage = () => {
               </div>
             </div>
             {infoPage && (
-              <div className={styles.course_info_page_wrap}>
-                <div className={styles.course_info_page}>
-                  <h3>설명작성</h3>
-                  <CloseIcon
-                    className={styles.close_icon}
-                    onClick={() => {
-                      setInfoPage(false);
-                    }}
-                  />
-                  <div className={styles.info_input_wrap}>
-                    <label htmlFor="courseTitle">코스제목</label>
-                    <input
-                      type="text"
-                      id="courseTitle"
-                      value={courseInfo.courseTitle}
-                      maxLength={30}
-                      placeholder="최대 30자 입력"
-                      onChange={(e) => {
-                        if (e.target.value.length <= 30) {
-                          setCourseInfo({
-                            ...courseInfo,
-                            courseTitle: e.target.value,
-                          });
-                        }
-                      }}
-                    />
-                  </div>
-                  <div className={styles.info_input_wrap}>
-                    <label>작성자</label>
-                    <input type="text" value={memberName} disabled={true} />
-                  </div>
-                  <div className={styles.info_course_summary}>
-                    <label htmlFor="courseSummary">코스설명</label>
-                    <textarea
-                      id="courseSummary"
-                      value={courseInfo.courseContent}
-                      maxLength={300}
-                      placeholder="최대 300자 입력"
-                      onChange={(e) => {
-                        if (e.target.value.length <= 300) {
-                          setCourseInfo({
-                            ...courseInfo,
-                            courseContent: e.target.value,
-                          });
-                        }
-                      }}
-                    ></textarea>
-                  </div>
-                  <div
-                    className={styles.info_create_btn}
-                    onClick={() => {
-                      setInfoPage(false);
-                    }}
-                  >
-                    작성완료
-                  </div>
-                </div>
-              </div>
+              <InfoPage
+                setInfoPage={setInfoPage}
+                setCourseInfo={setCourseInfo}
+                courseInfo={courseInfo}
+                memberName={memberName}
+              />
             )}
           </>
         )}
+      </div>
+    </>
+  );
+};
+
+const AttractionSearchItem = ({
+  attractionList,
+  addAttractionList,
+  setAddAttractionList,
+  setCreateAttractionList,
+  addCourseList,
+  keyword,
+  setKeyword,
+  searchKeyword,
+  setSearchKeyword,
+  category,
+  setCategory,
+  order,
+  setOrder,
+}) => {
+  return (
+    <>
+      <section className={styles.attraction_search_wrap}>
+        <div className={styles.attraction_list}>
+          {attractionList.map((attraction, index) => {
+            return (
+              <AttractionItem
+                key={"key-" + index}
+                attraction={attraction}
+                setAddAttractionList={setAddAttractionList}
+                addAttractionList={addAttractionList}
+              />
+            );
+          })}
+        </div>
+        <div className={styles.attraction_search}>
+          <div className={styles.search_content_wrap}>
+            <div className={styles.search_wrap}>
+              <form
+                className={styles.input_wrap}
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setSearchKeyword(keyword);
+                }}
+              >
+                <input
+                  type="text"
+                  value={keyword}
+                  onChange={(e) => {
+                    setKeyword(e.target.value);
+                  }}
+                />
+                <button className={styles.search_btn} type="submit">
+                  <SearchIcon />
+                </button>
+              </form>
+            </div>
+            <div className={styles.category_wrap}>
+              <p
+                className={category === "서울" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("서울");
+                }}
+              >
+                #서울
+              </p>
+              <p
+                className={category === "부산" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("부산");
+                }}
+              >
+                #부산
+              </p>
+              <p
+                className={category === "대구" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("대구");
+                }}
+              >
+                #대구
+              </p>
+              <p
+                className={category === "인천" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("인천");
+                }}
+              >
+                #인천
+              </p>
+              <p
+                className={category === "대전" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("대전");
+                }}
+              >
+                #대전
+              </p>
+              <p
+                className={category === "울산" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("울산");
+                }}
+              >
+                #울산
+              </p>
+              <p
+                className={category === "경기도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("경기도");
+                }}
+              >
+                #경기
+              </p>
+              <p
+                className={category === "강원특별자치도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("강원특별자치도");
+                }}
+              >
+                #강원
+              </p>
+              <p
+                className={category === "충청북도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("충청북도");
+                }}
+              >
+                #충북
+              </p>
+              <p
+                className={category === "충청남도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("충청남도");
+                }}
+              >
+                #충남
+              </p>
+              <p
+                className={category === "경상북도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("경상북도");
+                }}
+              >
+                #경북
+              </p>
+              <p
+                className={category === "경상남도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("경상남도");
+                }}
+              >
+                #경남
+              </p>
+              <p
+                className={category === "전북특별자치도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("전북특별자치도");
+                }}
+              >
+                #전북
+              </p>
+              <p
+                className={category === "전라남도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("전라남도");
+                }}
+              >
+                #전남
+              </p>
+              <p
+                className={category === "제주특별자치도" ? styles.active : ""}
+                onClick={() => {
+                  setCategory("제주특별자치도");
+                }}
+              >
+                #제주
+              </p>
+            </div>
+            <div className={styles.order_wrap}>
+              <div
+                className={order === 0 ? styles.order_active : ""}
+                onClick={() => {
+                  setOrder(0);
+                }}
+              >
+                전체목록
+              </div>
+              <div
+                className={order === 1 ? styles.order_active : ""}
+                onClick={() => {
+                  setOrder(1);
+                }}
+              >
+                찜목록
+              </div>
+            </div>
+          </div>
+          <div className={styles.button_wrap} onClick={addCourseList}>
+            <div>추가하기</div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+};
+
+const InfoPage = ({ setInfoPage, setCourseInfo, courseInfo, memberName }) => {
+  return (
+    <>
+      <div className={styles.course_info_page_wrap}>
+        <div className={styles.course_info_page}>
+          <h3>설명작성</h3>
+          <CloseIcon
+            className={styles.close_icon}
+            onClick={() => {
+              setInfoPage(false);
+            }}
+          />
+          <div className={styles.info_input_wrap}>
+            <label htmlFor="courseTitle">코스제목</label>
+            <input
+              type="text"
+              id="courseTitle"
+              value={courseInfo.courseTitle}
+              maxLength={30}
+              placeholder="최대 30자 입력"
+              onChange={(e) => {
+                if (e.target.value.length <= 30) {
+                  setCourseInfo({
+                    ...courseInfo,
+                    courseTitle: e.target.value,
+                  });
+                }
+              }}
+            />
+          </div>
+          <div className={styles.info_input_wrap}>
+            <label>작성자</label>
+            <input type="text" value={memberName} disabled={true} />
+          </div>
+          <div className={styles.info_course_summary}>
+            <label htmlFor="courseSummary">코스설명</label>
+            <textarea
+              id="courseSummary"
+              value={courseInfo.courseContent}
+              maxLength={300}
+              placeholder="최대 300자 입력"
+              onChange={(e) => {
+                if (e.target.value.length <= 300) {
+                  setCourseInfo({
+                    ...courseInfo,
+                    courseContent: e.target.value,
+                  });
+                }
+              }}
+            ></textarea>
+          </div>
+          <div
+            className={styles.info_create_btn}
+            onClick={() => {
+              setInfoPage(false);
+            }}
+          >
+            작성완료
+          </div>
+        </div>
       </div>
     </>
   );
@@ -471,11 +521,16 @@ const AttractionItem = ({
           <p>{attraction.attractionAddr}</p>
         </div>
         <div className={styles.attraction_like}>
-          <FavoriteBorderIcon />
+          {attraction.isLike === 1 ? (
+            <FavoriteIcon sx={{ fill: "var(--color1)" }} />
+          ) : (
+            <FavoriteBorderIcon />
+          )}
         </div>
       </div>
     </>
   );
 };
 
+export { AttractionItem, AttractionSearchItem, InfoPage };
 export default CourseWritePage;
