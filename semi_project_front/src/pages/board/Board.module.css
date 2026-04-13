@@ -26,7 +26,6 @@
 .select_wrap {
   display: flex;
   align-items: center;
-  gap: 4px; /* 요소 간 밀착 */
 }
 
 .select {
