@@ -109,15 +109,16 @@ const CourseWritePage = () => {
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_BACKSERVER}/courses/attraction?keyword=${searchKeyword}&category=${category}&order=${order}&memberId=${memberId}`,
+        `${import.meta.env.VITE_BACKSERVER}/courses/attraction?keyword=${keyword}&category=${category}&order=${order}&memberId=${memberId}`,
       )
       .then((res) => {
         setAttractionList(res.data);
+        console.log(res);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [order, searchKeyword, category]);
+  }, [order, searchKeyword, category, keyword]);
 
   //현재 접속한 멤버의 유저이름 가져오는 GET요청
   useEffect(() => {
@@ -135,7 +136,6 @@ const CourseWritePage = () => {
   const addCourseList = () => {
     setCreateAttractionList((prev) => [...prev, ...addAttractionList]);
     setAddAttractionList([]);
-    console.log(createAttractionList);
   };
   return (
     <>
@@ -184,6 +184,7 @@ const CourseWritePage = () => {
                 setCourseInfo={setCourseInfo}
                 courseInfo={courseInfo}
                 memberName={memberName}
+                infoPage={infoPage}
               />
             )}
           </>
@@ -212,10 +213,15 @@ const AttractionSearchItem = ({
     <>
       <section className={styles.attraction_search_wrap}>
         <div className={styles.attraction_list}>
+          {attractionList.length === 0 && (
+            <div className={styles.search_none_text}>
+              <p>일치하는 검색 결과를 찾을 수 없습니다.</p>
+            </div>
+          )}
           {attractionList.map((attraction, index) => {
             return (
               <AttractionItem
-                key={"key-" + index}
+                key={"key-" + attraction.attractionNo}
                 attraction={attraction}
                 setAddAttractionList={setAddAttractionList}
                 addAttractionList={addAttractionList}
@@ -231,6 +237,7 @@ const AttractionSearchItem = ({
                 onSubmit={(e) => {
                   e.preventDefault();
                   setSearchKeyword(keyword);
+                  setKeyword("");
                 }}
               >
                 <input
@@ -395,7 +402,13 @@ const AttractionSearchItem = ({
   );
 };
 
-const InfoPage = ({ setInfoPage, setCourseInfo, courseInfo, memberName }) => {
+const InfoPage = ({
+  setInfoPage,
+  setCourseInfo,
+  courseInfo,
+  memberName,
+  infoPage,
+}) => {
   return (
     <>
       <div className={styles.course_info_page_wrap}>

@@ -33,7 +33,7 @@ const Footer = () => {
             </ul>
           </div>
           <div className={styles.site_addr}>
-            <p>상호 : 사이트이름 | 대표자명 : 홍길동 | 개인정보 전화번호 :</p>
+            <p>상호 : LeafyGo | 대표자명 : 홍길동 | 개인정보 </p>
             <p>전화번호 : 02-123-1234 | 이메일 :khproject@naver.com </p>
             <p>주소 : 서울시 종로구 우정국로2길 21 대왕빌딩</p>
           </div>

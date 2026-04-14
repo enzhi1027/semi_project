@@ -3,17 +3,69 @@
   width: 1200px;
   margin: 0 auto;
 }
-
+.page_title_wrap {
+  border-bottom: 1px solid var(--gray6);
+  margin-top: 100px;
+  padding-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 80px;
+}
+.title_wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.page_title_index {
+  padding: 2px 12px;
+  background-color: var(--color1);
+  border-radius: 16px;
+  color: var(--gray8);
+  font-size: 22px;
+}
 .page_title {
   text-align: center;
-  margin-top: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--gray6);
-  margin-bottom: 32px;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 600;
 }
+.title_content {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.course_like_count {
+  display: flex;
+  gap: 4px;
+  font-size: 16px;
+  align-items: center;
+  align-self: self-end;
+}
+.course_like_count > p {
+  font-size: 20px;
+}
+.course_like_count > svg {
+  cursor: pointer;
+}
+.summary_wrap {
+  display: flex;
+  justify-content: center;
+  text-align-last: start;
+  padding: 80px 0;
+}
 
+.course_summary {
+  font-size: 18px;
+  overflow-wrap: break-word;
+  padding: 0 12px;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.course_writer {
+  align-self: self-end;
+  font-size: 18px;
+}
 .delete_btn {
   display: flex;
   gap: 8px;
@@ -25,8 +77,8 @@
 .attraction_wrap {
   display: flex;
   gap: 36px;
-  margin-bottom: 32px;
-  padding-bottom: 32px;
+  margin-bottom: 46px;
+  padding-bottom: 46px;
   border-bottom: 1px solid var(--gray6);
 }
 .content_wrap {
@@ -71,4 +123,8 @@
   height: 305px;
   overflow: hidden;
   line-height: 1.6;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 12;
+  -webkit-box-orient: vertical;
 }

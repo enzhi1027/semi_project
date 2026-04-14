@@ -120,10 +120,10 @@ const MainPage = () => {
                     <div className={styles.content_text}>
                       <h3>투어상품</h3>
                       <div>
-                        <p>컨텐츠 내용에 들어가야할 텍스트~~~</p>
-                        <p>컨텐츠 내용에 들어가야할 텍스트~~~</p>
-                        <p>컨텐츠 내용에 들어가야할 텍스트~~~</p>
-                        <p>컨텐츠 내용에 들어가야할 텍스트~~~</p>
+                        <p>자연과 사람을 잇는 특별한 여행</p>
+                        <p>지역 생태자원을 직접 체험하는 코스</p>
+                        <p>지속가능한 관광으로 환경을 지키는 실천</p>
+                        <p>함께하는 커뮤니티에서의 새로운 인연</p>
                         <EastIcon
                           className={styles.eastIcon_wrap}
                           sx={{ fontSize: "40px", fill: "var(--gray8)" }}

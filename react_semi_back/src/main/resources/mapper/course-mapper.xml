@@ -17,7 +17,7 @@
 	    (select count(member_id) from course_like_tbl where course_no = c.course_no and member_id = #{memberId}) as is_like
 	from course_tbl c
 	<if test="order == 1">
-		order by (select count(member_id) from course_like_tbl where course_no = c.course_no) desc
+		order by (select count(member_id) from course_like_tbl where course_no = c.course_no) desc, course_no desc
 	</if>
 	<if test="order == 2">
 		order by course_no desc
@@ -32,7 +32,10 @@
 	    attraction_summary,
 	    attraction_thumb,
 	    attraction_addr,
-	    course_index
+	    course_index,
+	    (select member_name from member_tbl where member_id = (select course_writer from course_tbl where course_no = #{courseNo})) as course_writer_name,
+	    (select count(member_id) from course_like_tbl where course_no = #{courseNo}) as like_count,
+	    (select course_content from course_tbl where course_no = #{courseNo}) as course_content
 	from course_attraction_tbl
 	where course_no = #{courseNo}
 	order by course_index asc
@@ -136,6 +139,10 @@
   
   <select id="selectCourseLikeList" resultType="courseList">
   	select * from course_like_tbl where course_no = #{courseNo}
+  </select>
+  
+  <select id="selectCourseLike" resultType="int">
+  	select count(member_id) from course_like_tbl where course_no = #{courseNo} and member_id = #{memberId}
   </select>
 </mapper>
 

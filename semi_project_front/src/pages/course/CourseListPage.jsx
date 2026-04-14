@@ -43,7 +43,7 @@ const CourseListPage = () => {
 
   return (
     <section className={styles.course_wrap}>
-      <h3 className={styles.page_title}>관광지 코스 목록</h3>
+      <h3 className={styles.page_title}>관광지 코스</h3>
       <div className={styles.option_wrap}>
         {memberId && (
           <Link to="/course/write" className={styles.write_course}>
