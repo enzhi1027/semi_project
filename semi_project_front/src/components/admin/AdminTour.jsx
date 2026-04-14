@@ -32,20 +32,20 @@ const AdminTour = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
   //검색 조건은 상품명으로만 받을 거라서 X
 
+  //삭제 상태 확인용
+  const [delCheck, setDelCheck] = useState(false);
+
   useEffect(() => {
     axios
       .get(
         `${import.meta.env.VITE_BACKSERVER}/admin/tour?page=${page}&size=${size}&order=${order}&status=${status}&searchKeyword=${searchKeyword}`,
       )
       .then((res) => {
-        console.log(tourItemList);
         setTourItemList(res.data.items);
         setTotalPage(res.data.totalPage);
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [page, order, status, searchKeyword]);
+      .catch((err) => {});
+  }, [page, order, status, searchKeyword, delCheck]);
 
   //상품 등록 페이지 이동 ------------------------------------------------
   const isnertItem = () => {
@@ -54,6 +54,39 @@ const AdminTour = () => {
   //상품 수정 페이지 이동 ------------------------------------------------
   const modifyTour = (tourItemNo) => {
     navigate(`/admin/tour/modifytour/${tourItemNo}`);
+  };
+  //상품 삭제
+  const deleteTour = (tourItemNo) => {
+    Swal.fire({
+      title: "상품을 삭제하시겠습니까?",
+      text: "삭제한 상품은 복구할 수 없습니다.",
+      icon: "warning",
+      confirmButtonColor: "var(--gray4)",
+      confirmButtonText: "삭제하기",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color1)",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .delete(`${import.meta.env.VITE_BACKSERVER}/admin/${tourItemNo}`)
+          .then((res) => {
+            Swal.fire({
+              title: "상품이 삭제되었습니다!",
+              icon: "success",
+            }).then((res) => {
+              setDelCheck(!delCheck);
+            });
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "삭제가 실패했습니다.",
+              text: "다시 시도해주세요.",
+              icon: "error",
+            });
+          });
+      }
+    });
   };
 
   return (
@@ -138,14 +171,12 @@ const AdminTour = () => {
                   tourItemNo: tourItem.tourItemNo,
                   tourItemStatus: newStatus,
                 };
-                console.log(obj);
                 axios
                   .patch(
                     `${import.meta.env.VITE_BACKSERVER}/admin/tourItems/${tourItem.tourItemNo}`,
                     obj,
                   )
                   .then((res) => {
-                    console.log(res);
                     if (res.data === 1) {
                       const newTourItemList = [...tourItemList];
                       newTourItemList[index].tourItemStatus =
@@ -153,9 +184,7 @@ const AdminTour = () => {
                       setTourItemList(newTourItemList);
                     }
                   })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+                  .catch((err) => {});
               }
             });
           };
@@ -240,7 +269,10 @@ const AdminTour = () => {
                           >
                             수정
                           </span>
-                          <span className={`${styles.delete} ${styles.btn}`}>
+                          <span
+                            className={`${styles.delete} ${styles.btn}`}
+                            onClick={() => deleteTour(tourItem.tourItemNo)}
+                          >
                             삭제
                           </span>
                         </div>

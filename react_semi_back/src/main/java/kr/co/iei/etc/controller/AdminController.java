@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.iei.board.model.service.BoardService;
+import kr.co.iei.board.model.vo.Board;
 import kr.co.iei.board.model.vo.ListItem;
 import kr.co.iei.member.model.service.MemberService;
 import kr.co.iei.member.model.vo.Member;
@@ -46,6 +49,8 @@ public class AdminController {
 	private FileUtils fileUtils;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private BoardService boardService;
 	
 	//상품 등록--------------------------------------------------------
 	@PostMapping
@@ -151,6 +156,25 @@ public class AdminController {
 		return ResponseEntity.ok(result);
 	}
 	
+	//상품 삭제 ----------------------------------------------------------------
+	@DeleteMapping(value="{tourItemNo}")
+	public ResponseEntity<?> deleteTourItem(@PathVariable Integer tourItemNo){
+		List<TourItemImg> deleteImgList = tourItemService.deleteTourItemImg(tourItemNo);
+		//파일 지워야 하니 List로 받기
+		if(deleteImgList != null) {
+			String savepath = root + "tourItemImg/";
+			for(TourItemImg tourItemImg : deleteImgList) {
+				File deleteImg = new File(savepath + tourItemImg.getTourItemImgPath());
+				//존재 여부 확인
+				if(deleteImg.exists()) {					
+					deleteImg.delete();
+				}
+			}
+			return ResponseEntity.ok(1);
+		}
+		return ResponseEntity.ok(0);
+	}
+	
 	//회원 전체 조회 -----------------------------------------------------------
 	@GetMapping(value = "memberList")
 	public ResponseEntity<?> selectMemberList(@ModelAttribute MemberListItem request) {
@@ -161,6 +185,24 @@ public class AdminController {
 	@PatchMapping(value = "/changeMemberGrade")
 	public ResponseEntity<?> changeMemberGrade(@RequestBody Member member){
 		int result = memberService.changeMemberGrade(member);
+		return ResponseEntity.ok(result);
+	}
+	
+	//게시글 본문 조회 -------------------------------------------------------
+	@GetMapping(value = "/board/content/{boardNo}")
+	public ResponseEntity<?> selectBoardContent(@PathVariable Integer boardNo){
+		String boardContent = boardService.selectBoardContent(boardNo);
+		
+		if(boardContent == null) {
+			return ResponseEntity.ok("내용이 없습니다.");
+		}
+		return ResponseEntity.ok(boardContent);
+	}
+	
+	//게시글 상태 전환 -----------------------------------------------------
+	@PatchMapping(value = "/board/status")
+	public ResponseEntity<?> changeBoardStatus(@RequestBody Board board) {
+		int result = boardService.changeBoardStatus(board);
 		return ResponseEntity.ok(result);
 	}
 }

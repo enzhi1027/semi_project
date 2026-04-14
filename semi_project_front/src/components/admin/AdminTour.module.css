@@ -139,3 +139,8 @@
 .btn:hover {
   cursor: pointer;
 }
+
+/*페이지네이션 margin 32 -----------------------------------------------*/
+.admin_tour_pagination {
+  margin-bottom: 32px;
+}

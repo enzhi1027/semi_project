@@ -1,5 +1,6 @@
 package kr.co.iei.touritem.model.service;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -51,7 +52,8 @@ public class TourItemService {
 		}
 		return result;
 	}
-
+	
+	//상품 조회 리스트(관리자 페이지 출력)
 	public TourListResponse selectTourItemList(ListItem request) {
 		Integer totalCount = tourItemDao.selectAdminTourCount(request);
 		int totalPage = (int)Math.ceil(totalCount/(double)request.getSize());
@@ -61,6 +63,7 @@ public class TourItemService {
 		return response;
 	}
 	
+	//상품 상태 변경 ---------------------------------------------------
 	@Transactional
 	public int changeTourItemStatus(TourItem tourItem) {
 		int result = tourItemDao.changeTourItemStatus(tourItem);
@@ -83,6 +86,7 @@ public class TourItemService {
 		return fileList;
 	}
 	
+	//상품 정보 수정 ----------------------------------------------------
 	@Transactional
 	public int updateTourItem(TourItem tourItem, List<TourItemImg> addImgList) {
 		//제목, 가격(성인, 아동), 이용 가능 기간(시작, 종료), 몇박 일정 수정
@@ -111,6 +115,29 @@ public class TourItemService {
 		}
 		
 		return result;
+	}
+
+	//상품 삭제 -------------------------------------------------------
+	@Transactional
+	public List<TourItemImg> deleteTourItemImg(Integer tourItemNo) {
+		//이미지
+		List<TourItemImg> deleteTourItemImg = tourItemDao.selectImgList(tourItemNo);
+		//상세 일정 삭제
+		tourItemDao.deleteTourItemInfo(tourItemNo);
+		//이미지 삭제
+		List<String> pathList = new ArrayList<>();
+		for(TourItemImg img : deleteTourItemImg) {
+			pathList.add(img.getTourItemImgPath());
+		}
+		if(!pathList.isEmpty()) {
+			tourItemDao.deleteTourItemImg(pathList);
+		}
+		//조회 먼저 하고 그 다음에 삭제
+		int result = tourItemDao.deleteTourItem(tourItemNo); //상품 삭제
+		if(result > 0) {
+			return deleteTourItemImg;
+		}
+		return null;
 	}
 	
 	

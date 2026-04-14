@@ -17,7 +17,9 @@
     <where>
         <choose>
             <when test="memberGrade == 1">
-                board_status = #{status}
+            <if test="status != 2">
+                board_status = #{status}            
+            </if>
             </when>
             <otherwise>
                 board_status = 1
@@ -244,4 +246,11 @@
      		comment_status = #{commentStatus}
     	where board_comment_no = #{boardCommentNo}
 	</update>
+	
+	
+	<!-- 관리자 게시글 본문 조회용 -->
+	<select id="selectBoardContent" resultType="string">
+		select board_content from board_tbl where board_no = #{boardNo}
+	</select>
+	
 </mapper>
