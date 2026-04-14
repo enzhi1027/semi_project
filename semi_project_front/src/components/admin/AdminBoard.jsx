@@ -47,7 +47,7 @@ const AdminBoard = () => {
   const [statusFilter, setStatusFilter] = useState(2);
 
   // 게시글 목록 조회 ----------------------------------------------
-  useEffect(() => {
+  const getBoardList = () => {
     axios
       .get(
         `${import.meta.env.VITE_BACKSERVER}/boards?page=${page}&size=${size}&status=${statusFilter}&order=${order}&searchType=${searchType}&searchKeyword=${searchKeyword}&category=${category}`,
@@ -57,6 +57,9 @@ const AdminBoard = () => {
         setTotalPage(res.data.totalPage);
       })
       .catch((err) => {});
+  };
+  useEffect(() => {
+    getBoardList();
   }, [page, order, searchType, searchKeyword, category, statusFilter]);
 
   return (
@@ -135,7 +138,7 @@ const AdminBoard = () => {
         </select>
       </div>
 
-      <AdminBoardList boardList={boardList} />
+      <AdminBoardList boardList={boardList} getBoardList={getBoardList} />
 
       <div className={styles.board_list_pagination}>
         <Pagination

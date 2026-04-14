@@ -112,9 +112,16 @@
   width: 100%;
   display: flex;
   margin-top: 8px;
+  justify-content: space-between;
 }
 
-.toggle_btn_wrap > p {
+.toggle_btn_wrap > .toggle_btn {
+  font-size: 16px;
+  color: var(--gray3);
+}
+
+.delete_btn {
+  padding-right: 16px;
   font-size: 16px;
   color: var(--gray3);
 }

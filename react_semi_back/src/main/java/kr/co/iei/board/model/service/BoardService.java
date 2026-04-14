@@ -143,10 +143,16 @@ public class BoardService {
   	    return boardDao.changeCommentStatus(comment);
   	}
 
+  	
   	//(관리자)게시글 본문 조회(요약 조회용)
 	public String selectBoardContent(Integer boardNo) {
 		String boardContent = boardDao.selectBoardContent(boardNo);
 		return boardContent;
+	}
+
+	public List<Board> selectLikeBoardList(String memberId) {
+		List<Board> list = boardDao.selectLikeBoardList(memberId);
+		return list;
 	}
     
 }
