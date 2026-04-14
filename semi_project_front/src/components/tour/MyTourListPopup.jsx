@@ -173,22 +173,15 @@ const AddList = ({
   );
 };
 
-const ShowList = ({ onAddClick, wishlistList, emojiList, memberId, item }) => {
-  const [clickedList, setClickedList] = useState([]);
-
-  useEffect(() => {
-    const tourItemNo = item.tourItemNo;
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKSERVER}/tours/wishlistNoList/${memberId}/${tourItemNo}`,
-      )
-      .then((res) => {
-        setClickedList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+const ShowList = ({
+  onAddClick,
+  wishlistList,
+  emojiList,
+  memberId,
+  item,
+  clickedList,
+  setClickedList,
+}) => {
   return (
     <>
       <div className={styles.show_list_header} onClick={onAddClick}>
@@ -306,6 +299,8 @@ const MyTourListPopup = ({
   onToggle,
   memberId,
   item,
+  clickedList,
+  setClickedList,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const [emojiList, setEmojiList] = useState([]);
@@ -329,6 +324,8 @@ const MyTourListPopup = ({
         emojiList={emojiList}
         memberId={memberId}
         item={item}
+        clickedList={clickedList}
+        setClickedList={setClickedList}
       />
     );
   };

@@ -11,6 +11,8 @@ import kr.co.iei.tour.model.vo.Emoji;
 import kr.co.iei.tour.model.vo.TourWishItem;
 import kr.co.iei.tour.model.vo.TourWishlist;
 import kr.co.iei.touritem.model.vo.TourItem;
+import kr.co.iei.touritem.model.vo.TourItemImg;
+import kr.co.iei.touritem.model.vo.TourItemInfo;
 
 @Service
 public class TourService {
@@ -78,5 +80,20 @@ public class TourService {
 			String searchWhen) {
 		List<TourItem> list = dao.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, searchWhen);
 		return list;
+	}
+
+	public TourItem selectTourItem(Integer tourItemNo) {
+		TourItem item = dao.selectTourItem(tourItemNo);
+		return item;
+	}
+	
+	public List<TourItemInfo> selectTourItemInfo(Integer tourItemNo) {
+		List<TourItemInfo> item = dao.selectTourItemInfo(tourItemNo);
+		return item;
+	}
+
+	public List<TourItemImg> selectTourItemImg(Integer tourItemNo) {
+		List<TourItemImg> imgs = dao.selectTourItemImg(tourItemNo);
+		return imgs;
 	}
 }

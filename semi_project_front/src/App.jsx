@@ -24,6 +24,7 @@ import BoardModifyPage from "./pages/board/BoardModifyPage";
 import TourMyPage from "./pages/tour/TourMyPage";
 import AdminModifyTour from "./pages/member(admin)/AdminModifyTour";
 import CourseUpdatePage from "./pages/course/CourseUpdatePage";
+import TourDetailPage from "./pages/tour/TourDetailPage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -103,6 +104,10 @@ function App() {
               path="/board/modify/:boardNo"
               element={<BoardModifyPage />}
             />
+            <Route
+              path="/tour/detail/:tourItemNo"
+              element={<TourDetailPage />}
+            ></Route>
           </Routes>
         </div>
         <Footer />

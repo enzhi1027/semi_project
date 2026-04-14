@@ -5,9 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import MyTourListPopup from "./MyTourListPopup";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const TourList = ({
-  isLiked,
   isOpen,
   onToggle,
   memberId,
@@ -16,7 +16,24 @@ const TourList = ({
   setWishlistList,
   item,
 }) => {
+  const navigate = useNavigate();
   const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  const [clickedList, setClickedList] = useState([]);
+
+  useEffect(() => {
+    const tourItemNo = item.tourItemNo;
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/tours/wishlistNoList/${memberId}/${tourItemNo}`,
+      )
+      .then((res) => {
+        setClickedList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleHeartClick = (e) => {
     e.stopPropagation();
@@ -37,7 +54,12 @@ const TourList = ({
 
   return (
     <>
-      <div className={styles.tour_list_item_wrap}>
+      <div
+        className={styles.tour_list_item_wrap}
+        onClick={() => {
+          navigate(`/tour/detail/${item.tourItemNo}`);
+        }}
+      >
         <div className={styles.tour_list_item_img}>
           <img
             src={
@@ -53,7 +75,11 @@ const TourList = ({
             className={styles.tour_list_item_heart}
             onClick={handleHeartClick}
           >
-            {isLiked ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            {clickedList.length != 0 ? (
+              <FavoriteIcon />
+            ) : (
+              <FavoriteBorderIcon />
+            )}
           </div>
         </div>
         <div className={styles.tour_list_item_price}>
@@ -63,7 +89,9 @@ const TourList = ({
         <div className={styles.tour_list_item_schedule}>
           {item.startPeriod.substring(0, 10).replaceAll("-", ".")} ~{" "}
           {item.endPeriod.substring(0, 10).replaceAll("-", ".")} /{" "}
-          {item.tourItemDays - 1}박 {item.tourItemDays}일
+          {item.tourItemDays - 1 === 0
+            ? "당일치기"
+            : item.tourItemDays - 1 + "박 " + item.tourItemDays + "일"}
         </div>
       </div>
 
@@ -75,6 +103,8 @@ const TourList = ({
           onToggle={onToggle}
           memberId={memberId}
           item={item}
+          clickedList={clickedList}
+          setClickedList={setClickedList}
         />
       )}
     </>

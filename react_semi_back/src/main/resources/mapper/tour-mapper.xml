@@ -139,5 +139,41 @@
             <![CDATA[ AND TOUR_ITEM_ADULT_PRICE <= #{searchPriceMax} ]]>
         </if>
     </where>
-   </select>
+   	</select>
+   
+	<select id="selectTourItem" resultType="tourItem">
+   		SELECT TOUR_ITEM_NO
+	         , TOUR_ITEM_NAME
+	         , TOUR_ITEM_ADULT_PRICE
+	         , TOUR_ITEM_KID_PRICE
+	         , START_PERIOD
+	         , END_PERIOD
+	         , TOUR_ITEM_DAYS
+	         , TOUR_ITEM_STATUS
+	      FROM TOUR_ITEM_TBL T
+	     WHERE TOUR_ITEM_NO = #{tourItemNo}
+	</select>
+	
+	<select id="selectTourItemInfo" resultType="tourItemInfo">
+		SELECT TOUR_ITEM_INFO_NO
+		     , TOUR_ITEM_DAY
+		     , TOUR_ITEM_PLACE
+		     , TOUR_ITEM_PLAN
+		     , TOUR_ITEM_PLACE_ORDER
+		  FROM TOUR_ITEM_INFO_TBL
+		 WHERE TOUR_ITEM_NO = #{tourItemNo}
+		 ORDER
+		    BY TOUR_ITEM_DAY ASC, TOUR_ITEM_PLACE_ORDER ASC
+	</select>
+	
+	<select id="selectTourItemImg" resultType="tourItemImg">
+		SELECT TOUR_ITEM_IMG_NO
+		     , TOUR_ITEM_NO
+		     , TOUR_ITEM_IMG_PATH
+		     , TOUR_ITEM_IMG_ORDER
+		  FROM TOUR_ITEM_IMG_TBL
+		 WHERE TOUR_ITEM_NO = #{tourItemNo}
+		 ORDER
+		    BY TOUR_ITEM_IMG_NO
+	</select>
 </mapper>

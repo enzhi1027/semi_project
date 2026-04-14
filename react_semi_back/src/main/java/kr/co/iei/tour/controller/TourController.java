@@ -20,6 +20,8 @@ import kr.co.iei.tour.model.vo.TourWishItem;
 import kr.co.iei.tour.model.vo.TourWishlist;
 import kr.co.iei.tour.service.TourService;
 import kr.co.iei.touritem.model.vo.TourItem;
+import kr.co.iei.touritem.model.vo.TourItemImg;
+import kr.co.iei.touritem.model.vo.TourItemInfo;
 
 @CrossOrigin(value = "*")
 @RestController
@@ -87,7 +89,24 @@ public class TourController {
 			@RequestParam(required = false) String searchPriceMin,
 			@RequestParam(required = false) String searchPriceMax, @RequestParam(required = false) String searchWhen) {
 		List<TourItem> list = service.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, searchWhen);
-		System.out.println(list);
 		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping(value = "/tourItem/{tourItemNo}")
+	public ResponseEntity<?> selectTourItem(@PathVariable Integer tourItemNo) {
+		TourItem item = service.selectTourItem(tourItemNo);
+		return ResponseEntity.ok(item);
+	}
+	
+	@GetMapping(value = "/tourItemInfo/{tourItemNo}")
+	public ResponseEntity<?> selectTourItemInfo(@PathVariable Integer tourItemNo) {
+		List<TourItemInfo> info = service.selectTourItemInfo(tourItemNo);
+		return ResponseEntity.ok(info);
+	}
+	
+	@GetMapping(value = "/tourItemImg/{tourItemNo}")
+	public ResponseEntity<?> selectTourItemImg(@PathVariable Integer tourItemNo) {
+		List<TourItemImg> imgs = service.selectTourItemImg(tourItemNo);
+		return ResponseEntity.ok(imgs);
 	}
 }
