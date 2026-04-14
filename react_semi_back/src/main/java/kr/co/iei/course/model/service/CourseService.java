@@ -162,6 +162,11 @@ public class CourseService {
 		
 		return 0;
 	}
+
+	public int selectCourseLike(CourseList request) {
+		int result = courseDao.selectCourseLike(request);
+		return result;
+	}
 }
 
 

@@ -107,7 +107,10 @@ const CourseItem = ({ course }) => {
             <FavoriteBorderIcon onClick={memberId ? likeOn : loginMsg} />
           ) : (
             <>
-              <FavoriteIcon onClick={likeOff} sx={{ fill: "var(--color1)" }} />
+              <FavoriteIcon
+                onClick={memberId ? likeOff : loginMsg}
+                sx={{ fill: "var(--color1)" }}
+              />
             </>
           )}
         </div>

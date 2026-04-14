@@ -17,4 +17,7 @@ public class CourseAttractionList {
 	private String attractionAddr;
 	private Integer courseIndex;
 	private String courseWriter;
+	private String courseWriterName;
+	private Integer likeCount;
+	private String courseContent;
 }

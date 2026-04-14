@@ -55,6 +55,17 @@ const CourseUpdatePage = () => {
   //페이지이동을 위한 네비게이트
   const navigate = useNavigate();
 
+  //로그인한 상태에서만 코스생성 가능
+  useEffect(() => {
+    if (isReady && memberId == null) {
+      Swal.fire({ title: "로그인 후 이용 가능합니다.", icon: "warning" }).then(
+        () => {
+          navigate("/login");
+        },
+      );
+    }
+  }, [isReady, memberId]);
+
   //관광지 리스트 가져오는 GET요청
   useEffect(() => {
     axios

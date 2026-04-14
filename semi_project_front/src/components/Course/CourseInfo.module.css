@@ -1,5 +1,5 @@
 .course_info_wrap {
-  height: 525px;
+  height: 516px;
   display: flex;
   gap: 16px;
 }
@@ -40,6 +40,42 @@
 .attraction_index {
   width: 50px;
   position: relative;
+}
+.index_bar_start {
+  width: 3px;
+  background-color: var(--color1);
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  height: 50%;
+  top: 50%;
+}
+.index_bar_write_start {
+  width: 3px;
+  background-color: var(--color1);
+  position: absolute;
+  left: 52%;
+  z-index: 1;
+  height: 50%;
+  top: 50%;
+}
+.index_bar_end {
+  width: 3px;
+  background-color: var(--color1);
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  height: 50%;
+  bottom: 50%;
+}
+.index_bar_write_end {
+  width: 3px;
+  background-color: var(--color1);
+  position: absolute;
+  left: 52%;
+  z-index: 1;
+  height: 50%;
+  bottom: 50%;
 }
 .index_bar {
   width: 3px;
@@ -124,9 +160,14 @@
   text-align: center;
   transform: translate(-55%, -50%);
   color: var(--gray8);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 .course_write_index {
   display: flex;

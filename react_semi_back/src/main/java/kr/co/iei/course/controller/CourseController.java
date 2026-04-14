@@ -90,7 +90,6 @@ public class CourseController {
 	//코스 삭제
 	@DeleteMapping(value="/{courseNo}")
 	public ResponseEntity<?> deleteCourse(@PathVariable int courseNo){
-		System.out.println(courseNo);
 		int result = courseService.deleteCourse(courseNo);
 		return ResponseEntity.ok(result);
 	}
@@ -119,6 +118,13 @@ public class CourseController {
 	@PostMapping(value="/update")
 	public ResponseEntity<?> updateCourse(@RequestBody Map<String, Object> request){
 		int result = courseService.updateCourse(request);
+		return ResponseEntity.ok(result);
+	}
+	
+	//코스 좋아요 조회
+	@GetMapping(value="/courseView")
+	public ResponseEntity<?> selectCourseLike(@ModelAttribute CourseList request){
+		int result = courseService.selectCourseLike(request);
 		return ResponseEntity.ok(result);
 	}
 	
