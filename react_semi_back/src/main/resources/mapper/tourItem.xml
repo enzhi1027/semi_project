@@ -103,6 +103,8 @@
 			</if>
 	</select>
 	
+	
+	<!-- 상품 상태 변경 -->
 	<update id="changeTourItemStatus">
 		update tour_item_tbl set
 			tour_item_status = #{tourItemStatus}
@@ -133,6 +135,8 @@
 			
 	</update>
 	
+	<!-- 상품 삭제 -->
+	
 	<delete id="deleteTourItemInfo">
 		delete from tour_item_info_tbl where tour_item_no = #{tourItemNo}
 	</delete>
@@ -143,6 +147,10 @@
 			<foreach collection="list" item="deleteFilePath" open="(" separator="," close=")">
 				#{deleteFilePath}
 			</foreach>
+	</delete>
+	
+	<delete id="deleteTourItem">
+		delete from tour_item_tbl where tour_item_no = #{tourItemNo}
 	</delete>
 	
 </mapper>

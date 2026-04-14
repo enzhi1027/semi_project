@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import styles from "./AdminContent.module.css";
 import axios from "axios";
 import AdminMember from "./AdminMember";
+import AdminBoard from "./AdminBoard";
 
 const AdminContent = () => {
-  const [tab, setTab] = useState("member");
+  const [tab, setTab] = useState("board");
 
   return (
     <section className={styles.admin_content_wrap}>
@@ -29,7 +30,7 @@ const AdminContent = () => {
       </div>
 
       <div>
-        {tab === "board" && <p>게시글 관리 컴포넌트</p>}
+        {tab === "board" && <AdminBoard />}
         {tab === "member" && <AdminMember />}
       </div>
     </section>

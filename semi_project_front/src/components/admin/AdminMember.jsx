@@ -29,13 +29,10 @@ const AdminMember = () => {
         `${import.meta.env.VITE_BACKSERVER}/admin/memberList?page=${page}&size=${size}&order=${order}&grade=${grade}&searchKeyword=${searchKeyword}`,
       )
       .then((res) => {
-        console.log(res);
         setMemberList(res.data.items);
         setTotalPage(res.data.totalPage);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [page, order, grade, searchKeyword]);
 
   return (
@@ -53,7 +50,7 @@ const AdminMember = () => {
             <Input
               type="text"
               value={keyword}
-              placeholder="검색어 입력"
+              placeholder="아이디 or 이름 검색"
               onChange={(e) => {
                 setKeyword(e.target.value);
               }}

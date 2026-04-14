@@ -65,6 +65,9 @@
   flex-grow: 1;
   gap: 12px;
 }
+.member_info p {
+  font-weight: 500;
+}
 
 .id_name_wrap {
   display: flex;
@@ -96,16 +99,31 @@
 
 .member_detail_info_wrap {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  width: 100%;
+  align-items: center;
+  gap: 48px;
   padding: 8px 12px;
   background-color: var(--gray8);
   border: 1px solid var(--gray6);
   border-radius: 8px;
 }
-.member_detail_info_wrap div {
+.detail_group {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.member_detail_info_btn {
+  height: 26px;
+  font-size: 18px;
+  color: var(--gray2);
+  padding: 4px 12px;
+}
+
+.member_detail_info_btn:hover {
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /*회원 등급 변경 --------------------------------------------*/

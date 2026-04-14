@@ -33,14 +33,14 @@ const MemberItem = ({ member }) => {
           data,
         )
         .then((res) => {
-          console.log(res);
           if (res.data > 0) {
             alert("등급 변경 완료");
             window.location.reload();
           }
         })
         .catch((err) => {
-          console.log(err);
+          alert("등급 변경 실패");
+          window.location.reload();
         });
     }
   };
@@ -93,9 +93,12 @@ const MemberItem = ({ member }) => {
 
           {/*상세 정보 접기/펼치기 ------------------------------------ */}
           <div className={styles.detail_wrap}>
-            <div className={styles.detail_toffle_btn}>
-              <p onClick={() => setIsShow(!isShow)}>
-                {isShow ? "상세 정보 접기 △" : "상세 정보 보기 ▽"}
+            <div className={styles.detail_toggle_btn}>
+              <p
+                className={styles.member_detail_info_btn}
+                onClick={() => setIsShow(!isShow)}
+              >
+                {isShow ? "상세 정보 접기 ↑" : "상세 정보 보기 ↓"}
               </p>
             </div>
           </div>
@@ -104,16 +107,21 @@ const MemberItem = ({ member }) => {
       {/*상세 정보 ------------------------------------------------ */}
       {isShow && (
         <div className={styles.member_detail_info_wrap}>
-          <div className={styles.detail_row}>
+          {/* 그룹 1: 이름, 이메일, 주소, 상세 주소 */}
+          <div className={styles.detail_group}>
             <p>이름 : {member.memberName}</p>
-            <p>아이디 : {member.memberId}</p>
-          </div>
-          <div className={styles.detail_row}>
             <p>이메일 : {member.memberEmail}</p>
-            <p>전화번호 : {member.memberPhone}</p>
-          </div>
-          <div className={styles.detail_row}>
             <p>주소 : {member.memberAddr}</p>
+            <p>
+              상세 주소 :{" "}
+              {member.memberAddrDetail ? member.memberAddrDetail : "없음"}
+            </p>
+          </div>
+
+          {/* 그룹 2: 아이디, 전화번호, 회원 등급, 가입일 */}
+          <div className={styles.detail_group}>
+            <p>아이디 : {member.memberId}</p>
+            <p>전화번호 : {member.memberPhone}</p>
             <p>
               회원 등급 :{" "}
               {member.memberGrade === 0
@@ -121,12 +129,6 @@ const MemberItem = ({ member }) => {
                 : member.memberGrade === 1
                   ? "관리자"
                   : "차단 회원"}
-            </p>
-          </div>
-          <div className={styles.detail_row}>
-            <p>
-              상세 주소 :{" "}
-              {member.memberAddrDetail ? member.memberAddrDetail : "없음"}
             </p>
             <p>가입일 : {member.enrollDate.substring(0, 10)}</p>
           </div>

@@ -38,6 +38,8 @@ public interface TourItemDao {
 
 	void deleteTourItemImg(List<String> deleteFilePath);
 
+	int deleteTourItem(Integer tourItemNo);
+
 
 
 }
