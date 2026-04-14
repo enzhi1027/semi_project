@@ -25,12 +25,34 @@
   padding: 20px;
   margin: 7px 0;
   background-color: var(--gray8);
+  border-radius: 15px;
 }
 
 /* content - 이미지 */
 .tour_detail_content .content_img {
   width: 100%;
-  height: 300px;
+  height: 600px;
+  overflow: hidden;
+  position: relative;
+}
+
+.tour_detail_content .content_img .detail_img_wrap {
+}
+
+.tour_detail_content .content_img .detail_img_wrap,
+.tour_detail_content .content_img .detail_img_wrap * {
+  height: 98.3%;
+}
+
+.tour_detail_content .content_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.tour_detail_content :global(.swiper-pagination-bullet-active) {
+  background-color: var(--color2);
 }
 
 /* content - 헤더 */
@@ -123,11 +145,23 @@
 }
 
 .content_content .content_title {
-  font-size: 1.25em;
+  font-size: 1.5em;
   font-weight: 700;
   padding: 15px 0;
 }
 
+.content_schedult_wrap {
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+}
+.whiteboard {
+  position: absolute;
+  background-color: var(--gray8);
+  height: 50px;
+  width: 100%;
+  top: 0;
+}
 .content_schedule {
   display: flex;
   flex-direction: column;
@@ -141,7 +175,7 @@
 }
 
 .schedule_titles .schedule_title {
-  font-size: 1.07em;
+  font-size: 1.25em;
   font-weight: 600;
 }
 
@@ -154,11 +188,46 @@
   gap: 20px;
 }
 
-.schedule_wrap .schedule_bar {
-  min-height: 1px;
-  border-left: 1px solid var(--border);
-}
-
 .schedule_wrap .schedule_days {
   display: flex;
+  flex-direction: column;
+}
+
+.schedule_days .schedule_day {
+  display: flex;
+  gap: 25px;
+}
+
+.schedule_wrap .schedule_sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.schedule_wrap .sidebar_circle {
+  display: flex;
+}
+
+.schedule_wrap .sidebar_circle svg path {
+  transform: scale(0.6);
+  transform-origin: center;
+  color: var(--border);
+}
+
+.schedule_wrap .sidebar_line {
+  flex: 1;
+  border: 0.5px solid var(--border);
+  width: 1px;
+}
+
+.schedule_day .dayday_wrap {
+}
+
+.schedule_day .day_place {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.schedule_day .day_detail {
+  padding: 10px 0;
 }

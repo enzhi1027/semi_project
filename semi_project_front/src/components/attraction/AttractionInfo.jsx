@@ -45,7 +45,12 @@ const AttractionInfo = ({
           }
         />
       </div>
-      <div className={styles.attraction_info_content}>{attraction.summary}</div>
+      <div
+        className={styles.attraction_info_content}
+        dangerouslySetInnerHTML={{
+          __html: attraction.summary,
+        }}
+      ></div>
     </div>
   );
 };

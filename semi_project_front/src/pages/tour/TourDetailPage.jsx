@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import styles from "./TourDetailPage.module.css";
 import { useLocation, useParams } from "react-router-dom";
 import useAuthStore from "../../components/utils/useAuthStore";
@@ -10,6 +10,16 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import groupBy from "lodash/groupBy";
+import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 const TourDetailPage = () => {
   const { tourItemNo } = useParams();
@@ -19,6 +29,8 @@ const TourDetailPage = () => {
   const [imgs, setImgs] = useState();
   const [wishlistList, setWishlistList] = useState();
   const [clickedList, setClickedList] = useState();
+  const [groupedData, setGroupedData] = useState();
+  const [days, setDays] = useState();
 
   const checkReservationDeadline = () => {
     const endDate = new Date(item.endPeriod);
@@ -68,8 +80,11 @@ const TourDetailPage = () => {
         `${import.meta.env.VITE_BACKSERVER}/tours/tourItemInfo/${tourItemNo}`,
       )
       .then((res) => {
-        console.log(res.data);
         setInfo(res.data);
+        setGroupedData(groupBy(res.data, "tourItemDay"));
+        setDays(
+          Object.keys(groupBy(res.data, "tourItemDay")).sort((a, b) => a - b),
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -136,9 +151,29 @@ const TourDetailPage = () => {
             </div>
           </div>
           <div className={styles.tour_detail_content}>
-            <div className={styles.content_img}>
-              <div>sdfsdfsd</div>
-              <img src="" alt="" />
+            <div className={`${styles.content_img} ${styles.swiper_container}`}>
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={20}
+                slidesPerView={1}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+                pagination={{ el: ".swiper-pagination", clickable: true }}
+                className={styles.detail_img_wrap}
+              >
+                {imgs.map((img, index) => {
+                  return (
+                    <SwiperSlide key={"img-" + index}>
+                      <img
+                        src={`${import.meta.env.VITE_BACKSERVER}/tourItemImg/${img.tourItemImgPath}`}
+                      />
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+              <div className="swiper-pagination"></div>
             </div>
 
             <div className={styles.content_header}>
@@ -178,36 +213,63 @@ const TourDetailPage = () => {
 
             <div className={styles.content_content}>
               <div className={styles.content_title}>상세 일정</div>
-              {info.map((detail, index) => {
-                return (
-                  <div
-                    className={styles.content_schedule}
-                    key={"detail-" + index}
-                  >
-                    <div className={styles.schedule_titles}>
-                      <div className={styles.schedule_title}>
-                        {index + 1}일차
-                      </div>
-                      <div className={styles.schedule_when}>
-                        {makePrettyDate(new Date())}
-                      </div>
-                    </div>
-                    <div className={styles.schedule_wrap}>
-                      <div className={styles.schedule_bar}></div>
-                      <div className={styles.schedule_days}>
-                        <div className={styles.schedule_day}>
-                          <div className={styles.day_place}>
-                            {detail.tourItemPlace}
+              <div className={styles.content_schedult_wrap}>
+                {days ? (
+                  days.map((day, index) => {
+                    return (
+                      <div
+                        className={styles.content_schedule}
+                        key={"day-" + index}
+                      >
+                        <div className={styles.schedule_titles}>
+                          <div className={styles.schedule_title}>{day}일차</div>
+                          <div className={styles.schedule_when}>
+                            {makePrettyDate(new Date())}
                           </div>
-                          <div className={styles.day_detail}>
-                            {removeTags(detail.tourItemPlan)}
+                        </div>
+                        <div className={styles.schedule_wrap}>
+                          <div className={styles.schedule_days}>
+                            {groupedData[day].map((dayItem, i) => {
+                              const isLast = i === groupedData[day].length - 1; // true -> 마지막
+                              return (
+                                <div
+                                  className={styles.schedule_day}
+                                  key={"dayday-" + i}
+                                >
+                                  <div className={styles.schedule_sidebar}>
+                                    <div className={styles.sidebar_circle}>
+                                      <PanoramaFishEyeIcon />
+                                    </div>
+                                    {!isLast && (
+                                      <div
+                                        className={styles.sidebar_line}
+                                      ></div>
+                                    )}
+                                  </div>
+                                  <div className={styles.dayday_wrap}>
+                                    <div className={styles.day_place}>
+                                      {dayItem.tourItemPlace}
+                                    </div>
+                                    <div
+                                      className={styles.day_detail}
+                                      dangerouslySetInnerHTML={{
+                                        __html: dayItem.tourItemPlan,
+                                      }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                );
-              })}
+                    );
+                  })
+                ) : (
+                  <div>로딩 중</div>
+                )}
+                <div className={styles.whiteboard}></div>
+              </div>
             </div>
           </div>
           <div className={styles.tour_detail_recommend}>
