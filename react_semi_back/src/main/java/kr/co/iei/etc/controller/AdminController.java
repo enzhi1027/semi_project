@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import kr.co.iei.board.model.service.BoardService;
 import kr.co.iei.board.model.vo.Board;
 import kr.co.iei.board.model.vo.ListItem;
@@ -203,6 +202,13 @@ public class AdminController {
 	@PatchMapping(value = "/board/status")
 	public ResponseEntity<?> changeBoardStatus(@RequestBody Board board) {
 		int result = boardService.changeBoardStatus(board);
+		return ResponseEntity.ok(result);
+	}
+	
+	//관리자) 게시글 삭제 ----------------------------------------------
+	@DeleteMapping(value = "/board/{boardNo}")
+	public ResponseEntity<?> deleteBoard(@PathVariable Integer boardNo){
+		int result = boardService.deleteBoard(boardNo);
 		return ResponseEntity.ok(result);
 	}
 }

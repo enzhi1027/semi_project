@@ -307,7 +307,7 @@ const AdminTourInsert = () => {
             상품 등록
           </Button>
           <Button
-            className="btn cancle"
+            className="btn cancel"
             onClick={() => {
               navigate("/mypage/admintour");
             }}
