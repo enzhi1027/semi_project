@@ -142,5 +142,11 @@ public class BoardService {
   	public int changeCommentStatus(BoardComment comment) {
   	    return boardDao.changeCommentStatus(comment);
   	}
+
+  	//(관리자)게시글 본문 조회(요약 조회용)
+	public String selectBoardContent(Integer boardNo) {
+		String boardContent = boardDao.selectBoardContent(boardNo);
+		return boardContent;
+	}
     
 }

@@ -37,16 +37,18 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 12px;
 }
 
 .member_item {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 24px;
   border: 1px solid var(--gray6);
   border-radius: 12px;
-  padding: 12px;
+  padding: 24px 12px;
+  background-color: var(--color4);
+  font-size: 20px;
 }
 
 /*회원 정보 ----------------------------------------*/
@@ -54,6 +56,7 @@
   display: flex;
   align-items: center;
   width: 100%;
+  gap: 32px;
 }
 
 .member_info {
@@ -61,6 +64,9 @@
   flex-direction: column;
   flex-grow: 1;
   gap: 12px;
+}
+.member_info p {
+  font-weight: 500;
 }
 
 .id_name_wrap {
@@ -75,14 +81,59 @@
   width: 100%;
 }
 
-.deail_grade_wrap {
-  display: flex;
-}
-.member_detail_info_wrap {
+/*회원 상세 정보 ----------------------------------------------*/
+
+.detail_wrap {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
-.member_detail_info_wrap div {
+
+.detail_toffle_btn {
+  width: 100%;
+  display: flex;
+}
+.detail_toffle_btn > p:hover {
+  cursor: pointer;
+}
+
+.member_detail_info_wrap {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 48px;
+  padding: 8px 12px;
+  background-color: var(--gray8);
+  border: 1px solid var(--gray6);
+  border-radius: 8px;
+}
+.detail_group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.member_detail_info_btn {
+  height: 26px;
+  font-size: 18px;
+  color: var(--gray2);
+  padding: 4px 12px;
+}
+
+.member_detail_info_btn:hover {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/*회원 등급 변경 --------------------------------------------*/
+.grade_change_wrap {
   display: flex;
   gap: 24px;
+  align-items: center;
+}
+
+.grade_change_wrap select {
+  padding: 8px 12px;
+  font-size: 16px;
 }

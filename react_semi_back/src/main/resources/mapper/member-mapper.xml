@@ -83,6 +83,7 @@
 			<if test="grade != 0">
 				and member_grade = #{grade} - 1
 			</if>
+			<!-- 유저 이름, 아이디 검색 -->
 			<if test="searchKeyword != null and searchKeyword != ''">
 				and (member_id like '%' || #{searchKeyword} || '%' 
 					or member_name like '%' || #{searchKeyword} || '%')

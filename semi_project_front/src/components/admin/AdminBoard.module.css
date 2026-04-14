@@ -1,0 +1,45 @@
+.select {
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 40px;
+  min-width: 100px;
+  text-align: center;
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px;
+}
+
+.list_option_wrap {
+  margin: 32px 0px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.right_option {
+  display: flex;
+  align-items: center;
+}
+
+.search_wrap {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search_wrap > input {
+  flex: 1;
+  height: 40px;
+  font-size: 16px;
+  padding: 0 12px;
+}
+
+/*페이지네이션 ------------------------------------*/
+.board_list_pagination {
+  padding: 32px 0px;
+}

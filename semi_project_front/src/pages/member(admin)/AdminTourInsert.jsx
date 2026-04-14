@@ -149,7 +149,6 @@ const AdminTourInsert = () => {
     // 기존 요소를 삭제하거나 교체하여 배열의 내용을 변경
     // 제거된 요소가 담긴 별도의 배열을 새로 반환
     newPlace.splice(index + 1, 0, newField);
-    console.log(index);
     //수정된 복사본 배열로 업데이트
     setTourItemInfo(newPlace);
   };
@@ -253,13 +252,12 @@ const AdminTourInsert = () => {
     });
 
     axios
-      .post(`${import.meta.env.VITE_BACKSERVER}/tourItems`, form, {
+      .post(`${import.meta.env.VITE_BACKSERVER}/admin`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
-        console.log(res);
         if (res.data > 0) {
           Swal.fire({ title: "상품 등록 완료!", icon: "success" }).then(() => {
             navigate("/tour/list");
@@ -267,7 +265,6 @@ const AdminTourInsert = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire({ title: "상품 등록이 실패했습니다.", icon: "error" });
       });
   };

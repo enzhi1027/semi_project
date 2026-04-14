@@ -51,4 +51,6 @@ public interface BoardDao {
 
 	int changeCommentStatus(BoardComment comment);
 
+	String selectBoardContent(Integer boardNo);
+
 }
