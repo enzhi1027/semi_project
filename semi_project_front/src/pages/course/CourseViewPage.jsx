@@ -6,6 +6,8 @@ import Button from "../../components/ui/Button";
 import useAuthStore from "../../components/utils/useAuthStore";
 import CourseInfo from "../../components/Course/CourseInfo";
 import Swal from "sweetalert2";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 const CourseViewPage = () => {
   //주소에 있는 코스번호 가저오는 파람
@@ -24,6 +26,9 @@ const CourseViewPage = () => {
   //페이지이동을 위한 네비게이트
   const navigate = useNavigate();
 
+  //코스 좋아요 스테이트
+  const [like, setLike] = useState(0);
+
   //코스 관광지 리스트 가져오는 GET요청
   useEffect(() => {
     axios
@@ -34,7 +39,7 @@ const CourseViewPage = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [like]);
 
   //코스 제목 가져오는 GET요청
   useEffect(() => {
@@ -74,6 +79,7 @@ const CourseViewPage = () => {
     });
   };
 
+  //코스 수정 버튼 클릭시 뜨는 알림 -> 확인 시 코스 수정페이지로 이동
   const courseUpdate = () => {
     Swal.fire({
       title: "코스를 수정하시겠습니까?",
@@ -90,12 +96,111 @@ const CourseViewPage = () => {
     });
   };
 
+  //코스 좋아요 여부 확인하는 요청
+  useEffect(() => {
+    axios
+      .get(
+        `${import.meta.env.VITE_BACKSERVER}/courses/courseView?memberId=${memberId}&courseNo=${courseNo}`,
+      )
+      .then((res) => {
+        setLike(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  //좋아요 해제하는 함수 - 좋아요 삭제하는 DELETE요청
+  const likeOff = () => {
+    axios
+      .delete(
+        `${import.meta.env.VITE_BACKSERVER}/courses?memberId=${memberId}&courseNo=${courseNo}`,
+      )
+      .then((res) => {
+        if (res.data === 1) {
+          setLike(0);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //좋아요 하는 함수 - 좋아요 추가하는 POST요청
+  const likeOn = () => {
+    axios
+      .post(
+        `${import.meta.env.VITE_BACKSERVER}/courses?memberId=${memberId}&courseNo=${courseNo}`,
+      )
+      .then((res) => {
+        if (res.data === 1) {
+          setLike(1);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  //로그인 했을때만 좋아요 누를 수 있도록 알림
+  const loginMsg = () => {
+    Swal.fire({
+      title: "로그인 후 이용 가능합니다.",
+      icon: "info",
+    });
+  };
+
   return (
     <section className={styles.course_view_wrap}>
-      <h3 className={styles.page_title}>{courseTitle}</h3>
-      {attractionList.map((attraction, index) => {
-        return <AttractionItem key={"key-" + index} attraction={attraction} />;
-      })}
+      {attractionList.length !== 0 && (
+        <>
+          <div className={styles.page_title_wrap}>
+            <div className={styles.title_wrap}>
+              <h3 className={styles.page_title_index}>
+                {attractionList.length + "코스"}
+              </h3>
+              <h3 className={styles.page_title}>{courseTitle}</h3>
+            </div>
+
+            <div className={styles.title_content}>
+              <div className={styles.course_like_count}>
+                {like === 0 ? (
+                  <>
+                    <FavoriteBorderIcon
+                      onClick={memberId ? likeOn : loginMsg}
+                    />
+                    <p>{attractionList[0].likeCount}</p>
+                  </>
+                ) : (
+                  <>
+                    <FavoriteIcon
+                      onClick={memberId ? likeOff : loginMsg}
+                      sx={{ fill: "var(--color1)" }}
+                    />
+                    <p>{attractionList[0].likeCount}</p>
+                  </>
+                )}
+              </div>
+
+              <div className={styles.course_writer}>
+                <p>{"작성자 | " + attractionList[0].courseWriterName}</p>
+              </div>
+            </div>
+          </div>
+          <div className={styles.summary_wrap}>
+            <div className={styles.course_summary}>
+              {attractionList[0].courseContent}
+            </div>
+          </div>
+        </>
+      )}
+      <div className={styles.attraction_item_wrap}>
+        {attractionList.map((attraction, index) => {
+          return (
+            <AttractionItem key={"key-" + index} attraction={attraction} />
+          );
+        })}
+      </div>
       <CourseInfo
         attractionList={attractionList}
         listLength={attractionList.length}

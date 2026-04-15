@@ -1,0 +1,39 @@
+.page_title {
+  margin: 24px 0px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.like_content_wrap {
+  padding: 0px 16px;
+}
+
+/**/
+
+.like_content_tap {
+  display: flex;
+  margin-bottom: 20px;
+  justify-content: flex-start;
+}
+
+.like_content_tap > span {
+  padding: 8px 12px;
+  font-size: 18px;
+  cursor: pointer;
+  border: 1px solid var(--gray5);
+  text-align: center;
+  width: 120px;
+  background-color: var(--gray6);
+  color: var(--gray2);
+  transition: all 0.2s;
+}
+
+.like_content_tap > span + span {
+  border-left: none;
+}
+
+.active_tab {
+  background-color: #fff !important;
+  color: #000 !important;
+  font-weight: 600;
+}

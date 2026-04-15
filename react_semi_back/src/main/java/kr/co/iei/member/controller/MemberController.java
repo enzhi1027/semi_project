@@ -1,5 +1,6 @@
 package kr.co.iei.member.controller;
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.iei.board.model.service.BoardService;
+import kr.co.iei.board.model.vo.Board;
 import kr.co.iei.member.model.service.MemberService;
 import kr.co.iei.member.model.vo.LoginMember;
 import kr.co.iei.member.model.vo.Member;
@@ -30,6 +33,9 @@ import kr.co.iei.utils.FileUtils;
 public class MemberController {
 	@Autowired
 	private MemberService memberService;
+	
+	@Autowired
+	private BoardService boardService;
 	
 	@Autowired
 	private EmailSender sender;
@@ -165,6 +171,13 @@ public class MemberController {
 	public ResponseEntity<?> dupCheckPhone(@RequestParam String memberPhone){
 		Member m = memberService.selectOneMemberPhone(memberPhone);
 		return ResponseEntity.ok(m);
+	}
+	
+	//좋아요 표시한 게시글 조회 -------------------------------------------------------
+	@GetMapping(value = "/like-list/{memberId}")
+	public ResponseEntity<?> selectLikeBoardList(@PathVariable String memberId){
+		List<Board> list = boardService.selectLikeBoardList(memberId);
+		return ResponseEntity.ok(list);
 	}
 	
 	

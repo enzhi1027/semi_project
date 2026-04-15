@@ -88,13 +88,21 @@ const MyPw = () => {
   return (
     <div className={styles.my_pw_wrap}>
       {/*기존 비밀번호 확인-------------------------------------- */}
-      <div className={styles.check_pw_wrap}>
+      <form
+        className={styles.check_pw_wrap}
+        onSubmit={(e) => {
+          e.preventDefault();
+          checkPw();
+        }}
+      >
         <h3 className={styles.my_pw_title}>비밀번호 변경</h3>
         <h3 className={styles.check_pw_title}>기존 비밀번호 확인</h3>
         <div className={`${styles.input_wrap} ${styles.check_pw}`}>
           <>
             <Input
               type="password"
+              name="currentPw"
+              autoComplete="currentPw" //dom에러야 내 개발자 도구에서 꺼져
               value={currentPw}
               placeholder="기존 비밀번호 입력"
               onChange={(e) => {
@@ -112,10 +120,16 @@ const MyPw = () => {
         ) : (
           <p className={styles.false_msg}>기존 비밀번호를 입력해주세요.</p>
         )}
-      </div>
+      </form>
 
       {/*새 비밀번호 입력-------------------------------------- */}
-      <div className={styles.new_pw_wrap}>
+      <form
+        className={styles.new_pw_wrap}
+        onSubmit={(e) => {
+          e.preventDefault();
+          changePw();
+        }}
+      >
         <div>
           <>
             <h3>새 비밀번호 입력</h3>
@@ -124,6 +138,7 @@ const MyPw = () => {
                 type="password"
                 name="memberPw"
                 id="memberPw"
+                autoComplete="memberPw"
                 placeholder="새 비밀번호 입력 / 8자리 이상 / 대소문자, 숫자, 특수문자 포함"
                 value={member.memberPw}
                 disabled={!isAuth}
@@ -141,6 +156,7 @@ const MyPw = () => {
                 type="password"
                 name="memberPwRe"
                 id="memberPwRe"
+                autoComplete="memberPwRe"
                 placeholder="새 비밀번호 확인"
                 value={memberPwRe}
                 disabled={!isAuth}
@@ -166,7 +182,7 @@ const MyPw = () => {
             </div>
           </>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

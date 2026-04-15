@@ -4,11 +4,11 @@
 }
 .page_title {
   text-align: center;
-  margin-top: 24px;
-  padding-bottom: 24px;
+  margin-top: 50px;
+  padding-bottom: 50px;
   border-bottom: 1px solid var(--gray6);
   margin-bottom: 24px;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 600;
 }
 .option_wrap {
@@ -50,5 +50,5 @@
   font-weight: 500;
 }
 .pagination {
-  margin-bottom: 24px;
+  margin-bottom: 56px;
 }

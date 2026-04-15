@@ -156,52 +156,27 @@ const TourSearchPage = () => {
           {searchWhere === "" &&
           searchPriceMin === "" &&
           searchPriceMax === "" ? (
-            <>
-              <div className={styles.tour_product_recommend}>
-                <div className={styles.product_list_title}>추천 상품</div>
-                <TourProductList
-                  memberId={memberId}
-                  isReady={isReady}
-                  wishlistList={wishlistList}
-                  setWishlistList={setWishlistList}
-                  order={0}
-                  recommendItemList={recommendItemList}
-                  setRecommendItemList={setRecommendItemList}
-                  allItemList={allItemList}
-                  setAllItemList={setAllItemList}
-                  type="list"
-                />
-              </div>
-              <div className={styles.tour_product_all}>
-                <div className={styles.product_list_title}>전체 상품</div>
-                <TourProductList
-                  memberId={memberId}
-                  isReady={isReady}
-                  wishlistList={wishlistList}
-                  setWishlistList={setWishlistList}
-                  order={1}
-                  recommendItemList={recommendItemList}
-                  setRecommendItemList={setRecommendItemList}
-                  allItemList={allItemList}
-                  setAllItemList={setAllItemList}
-                  type="list"
-                />
-              </div>
-            </>
+            <TourProductList
+              memberId={memberId}
+              isReady={isReady}
+              wishlistList={wishlistList}
+              setWishlistList={setWishlistList}
+              recommendItemList={recommendItemList}
+              setRecommendItemList={setRecommendItemList}
+              allItemList={allItemList}
+              setAllItemList={setAllItemList}
+              type="list"
+            />
           ) : (
-            <div>
-              <div className={styles.product_list_title}>검색 결과</div>
-              <TourProductList
-                memberId={memberId}
-                isReady={isReady}
-                wishlistList={wishlistList}
-                setWishlistList={setWishlistList}
-                order={1}
-                searchItemList={searchItemList}
-                setSearchItemList={setSearchItemList}
-                type="search"
-              />
-            </div>
+            <TourProductList
+              memberId={memberId}
+              isReady={isReady}
+              wishlistList={wishlistList}
+              setWishlistList={setWishlistList}
+              searchItemList={searchItemList}
+              setSearchItemList={setSearchItemList}
+              type="search"
+            />
           )}
         </div>
       </section>

@@ -92,9 +92,3 @@
   flex-direction: column;
   width: 100%;
 }
-
-.tour_product_wrap .product_list_title {
-  font-size: 2em;
-  font-weight: 800;
-  margin-bottom: 12px;
-}

@@ -169,6 +169,26 @@ const AttractionInfoItem = ({
       prev.filter((item) => item !== attraction),
     );
   };
+
+  const indexBarClassNameFunc = () => {
+    let indexBarClassName;
+    if (attraction.courseIndex === 1) {
+      indexBarClassName =
+        courseWritePage || match
+          ? styles.index_bar_write_start
+          : styles.index_bar_start;
+    } else if (attraction.courseIndex === listLength) {
+      indexBarClassName =
+        courseWritePage || match
+          ? styles.index_bar_write_end
+          : styles.index_bar_end;
+    } else {
+      indexBarClassName =
+        courseWritePage || match ? styles.index_bar_write : styles.index_bar;
+    }
+    return indexBarClassName;
+  };
+
   return (
     <>
       <div
@@ -188,13 +208,19 @@ const AttractionInfoItem = ({
           >
             <p>{attraction.courseIndex}</p>
           </div>
-          <div
-            className={
-              courseWritePage || match
-                ? styles.index_bar_write
-                : styles.index_bar
-            }
-          ></div>
+
+          <div className={indexBarClassNameFunc()}></div>
+
+          {attraction.courseIndex !== 1 &&
+            attraction.courseIndex !== listLength && (
+              <div
+                className={
+                  courseWritePage || match
+                    ? styles.index_bar_write
+                    : styles.index_bar
+                }
+              ></div>
+            )}
         </div>
         {(courseWritePage || match) && (
           <div className={styles.course_write_index}>

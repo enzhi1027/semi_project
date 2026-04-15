@@ -4,19 +4,21 @@
   flex-wrap: wrap;
   gap: 24px;
   margin: 24px 0;
+  margin-bottom: 36px;
 }
 
 /*코스 아이템*/
 .course_item {
   width: calc((1200px - 72px) / 4);
   border-radius: 10px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 4px 4px 16px rgba(0, 0, 0, 0.3);
 
   transition-duration: 0.3s;
   position: relative;
 }
 .course_item:hover {
   transform: scale(104%);
+  box-shadow: 8px 16px 20px rgba(0, 0, 0, 0.3);
 }
 .course_like {
   padding: 4px;
@@ -60,12 +62,12 @@
   color: var(--color1);
 }
 .course_content {
-  height: 75px;
+  height: 58px;
   margin: 8px 0;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   font-weight: 500;
 }

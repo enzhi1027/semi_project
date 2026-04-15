@@ -31,7 +31,7 @@ const BoardItem = ({ board }) => {
     axios
       .patch(`${import.meta.env.VITE_BACKSERVER}/admin/board/status`, {
         boardNo: board.boardNo,
-        boardStatus: board.boardStatus,
+        boardStatus: newStatus,
       })
       .then((res) => {
         Swal.fire({
@@ -60,6 +60,35 @@ const BoardItem = ({ board }) => {
       });
   };
 
+  const deleteBoard = () => {
+    Swal.fire({
+      title: "게시글을 삭제하시겠습니까?",
+      text: "삭제한 게시글은 복구할 수 없습니다.",
+      icon: "question",
+      confirmButtonColor: "var(--gray4)",
+      confirmButtonText: "삭제하기",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color1)",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .delete(
+            `${import.meta.env.VITE_BACKSERVER}/admin/board/${board.boardNo}`,
+          )
+          .then((res) => {
+            if (res.isConfirmed) {
+              Swal.fire({
+                title: "게시글이 삭제되었습니다.",
+                icon: "success",
+                confirmButtonColor: "var(--color1)",
+              });
+            }
+          });
+      }
+    });
+  };
+
   const getCategoryName = (category) => {
     if (category === 1) return "Review";
     if (category === 2) return "Forum";
@@ -81,6 +110,7 @@ const BoardItem = ({ board }) => {
           )
           .then((res) => {
             //불러온 content 저장
+            const result = res.data ? res.data : "내용이 없습니다.";
             setContent(res.data);
             setIsLoading(false);
           })
@@ -94,11 +124,11 @@ const BoardItem = ({ board }) => {
 
   // HTML 태그 제거 및 텍스트 요약 함수
   const getSummary = (content) => {
-    if (!content) return "내용이 없습니다.";
-    const pureText = content.replace(/<[^>]*>?/gm, ""); // 정규식으로 태그 제거
+    if (!content || content.trim() === "") return "내용이 없습니다.";
+    const pureText = content.replace(/<[^>]*>?/gm, "");
     return pureText.length > 200
       ? pureText.substring(0, 200) + "..."
-      : pureText;
+      : pureText || "내용이 없습니다.";
   };
 
   return (
@@ -137,7 +167,7 @@ const BoardItem = ({ board }) => {
             <p>{board.boardDate}</p>
             <div className={styles.admin_board_status_wrap}>
               <Button
-                className={`btn ${boardStatus === 1 ? "" : "cancle"}`} //1이 아니면 회색 버튼
+                className={`btn ${boardStatus === 1 ? "" : "cancel"}`} //1이 아니면 회색 버튼
                 onClick={changeStatus}
               >
                 {boardStatus === 1 ? "공개" : "비공개"}
@@ -147,9 +177,15 @@ const BoardItem = ({ board }) => {
 
           {/* 상세 내용 토글 버튼 영역 */}
           <div className={styles.toggle_btn_wrap}>
-            <p onClick={toggleContent}>
+            <p className={styles.toggle_btn} onClick={toggleContent}>
               {isShow ? "클릭 시 접기 ↑" : "클릭 시 펼치기 ↓"}
             </p>
+
+            {boardStatus !== 1 && (
+              <p className={styles.delete_btn} onClick={deleteBoard}>
+                삭제
+              </p>
+            )}
           </div>
         </div>
       </div>

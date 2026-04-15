@@ -58,7 +58,16 @@
 
 	<select id="selectBoardCount" resultType="Integer">
 		select count(*) from board_tbl
-		where board_status = #{status}
+		<where>
+			<if test="memberGrade == 1">
+				<if test="status == 1 or status == 0">
+					and board_status = #{status}
+				</if>
+			</if>		
+			
+			<if test="memberGrade != 1">
+				and board_status = 1
+			</if>
 
     	<if test="category == 1">
       	  	and board_category = 1
@@ -73,6 +82,7 @@
 		<if test="searchType == 2">
 			and board_writer = #{searchKeyword}
 		</if>
+		</where>
 	</select>
 
 	<select id="getNewBoardNo" resultType="int">
@@ -251,6 +261,24 @@
 	<!-- 관리자 게시글 본문 조회용 -->
 	<select id="selectBoardContent" resultType="string">
 		select board_content from board_tbl where board_no = #{boardNo}
+	</select>
+	
+	<!-- 좋아요 표시한 게시글 조회 -->
+	<select id="selectLikeBoardList" resultType="board">
+    	select 
+        	board_tbl.board_no,
+        	board_tbl.board_category,
+        	board_tbl.board_title,
+        	board_tbl.board_thumb,
+        	board_tbl.board_writer,
+        	board_tbl.board_status,
+        	to_char(board_tbl.board_date, 'yyyy-mm-dd') as board_date,
+        	member_tbl.member_thumb
+    	from board_like_tbl 
+    	join board_tbl on (board_like_tbl.board_no = board_tbl.board_no)
+    	join member_tbl on (board_tbl.board_writer = member_id)
+    	where board_like_tbl.member_id = #{memberId}
+    	order by board_tbl.board_no desc
 	</select>
 	
 </mapper>
