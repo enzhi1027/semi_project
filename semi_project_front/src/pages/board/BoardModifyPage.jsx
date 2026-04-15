@@ -18,7 +18,6 @@ const BoardModifyPage = () => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/boards/${boardNo}`)
       .then((res) => {
-        console.log(res.data);
         setBoard(res.data);
       })
       .catch((err) => console.error(err));

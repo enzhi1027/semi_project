@@ -4,6 +4,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
 import ResizeImage from 'tiptap-extension-resize-image';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 const TextEditor = ({ data, setData }) => {
   const editor = useEditor({
@@ -14,7 +15,12 @@ const TextEditor = ({ data, setData }) => {
       setData(editor.getHTML());
     },
   });
-
+  useEffect(() => {
+    if (editor && data && editor.isEmpty) {
+      // 에디터가 있고, data가 들어왔는데 현재 에디터가 비어있다면 내용을 세팅함
+      editor.commands.setContent(data);
+    }
+  }, [editor, data]);
   return (
     <div className={styles.editor_wrap}>
       <MenuBar editor={editor} />
@@ -58,13 +64,14 @@ const MenuBar = ({ editor }) => {
       const form = new FormData();
       form.append('image', file);
       axios
-        .post(`${import.meta.env.VITE_BACKSERVER}/boards/image-upload`, form, {
+        .post(`${import.meta.env.VITE_IMG_SERVER}/boards/image-upload`, form, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         })
         .then((res) => {
-          const imageUrl = `${import.meta.env.VITE_BACKSERVER}/editor/${res.data}`;
+          //공용폴더 이미지
+          const imageUrl = `${import.meta.env.VITE_IMG_SERVER}/editor/${res.data}`;
           editor.chain().focus().setImage({ src: imageUrl }).run();
         })
         .catch((err) => {
