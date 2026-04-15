@@ -19,8 +19,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.iei.attraction.model.vo.AttractionListItem;
+import kr.co.iei.attraction.model.vo.AttractionListResponse;
+import kr.co.iei.attraction.service.AttractionService;
 import kr.co.iei.board.model.service.BoardService;
 import kr.co.iei.board.model.vo.Board;
+import kr.co.iei.board.model.vo.ListItem;
+import kr.co.iei.board.model.vo.ListResponse;
+import kr.co.iei.course.model.service.CourseService;
+import kr.co.iei.course.model.vo.CourseList;
+import kr.co.iei.course.model.vo.CourseListItem;
+import kr.co.iei.course.model.vo.CourseListResponse;
 import kr.co.iei.member.model.service.MemberService;
 import kr.co.iei.member.model.vo.LoginMember;
 import kr.co.iei.member.model.vo.Member;
@@ -36,6 +45,12 @@ public class MemberController {
 	
 	@Autowired
 	private BoardService boardService;
+	
+	@Autowired
+	private CourseService courseService;
+	
+	@Autowired
+	private AttractionService attractionService;
 	
 	@Autowired
 	private EmailSender sender;
@@ -173,12 +188,30 @@ public class MemberController {
 		return ResponseEntity.ok(m);
 	}
 	
-	//좋아요 표시한 게시글 조회 -------------------------------------------------------
-	@GetMapping(value = "/like-list/#{memberId}")
-	public ResponseEntity<?> selectLikeBoardList(@PathVariable String memberId){
-		List<Board> list = boardService.selectLikeBoardList(memberId);
-		return ResponseEntity.ok(list);
+	//좋아요 표시한 관광지 목록 조회 -----------------------------------------------
+	@GetMapping(value = "/like-attraction")
+	public ResponseEntity<?> 
+		selectLikeAttractionList(@ModelAttribute AttractionListItem request){
+		AttractionListResponse response = 
+					attractionService.selectLikeAttractionList(request);
+		return ResponseEntity.ok(response);
 	}
+	
+	//좋아요 표시한 게시글 목록 조회 ------------------------------------------------
+	@GetMapping(value = "/like-board")
+	public ResponseEntity<?> selectLikeBoardList(@ModelAttribute ListItem request){
+		ListResponse response = boardService.selectLikeBoardList(request);
+		return ResponseEntity.ok(response);
+	}
+	
+	//좋아요 표시한 코스 목록 조회 ------------------------------------------------
+	@GetMapping(value = "/like-course")
+	public ResponseEntity<?> selectLikeCourseList(@ModelAttribute CourseListItem request){
+		CourseListResponse response = courseService.selectLikeCourseList(request);
+		System.out.println(response);
+		return ResponseEntity.ok(response);
+	}
+
 	
 	
 }

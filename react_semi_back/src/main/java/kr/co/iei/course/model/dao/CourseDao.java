@@ -48,4 +48,9 @@ public interface CourseDao {
 
 	int selectCourseLike(CourseList request);
 
+	List<CourseList> selectLikeCourseList(CourseListItem request);
+
+	int selectLikeCourseCount(CourseListItem request);
+
+
 }

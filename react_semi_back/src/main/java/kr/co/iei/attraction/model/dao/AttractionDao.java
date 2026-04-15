@@ -43,4 +43,10 @@ public interface AttractionDao {
 	int insertWish(Map<String, Object> request);
 
 	List<Board> selectReviewList(Integer attractionNo, String reviewCategory);
+
+	
+	//좋아요 표시한 관광지 목록 조회 ---------------------------------------------
+	Integer selectLikeAttractionCount(AttractionListItem request);
+
+	List<Attraction> selectLikeAttractionList(AttractionListItem request);
 }

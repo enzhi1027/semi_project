@@ -194,7 +194,7 @@ const AdminModifyTour = () => {
                 title: "수정이 완료되었습니다!",
                 icon: "success",
               }).then(() => {
-                navigate("/tour/list");
+                navigate(`/tour/detail/${tourItem.tourItemNo}`);
               });
             }
           })

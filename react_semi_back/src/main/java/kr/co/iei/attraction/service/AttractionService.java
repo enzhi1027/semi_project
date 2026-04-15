@@ -102,4 +102,14 @@ public class AttractionService {
 		List<Board> list = dao.selectReviewList(attractionNo, reviewCategory);
 		return list;
 	}
+
+	
+	
+	//좋아요 표시한 관광지 목록 조회 -------------------------------------------------
+	public AttractionListResponse selectLikeAttractionList(AttractionListItem request) {
+		Integer likeCount = dao.selectLikeAttractionCount(request);
+		int likePage = (int) Math.ceil(likeCount / (double) request.getSize());
+		AttractionListResponse response = new AttractionListResponse(dao.selectLikeAttractionList(request), likePage);
+		return response;
+	}
 }

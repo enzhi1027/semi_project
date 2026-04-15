@@ -1,3 +1,4 @@
+/*기본 설정 --------------------------------------------*/
 .page_title {
   margin: 24px 0px;
   font-size: 24px;
@@ -8,15 +9,25 @@
   padding: 0px 16px;
 }
 
-/**/
-
-.like_content_tap {
+/*검색 ------------------------------------------------*/
+.search_wrap {
   display: flex;
-  margin-bottom: 20px;
-  justify-content: flex-start;
+  gap: 24px;
 }
 
-.like_content_tap > span {
+/*탭 전환 ---------------------------------------------*/
+
+.like_content_tab_wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.like_content_tab {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.like_content_tab > span {
   padding: 8px 12px;
   font-size: 18px;
   cursor: pointer;
@@ -28,7 +39,7 @@
   transition: all 0.2s;
 }
 
-.like_content_tap > span + span {
+.like_content_tab > span + span {
   border-left: none;
 }
 
@@ -36,4 +47,33 @@
   background-color: #fff !important;
   color: #000 !important;
   font-weight: 600;
+}
+
+/*정렬 기준*/
+.order_select_wrap {
+  display: flex;
+  gap: 24px;
+  justify-content: flex-end;
+}
+
+.order_select_wrap select {
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 40px;
+  min-width: 100px;
+  text-align: center;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 16px;
+}
+.order_select_wrap select:hover {
+  cursor: pointer;
+}
+
+/*페이지네이션*/
+.pagination {
+  padding: 32px 0px;
 }

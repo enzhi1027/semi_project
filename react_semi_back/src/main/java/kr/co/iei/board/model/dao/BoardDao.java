@@ -53,6 +53,10 @@ public interface BoardDao {
 
 	String selectBoardContent(Integer boardNo);
 
-	List<Board> selectLikeBoardList(String memberId);
+	Integer selectLikeBoardCount(ListItem request);
+
+	List<Board> selectLikeBoardList(ListItem request);
+
+
 
 }

@@ -309,7 +309,7 @@ const AdminTourInsert = () => {
           <Button
             className="btn cancel"
             onClick={() => {
-              navigate("/mypage/admintour");
+              navigate("/mypage/admin/tour");
             }}
           >
             취소

@@ -144,6 +144,40 @@
   <select id="selectCourseLike" resultType="int">
   	select count(member_id) from course_like_tbl where course_no = #{courseNo} and member_id = #{memberId}
   </select>
+  
+  
+  
+  <select id="selectLikeCourseCount" resultType="int">
+  	select count(*) from course_like_tbl 
+    where member_id = #{memberId}
+  </select>
+  
+  <select id="selectLikeCourseList" resultType="courseList">
+  	select 
+        course_no,
+        course_title,
+        course_content,
+        (select member_name from member_tbl where member_id = c.course_writer) as course_writer,
+        (select count(course_index) from course_attraction_tbl where course_no = c.course_no) as course_count,
+        (select attraction_thumb from course_attraction_tbl where course_no = c.course_no and 
+        course_index = (select min(course_index) from course_attraction_tbl where course_no = c.course_no)) as course_thumb,
+        1 as is_like
+    from course_tbl c
+    where course_no in (select course_no from course_like_tbl where member_id = #{memberId})
+    
+    <if test="order == 1">
+        order by course_no desc
+    </if>
+    <if test="order == 2">
+        order by course_no asc
+    </if>
+    
+    offset #{page} * #{size} rows fetch next #{size} rows only
+  </select>
+  
+  
+  
+  
 </mapper>
 
 

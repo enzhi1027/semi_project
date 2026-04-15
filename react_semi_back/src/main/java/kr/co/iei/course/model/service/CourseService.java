@@ -167,6 +167,18 @@ public class CourseService {
 		int result = courseDao.selectCourseLike(request);
 		return result;
 	}
+
+	//좋아요 표시한 코스 목록 조회
+	public CourseListResponse selectLikeCourseList(CourseListItem request) {
+		List<CourseList> list = courseDao.selectLikeCourseList(request);
+		int likeCourseCount = courseDao.selectLikeCourseCount(request);
+		int totalPage = (int)Math.ceil(likeCourseCount/(double)request.getSize());
+		CourseListResponse response = new CourseListResponse(list, totalPage);
+		return response;
+	}
+
+	
+
 }
 
 
