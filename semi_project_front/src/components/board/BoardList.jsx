@@ -29,7 +29,15 @@ const BoardItem = ({ board }) => {
       }}
     >
       <div className={styles.board_img_wrap}>
-        <img src={board.boardThumb ? board.boardThumb : defaultImage} />
+        <img
+          src={
+            board.boardThumb
+              ? board.boardThumb.startsWith('http')
+                ? board.boardThumb
+                : `${import.meta.env.VITE_IMG_SERVER}/editor/${board.boardThumb}`
+              : defaultImage
+          }
+        />
       </div>
       <div className={styles.board_info}>
         <p className={styles.board_title}>
@@ -43,7 +51,7 @@ const BoardItem = ({ board }) => {
               <img
                 src={
                   board.memberThumb
-                    ? `${import.meta.env.VITE_BACKSERVER}/member/thumb/${board.memberThumb}`
+                    ? `${import.meta.env.VITE_IMG_SERVER}/member/thumb/${board.memberThumb}`
                     : userImage
                 }
               />
