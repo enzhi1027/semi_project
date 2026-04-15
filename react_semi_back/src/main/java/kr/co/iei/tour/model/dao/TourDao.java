@@ -43,4 +43,6 @@ public interface TourDao {
 
 	List<TourItemImg> selectTourItemImg(Integer tourItemNo);
 
+	List<TourItem> selectWishItemList(String memberId);
+
 }

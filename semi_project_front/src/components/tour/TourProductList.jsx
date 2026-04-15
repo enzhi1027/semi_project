@@ -22,9 +22,26 @@ const ListPage = ({
   setAllItemList,
   openIndex,
   setOpenIndex,
+  allClickedItems,
+  setAllClickedItems,
 }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
+
+  const updateItemWishStatus = (tourItemNo, newListOrUpdater) => {
+    setAllClickedItems((prev) => {
+      const currentItemWishList = prev[tourItemNo] || [];
+      const nextList =
+        typeof newListOrUpdater === "function"
+          ? newListOrUpdater(currentItemWishList)
+          : newListOrUpdater;
+
+      return {
+        ...prev,
+        [tourItemNo]: nextList,
+      };
+    });
+  };
 
   useEffect(() => {
     for (let i = 0; i < 2; i++) {
@@ -62,7 +79,7 @@ const ListPage = ({
             }}
             className={styles.produt_list_wrap}
           >
-            {recommendItemList.map((item, index) => {
+            {recommendItemList.map((item) => {
               return (
                 <SwiperSlide key={"item-" + item.tourItemNo}>
                   <TourList
@@ -80,6 +97,10 @@ const ListPage = ({
                     wishlistList={wishlistList}
                     setWishlistList={setWishlistList}
                     item={item}
+                    clickedList={allClickedItems[item.tourItemNo] || []}
+                    setClickedList={(newList) =>
+                      updateItemWishStatus(item.tourItemNo, newList)
+                    }
                   />
                 </SwiperSlide>
               );
@@ -90,7 +111,7 @@ const ListPage = ({
       <div className={styles.tour_product_all}>
         <div className={styles.product_list_title}>전체 상품</div>
         <div className={styles.product_list_allItem}>
-          {allItemList.map((item, index) => {
+          {allItemList.map((item) => {
             return (
               <TourList
                 isLiked={false}
@@ -108,6 +129,10 @@ const ListPage = ({
                 setWishlistList={setWishlistList}
                 item={item}
                 key={"item-" + item.tourItemNo}
+                clickedList={allClickedItems[item.tourItemNo] || []}
+                setClickedList={(newList) =>
+                  updateItemWishStatus(item.tourItemNo, newList)
+                }
               />
             );
           })}
@@ -126,6 +151,8 @@ const SearchPage = ({
   setSearchItemList,
   openIndex,
   setOpenIndex,
+  allClickedItems,
+  setAllClickedItems,
 }) => {
   return (
     <>
@@ -134,25 +161,27 @@ const SearchPage = ({
         {searchItemList.length != 0 ? (
           searchItemList.map((item, index) => {
             return (
-              <>
-                <div
-                  className={styles.search_page_item_wrap}
-                  key={"item-" + item.tourItemNo}
-                >
-                  <TourList
-                    isLiked={false}
-                    isOpen={openIndex === index}
-                    onToggle={() => {
-                      setOpenIndex(openIndex === index ? null : index);
-                    }}
-                    memberId={memberId}
-                    isReady={isReady}
-                    wishlistList={wishlistList}
-                    setWishlistList={setWishlistList}
-                    item={item}
-                  />
-                </div>
-              </>
+              <div
+                className={styles.search_page_item_wrap}
+                key={"item-" + item.tourItemNo}
+              >
+                <TourList
+                  isLiked={false}
+                  isOpen={openIndex === index}
+                  onToggle={() => {
+                    setOpenIndex(openIndex === index ? null : index);
+                  }}
+                  memberId={memberId}
+                  isReady={isReady}
+                  wishlistList={wishlistList}
+                  setWishlistList={setWishlistList}
+                  item={item}
+                  clickedList={allClickedItems[item.tourItemNo] || []}
+                  setClickedList={(newList) =>
+                    updateItemWishStatus(item.tourItemNo, newList)
+                  }
+                />
+              </div>
             );
           })
         ) : (
@@ -177,8 +206,11 @@ const TourProductList = ({
   searchItemList,
   setSearchItemList,
   type,
+  allClickedItems,
+  setAllClickedItems,
 }) => {
   const [openIndex, setOpenIndex] = useState(null);
+
   return type === "list" ? (
     <ListPage
       memberId={memberId}
@@ -191,6 +223,8 @@ const TourProductList = ({
       setAllItemList={setAllItemList}
       openIndex={openIndex}
       setOpenIndex={setOpenIndex}
+      allClickedItems={allClickedItems}
+      setAllClickedItems={setAllClickedItems}
     />
   ) : (
     <SearchPage
@@ -202,6 +236,8 @@ const TourProductList = ({
       setSearchItemList={setSearchItemList}
       openIndex={openIndex}
       setOpenIndex={setOpenIndex}
+      allClickedItems={allClickedItems}
+      setAllClickedItems={setAllClickedItems}
     />
   );
 };

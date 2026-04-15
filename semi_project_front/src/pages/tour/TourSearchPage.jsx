@@ -10,6 +10,7 @@ import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
 import TourProductList from "../../components/tour/TourProductList";
 import axios from "axios";
+import OwnCalendar from "../../components/tour/Calender";
 
 const TourSearchPage = () => {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ const TourSearchPage = () => {
 
   const [priceMin, setPriceMin] = useState();
   const [priceMax, setPriceMax] = useState();
+
+  const [allClickedItems, setAllClickedItems] = useState({});
 
   useEffect(() => {
     axios
@@ -124,10 +127,7 @@ const TourSearchPage = () => {
               <SearchIcon />
             </div>
             <div className={styles.search_when}>
-              <div className={styles.search_when_btn}>
-                <CalendarMonthIcon />
-                <div>출발일 선택</div>
-              </div>
+              <OwnCalendar />
             </div>
           </div>
           <div className={styles.menubar_icon_wrap}>
@@ -146,7 +146,19 @@ const TourSearchPage = () => {
             >
               <AccountCircleIcon />
             </div>
-            <div className={styles.icon_cart}>
+            <div
+              className={styles.icon_cart}
+              onClick={() => {
+                if (isReady && memberId == null) {
+                  Swal.fire({
+                    title: "로그인 후 이용 가능합니다.",
+                    icon: "warning",
+                  });
+                } else {
+                  navigate("/tour/mypage");
+                }
+              }}
+            >
               <ShoppingCartIcon />
             </div>
           </div>
@@ -166,6 +178,8 @@ const TourSearchPage = () => {
               allItemList={allItemList}
               setAllItemList={setAllItemList}
               type="list"
+              allClickedItems={allClickedItems}
+              setAllClickedItems={setAllClickedItems}
             />
           ) : (
             <TourProductList
@@ -176,6 +190,8 @@ const TourSearchPage = () => {
               searchItemList={searchItemList}
               setSearchItemList={setSearchItemList}
               type="search"
+              allClickedItems={allClickedItems}
+              setAllClickedItems={setAllClickedItems}
             />
           )}
         </div>

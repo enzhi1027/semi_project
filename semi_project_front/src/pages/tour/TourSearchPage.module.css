@@ -83,12 +83,6 @@
 .tour_product_wrap {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 25px;
   margin-top: 20px;
-}
-
-.tour_product_wrap > div {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
 }

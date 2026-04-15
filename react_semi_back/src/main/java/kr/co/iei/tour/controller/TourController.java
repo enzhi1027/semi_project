@@ -109,4 +109,10 @@ public class TourController {
 		List<TourItemImg> imgs = service.selectTourItemImg(tourItemNo);
 		return ResponseEntity.ok(imgs);
 	}
+	
+	@GetMapping(value = "/wishItem/{memberId}")
+	public ResponseEntity<?> selectWishItemList(@PathVariable String memberId) {
+		List<TourItem> list = service.selectWishItemList(memberId);
+		return ResponseEntity.ok(list);
+	}
 }
