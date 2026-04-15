@@ -1,6 +1,8 @@
 .course_wrap {
   width: 1200px;
+  min-height: 950px;
   margin: 0 auto;
+  margin-bottom: 50px;
 }
 .page_title {
   text-align: center;
