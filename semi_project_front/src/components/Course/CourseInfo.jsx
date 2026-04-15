@@ -239,7 +239,13 @@ const AttractionInfoItem = ({
             )}
           </div>
         )}
-        <div className={styles.attraction_img_wrap}>
+        <div
+          className={
+            listLength === 1
+              ? styles.attraction_img_wrap_first
+              : styles.attraction_img_wrap
+          }
+        >
           <img
             src={
               attraction.attractionThumb

@@ -56,6 +56,7 @@
 .member {
   display: flex;
   gap: 24px;
+  width: 260px;
 }
 .member > a {
   display: flex;
@@ -176,11 +177,11 @@
 
 .main_content {
   width: 100%;
-  height: 73vh;
+  height: 75vh;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-image: url(../../assets/img/mainPage/main2.jpg);
+  background-image: url(../../assets/img/mainPage/main5.jpg);
 }
 
 .content_wrap {
@@ -221,14 +222,10 @@
   color: var(--color5);
   background-color: var(--gray8);
 }
-.site_intro {
-  width: 100vw;
-  height: 100%;
-}
+
 .intro_top {
-  padding-top: 42px;
+  padding-top: 28px;
   padding-bottom: 62px;
-  width: 100vw;
   background-color: var(--gray8);
   display: flex;
   flex-direction: column;
