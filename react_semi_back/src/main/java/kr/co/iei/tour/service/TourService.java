@@ -96,4 +96,9 @@ public class TourService {
 		List<TourItemImg> imgs = dao.selectTourItemImg(tourItemNo);
 		return imgs;
 	}
+
+	public List<TourItem> selectWishItemList(String memberId) {
+		List<TourItem> list = dao.selectWishItemList(memberId);
+		return list;
+	}
 }

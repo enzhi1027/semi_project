@@ -51,6 +51,9 @@
 	    <if test="order == 0">
 		  LEFT
 		  JOIN TOUR_WISH_TBL W ON T.TOUR_ITEM_NO = W.TOUR_ITEM_NO
+		</if>
+		 WHERE T.TOUR_ITEM_STATUS = 0
+		<if test="order == 0">
 		 GROUP
 		    BY T.TOUR_ITEM_NO
 		     , T.TOUR_ITEM_NAME
@@ -62,6 +65,7 @@
 		     , T.TOUR_ITEM_STATUS
 		 ORDER
             BY WISH_COUNT DESC
+        OFFSET 0 ROWS FETCH NEXT 8 ROWS ONLY
 		</if>
 		<if test="order == 1">
 		ORDER
@@ -113,33 +117,32 @@
     </select>
     
     <select id="searchTourItemList" resultType="tourItem">
-	    SELECT TOUR_ITEM_NO
-         , TOUR_ITEM_NAME
-         , TOUR_ITEM_ADULT_PRICE
-         , TOUR_ITEM_KID_PRICE
-         , START_PERIOD
-         , END_PERIOD
-         , TOUR_ITEM_DAYS
-         , TOUR_ITEM_STATUS
-         , (SELECT I.TOUR_ITEM_IMG_PATH
-	          FROM TOUR_ITEM_IMG_TBL I
-	         WHERE I.TOUR_ITEM_NO = T.TOUR_ITEM_NO
-	           AND I.TOUR_ITEM_IMG_ORDER = 1) AS TOUR_ITEM_IMG_PATH
-      FROM TOUR_ITEM_TBL T
-    <where>
-        <if test="searchWhere != null and searchWhere != ''">
-            AND TOUR_ITEM_NAME LIKE '%' || #{searchWhere} || '%'
-        </if>
-        
-        <if test="searchPriceMin != null and searchPriceMin != ''">
-            <![CDATA[ AND TOUR_ITEM_ADULT_PRICE >= #{searchPriceMin} ]]>
-        </if>
-        
-        <if test="searchPriceMax != null and searchPriceMax != ''">
-            <![CDATA[ AND TOUR_ITEM_ADULT_PRICE <= #{searchPriceMax} ]]>
-        </if>
-    </where>
-   	</select>
+	    SELECT T.TOUR_ITEM_NO
+	         , T.TOUR_ITEM_NAME
+	         , T.TOUR_ITEM_ADULT_PRICE
+	         , T.TOUR_ITEM_KID_PRICE
+	         , T.START_PERIOD
+	         , T.END_PERIOD
+	         , T.TOUR_ITEM_DAYS
+	         , T.TOUR_ITEM_STATUS
+	         , (SELECT I.TOUR_ITEM_IMG_PATH
+	              FROM TOUR_ITEM_IMG_TBL I
+	             WHERE I.TOUR_ITEM_NO = T.TOUR_ITEM_NO
+	               AND I.TOUR_ITEM_IMG_ORDER = 1) AS TOUR_ITEM_IMG_PATH
+	      FROM TOUR_ITEM_TBL T
+	     WHERE T.TOUR_ITEM_STATUS = 0
+	    <if test="searchWhere != null and searchWhere != ''">
+	        AND T.TOUR_ITEM_NAME LIKE '%' || #{searchWhere} || '%'
+	    </if>
+	    
+	    <if test="searchPriceMin != null and searchPriceMin != ''">
+	        <![CDATA[ AND T.TOUR_ITEM_ADULT_PRICE >= #{searchPriceMin} ]]>
+	    </if>
+	    
+	    <if test="searchPriceMax != null and searchPriceMax != ''">
+	        <![CDATA[ AND T.TOUR_ITEM_ADULT_PRICE <= #{searchPriceMax} ]]>
+	    </if>
+	</select>
    
 	<select id="selectTourItem" resultType="tourItem">
    		SELECT TOUR_ITEM_NO
@@ -152,6 +155,7 @@
 	         , TOUR_ITEM_STATUS
 	      FROM TOUR_ITEM_TBL T
 	     WHERE TOUR_ITEM_NO = #{tourItemNo}
+	       AND TOUR_ITEM_STATUS = 0
 	</select>
 	
 	<select id="selectTourItemInfo" resultType="tourItemInfo">
@@ -176,4 +180,21 @@
 		 ORDER
 		    BY TOUR_ITEM_IMG_NO
 	</select>
+	
+	<select id="selectWishItemList" resultType="tourItem">
+		SELECT T.TOUR_ITEM_NO
+		     , T.TOUR_ITEM_NAME
+		     , T.TOUR_ITEM_ADULT_PRICE
+		     , T.TOUR_ITEM_KID_PRICE
+		     , T.START_PERIOD
+		     , T.END_PERIOD
+		     , T.TOUR_ITEM_DAYS
+		     , T.TOUR_ITEM_STATUS
+		     , W.TOUR_WISHLIST_NO
+		  FROM TOUR_ITEM_TBL T
+		  JOIN TOUR_WISH_TBL W ON T.TOUR_ITEM_NO = W.TOUR_ITEM_NO
+		  JOIN TOUR_WISHLIST_TBL L ON W.TOUR_WISHLIST_NO = L.TOUR_WISHLIST_NO
+		 WHERE L.MEMBER_ID = #{memberId}
+		 ORDER BY W.TOUR_WISHLIST_NO, T.TOUR_ITEM_NO
+ </select>
 </mapper>

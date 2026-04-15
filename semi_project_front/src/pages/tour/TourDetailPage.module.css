@@ -151,17 +151,52 @@
 }
 
 .content_schedult_wrap {
-  height: 500px;
   overflow: hidden;
   position: relative;
+  max-height: 450px;
 }
+
 .whiteboard {
   position: absolute;
   background-color: var(--gray8);
-  height: 50px;
+  height: 100px;
   width: 100%;
-  top: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, transparent, var(--gray8));
+  display: flex;
+  justify-content: center;
+  align-items: end;
 }
+.content_schedult_wrap.showAll {
+  max-height: none;
+}
+
+.whiteboard .whiteboard_btn,
+.close_btn .whiteboard_btn_close {
+  width: 300px;
+  text-align: center;
+  border-radius: 7px;
+  padding: 5px;
+  height: 30px;
+  align-content: center;
+  border: 1px solid var(--color2);
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.whiteboard .whiteboard_btn:hover,
+.close_btn .whiteboard_btn_close:hover {
+  background-color: var(--color2);
+  color: var(--gray8);
+}
+
+.close_btn {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
 .content_schedule {
   display: flex;
   flex-direction: column;

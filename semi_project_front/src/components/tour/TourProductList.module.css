@@ -1,10 +1,3 @@
-.tour_product_wrap .produt_list_wrap {
-  width: 100%;
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
 .swiper_container {
   position: relative;
 }
@@ -35,12 +28,12 @@
 
 .search_page_container {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 15px;
 }
 
 .search_page_item_wrap {
-  width: calc(100% / 4 - 7.5px);
+  width: calc(100% / 4 - 15px);
 }
 
 .none_result {
@@ -49,4 +42,20 @@
   height: 500px;
   align-content: center;
   font-size: 1.4em;
+}
+
+.product_list_title {
+  font-size: 2em;
+  font-weight: 800;
+}
+
+.product_list_allItem {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 15px;
+}
+
+.product_list_allItem > div {
+  width: calc(100% / 4 - 15px);
 }

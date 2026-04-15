@@ -32,4 +32,5 @@ public class TourItem {
 	private List<TourItemImg> fileList;		//상품 이미지 리스트
 	
 	private List<String> deleteFilePath; //삭제할 파일 경로 저장용
+	private Integer tourWishlistNo;
 }
