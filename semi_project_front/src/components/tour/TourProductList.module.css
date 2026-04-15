@@ -50,3 +50,20 @@
   align-content: center;
   font-size: 1.4em;
 }
+
+.product_list_title {
+  font-size: 2em;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.product_list_allItem {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.product_list_allItem > div {
+  width: 285px;
+}

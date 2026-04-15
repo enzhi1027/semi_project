@@ -174,7 +174,7 @@ public class MemberController {
 	}
 	
 	//좋아요 표시한 게시글 조회 -------------------------------------------------------
-	@GetMapping(value = "/like-list/#{memberId}")
+	@GetMapping(value = "/like-list/{memberId}")
 	public ResponseEntity<?> selectLikeBoardList(@PathVariable String memberId){
 		List<Board> list = boardService.selectLikeBoardList(memberId);
 		return ResponseEntity.ok(list);

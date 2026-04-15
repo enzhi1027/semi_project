@@ -16,7 +16,6 @@ const ListPage = ({
   isReady,
   wishlistList,
   setWishlistList,
-  order,
   recommendItemList,
   setRecommendItemList,
   allItemList,
@@ -28,63 +27,53 @@ const ListPage = ({
   const nextRef = useRef(null);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKSERVER}/tours/itemList/${order}`)
-      .then((res) => {
-        if (order) {
-          // 0: 추천 상품, 1: 전체 상품
-          setAllItemList(res.data);
-        } else {
-          setRecommendItemList(res.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    for (let i = 0; i < 2; i++) {
+      const order = i;
+      axios
+        .get(`${import.meta.env.VITE_BACKSERVER}/tours/itemList/${order}`)
+        .then((res) => {
+          if (order) {
+            setAllItemList(res.data);
+          } else {
+            setRecommendItemList(res.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
-    <div className={styles.swiper_container}>
-      <NavigateBeforeIcon ref={prevRef} className={styles.btn_prev} />
-      <NavigateNextIcon ref={nextRef} className={styles.btn_next} />
-      <Swiper
-        modules={[Navigation, Pagination, Autoplay]}
-        spaceBetween={20}
-        slidesPerView={4}
-        navigation={{ prevEl: prevRef, nextEl: nextRef }}
-        onBeforeInit={(swiper) => {
-          swiper.params.navigation.prevEl = prevRef.current;
-          swiper.params.navigation.nextEl = nextRef.current;
-        }}
-        className={styles.produt_list_wrap}
-      >
-        {order === 0
-          ? recommendItemList.map((item, index) => {
+    <>
+      <div className={styles.tour_product_recommend}>
+        <div className={styles.product_list_title}>추천 상품</div>
+        <div className={styles.swiper_container}>
+          <NavigateBeforeIcon ref={prevRef} className={styles.btn_prev} />
+          <NavigateNextIcon ref={nextRef} className={styles.btn_next} />
+          <Swiper
+            modules={[Navigation, Pagination, Autoplay]}
+            spaceBetween={20}
+            slidesPerView={4}
+            navigation={{ prevEl: prevRef, nextEl: nextRef }}
+            onBeforeInit={(swiper) => {
+              swiper.params.navigation.prevEl = prevRef.current;
+              swiper.params.navigation.nextEl = nextRef.current;
+            }}
+            className={styles.produt_list_wrap}
+          >
+            {recommendItemList.map((item, index) => {
               return (
                 <SwiperSlide key={"item-" + item.tourItemNo}>
                   <TourList
                     isLiked={false}
-                    isOpen={openIndex === index}
+                    isOpen={openIndex === `recommend-${item.tourItemNo}`}
                     onToggle={() => {
-                      setOpenIndex(openIndex === index ? null : index);
-                    }}
-                    memberId={memberId}
-                    isReady={isReady}
-                    wishlistList={wishlistList}
-                    setWishlistList={setWishlistList}
-                    item={item}
-                  />
-                </SwiperSlide>
-              );
-            })
-          : allItemList.map((item, index) => {
-              return (
-                <SwiperSlide key={"item-" + item.tourItemNo}>
-                  <TourList
-                    isLiked={false}
-                    isOpen={openIndex === index}
-                    onToggle={() => {
-                      setOpenIndex(openIndex === index ? null : index);
+                      setOpenIndex(
+                        openIndex === `recommend-${item.tourItemNo}`
+                          ? null
+                          : `recommend-${item.tourItemNo}`,
+                      );
                     }}
                     memberId={memberId}
                     isReady={isReady}
@@ -95,8 +84,36 @@ const ListPage = ({
                 </SwiperSlide>
               );
             })}
-      </Swiper>
-    </div>
+          </Swiper>
+        </div>
+      </div>
+      <div className={styles.tour_product_all}>
+        <div className={styles.product_list_title}>전체 상품</div>
+        <div className={styles.product_list_allItem}>
+          {allItemList.map((item, index) => {
+            return (
+              <TourList
+                isLiked={false}
+                isOpen={openIndex === `all-${item.tourItemNo}`}
+                onToggle={() => {
+                  setOpenIndex(
+                    openIndex === `all-${item.tourItemNo}`
+                      ? null
+                      : `all-${item.tourItemNo}`,
+                  );
+                }}
+                memberId={memberId}
+                isReady={isReady}
+                wishlistList={wishlistList}
+                setWishlistList={setWishlistList}
+                item={item}
+                key={"item-" + item.tourItemNo}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -111,35 +128,40 @@ const SearchPage = ({
   setOpenIndex,
 }) => {
   return (
-    <div className={styles.search_page_container}>
-      {searchItemList.length != 0 ? (
-        searchItemList.map((item, index) => {
-          return (
-            <>
-              <div
-                className={styles.search_page_item_wrap}
-                key={"item-" + item.tourItemNo}
-              >
-                <TourList
-                  isLiked={false}
-                  isOpen={openIndex === index}
-                  onToggle={() => {
-                    setOpenIndex(openIndex === index ? null : index);
-                  }}
-                  memberId={memberId}
-                  isReady={isReady}
-                  wishlistList={wishlistList}
-                  setWishlistList={setWishlistList}
-                  item={item}
-                />
-              </div>
-            </>
-          );
-        })
-      ) : (
-        <div className={styles.none_result}>검색 결과가 존재하지 않습니다.</div>
-      )}
-    </div>
+    <>
+      <div className={styles.product_list_title}>검색 결과</div>
+      <div className={styles.search_page_container}>
+        {searchItemList.length != 0 ? (
+          searchItemList.map((item, index) => {
+            return (
+              <>
+                <div
+                  className={styles.search_page_item_wrap}
+                  key={"item-" + item.tourItemNo}
+                >
+                  <TourList
+                    isLiked={false}
+                    isOpen={openIndex === index}
+                    onToggle={() => {
+                      setOpenIndex(openIndex === index ? null : index);
+                    }}
+                    memberId={memberId}
+                    isReady={isReady}
+                    wishlistList={wishlistList}
+                    setWishlistList={setWishlistList}
+                    item={item}
+                  />
+                </div>
+              </>
+            );
+          })
+        ) : (
+          <div className={styles.none_result}>
+            검색 결과가 존재하지 않습니다.
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 
@@ -148,7 +170,6 @@ const TourProductList = ({
   isReady,
   wishlistList,
   setWishlistList,
-  order,
   recommendItemList,
   setRecommendItemList,
   allItemList,
@@ -164,7 +185,6 @@ const TourProductList = ({
       isReady={isReady}
       wishlistList={wishlistList}
       setWishlistList={setWishlistList}
-      order={order}
       recommendItemList={recommendItemList}
       setRecommendItemList={setRecommendItemList}
       allItemList={allItemList}
