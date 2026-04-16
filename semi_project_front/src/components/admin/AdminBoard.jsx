@@ -29,7 +29,7 @@ const AdminBoard = () => {
   const [searchType, setSearchType] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState("");
 
-  //회원옵션(여기서는 필요 X)
+  //회원옵션(AdminBoard에서는 필요 X)
   const handleWriteClick = () => {
     if (memberGrade === 2) {
       Swal.fire({

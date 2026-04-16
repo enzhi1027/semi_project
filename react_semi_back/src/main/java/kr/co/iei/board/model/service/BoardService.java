@@ -149,10 +149,15 @@ public class BoardService {
 		String boardContent = boardDao.selectBoardContent(boardNo);
 		return boardContent;
 	}
-
-	public List<Board> selectLikeBoardList(String memberId) {
-		List<Board> list = boardDao.selectLikeBoardList(memberId);
-		return list;
+	
+	//좋아요 표시한 게시글 목록 조회
+	public ListResponse selectLikeBoardList(ListItem request) {
+		Integer likeCount = boardDao.selectLikeBoardCount(request);
+	    int totalPage = (int) Math.ceil(likeCount / (double) request.getSize()); 
+	    List<Board> list = boardDao.selectLikeBoardList(request); 
+	    ListResponse response = new ListResponse(list, totalPage); 
+	    return response;
 	}
-    
+	
+
 }

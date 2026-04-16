@@ -29,7 +29,7 @@
 
 /*메인 정보창 ----------------------------------------*/
 .mypage_content {
-  width: 925px;
+  width: 950px;
   min-height: 600px;
   background-color: var(--gray8);
   border: 1px solid var(--gray5);

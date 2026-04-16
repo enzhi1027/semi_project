@@ -21,4 +21,8 @@ public class AttractionListItem {
 	private Integer accessible;
 	private Integer parking;
 	private List<String> checkedItems;
+	
+	//좋아요 표시 목록 조회용
+	private String memberId;
+	private Integer order;
 }

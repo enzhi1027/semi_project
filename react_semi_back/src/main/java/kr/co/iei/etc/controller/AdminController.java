@@ -181,6 +181,8 @@ public class AdminController {
 		System.out.println(response);
 		return ResponseEntity.ok(response);
 	}
+	
+	//회원 등급 변경 ----------------------------------------------------------
 	@PatchMapping(value = "/changeMemberGrade")
 	public ResponseEntity<?> changeMemberGrade(@RequestBody Member member){
 		int result = memberService.changeMemberGrade(member);
