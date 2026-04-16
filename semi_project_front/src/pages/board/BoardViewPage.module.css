@@ -53,10 +53,6 @@
   margin-bottom: 12px;
 }
 
-.board_view_content ul {
-  padding-left: 20px;
-}
-
 .board_view_content img {
   max-width: 100%;
   height: auto;
@@ -284,4 +280,10 @@
   margin: 0;
   min-height: 1.6em;
   line-height: 1.6;
+}
+
+/* 1. ul(불렛)과 ol(번호) 모두에게 왼쪽 여백 부여 */
+.board_view_content ul,
+.board_view_content ol {
+  padding-left: 20px;
 }
