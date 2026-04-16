@@ -13,6 +13,8 @@ import kr.co.iei.board.model.vo.Board;
 import kr.co.iei.board.model.vo.BoardComment;
 import kr.co.iei.board.model.vo.ListItem;
 import kr.co.iei.board.model.vo.ListResponse;
+import kr.co.iei.board.model.vo.MyCommentList;
+import kr.co.iei.board.model.vo.MyCommentResponse;
 import kr.co.iei.member.model.vo.LoginMember;
 import kr.co.iei.utils.FileUtils;
 import kr.co.iei.utils.JwtUtils;
@@ -150,7 +152,7 @@ public class BoardService {
 		return boardContent;
 	}
 	
-	//좋아요 표시한 게시글 목록 조회
+	//좋아요 표시한 게시글 조회
 	public ListResponse selectLikeBoardList(ListItem request) {
 		Integer likeCount = boardDao.selectLikeBoardCount(request);
 	    int totalPage = (int) Math.ceil(likeCount / (double) request.getSize()); 
@@ -158,6 +160,25 @@ public class BoardService {
 	    ListResponse response = new ListResponse(list, totalPage); 
 	    return response;
 	}
+
+	//내가 작성한 댓글 조회
+	public MyCommentResponse selectMyCommentList(ListItem request) {
+		Integer commentCount = boardDao.selectMyCommentCount(request);
+		int totalPage = (int) Math.ceil(commentCount / (double) request.getSize());
+		List<MyCommentList> list = boardDao.selectMyCommentList(request);
+		MyCommentResponse response = new MyCommentResponse(list, totalPage);
+		return response;
+	}
+	
+	//내가 작성한 게시글 조회
+	public ListResponse selectMyBoardList(ListItem request) {
+		Integer boardCount = boardDao.selectMyBoardCount(request);
+		int totalPage = (int) Math.ceil(boardCount / (double) request.getSize());
+		List<Board> list = boardDao.selectMyBoardList(request);
+		ListResponse response = new ListResponse(list, totalPage);
+		return response;
+	}
+
 	
 
 }

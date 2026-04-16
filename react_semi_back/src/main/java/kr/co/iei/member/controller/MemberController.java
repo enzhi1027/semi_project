@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,8 +25,10 @@ import kr.co.iei.attraction.model.vo.AttractionListResponse;
 import kr.co.iei.attraction.service.AttractionService;
 import kr.co.iei.board.model.service.BoardService;
 import kr.co.iei.board.model.vo.Board;
+import kr.co.iei.board.model.vo.BoardComment;
 import kr.co.iei.board.model.vo.ListItem;
 import kr.co.iei.board.model.vo.ListResponse;
+import kr.co.iei.board.model.vo.MyCommentResponse;
 import kr.co.iei.course.model.service.CourseService;
 import kr.co.iei.course.model.vo.CourseList;
 import kr.co.iei.course.model.vo.CourseListItem;
@@ -144,8 +147,13 @@ public class MemberController {
 	@GetMapping(value = "/{memberId}")
 	public ResponseEntity<?> selectOneMember(@PathVariable String memberId) {
 		Member member = memberService.selectOneMember(memberId);
-		member.setMemberPw(null);//비밀번호는 제외
-		return ResponseEntity.ok(member);
+		if (member != null) {
+	        member.setMemberPw(null); // 정보가 있을 때만 비밀번호 가리기
+	        return ResponseEntity.ok(member);
+	    } else {
+	        // 회원이 없을 경우 404 에러를 반환
+	        return ResponseEntity.status(404).body("존재하지 않는 회원 정보입니다.");
+	    }
 	}
 	
 	//유저 정보 수정 ---------------------------------------------------------------
@@ -212,6 +220,119 @@ public class MemberController {
 		return ResponseEntity.ok(response);
 	}
 
+	//내가 작성한 게시글 조회 ---------------------------------------------------
+	@GetMapping(value = "/my-board")
+	public ResponseEntity<?> selectMyBoardList(@ModelAttribute ListItem request){
+		ListResponse response = boardService.selectMyBoardList(request);
+		return ResponseEntity.ok(response);
+	}
+	
+	//내가 작성한 댓글 조회 -----------------------------------------------------
+	@GetMapping(value = "/my-comment")
+	public ResponseEntity<?> selectMyCommentList(@ModelAttribute ListItem request){
+		MyCommentResponse response = boardService.selectMyCommentList(request);
+		return ResponseEntity.ok(response);
+	}
+	
+	//내가 작성한 코스 조회 -----------------------------------------------------
+	@GetMapping(value = "/my-course")
+	public ResponseEntity<?> selectMyCourseList(@ModelAttribute CourseListItem request){
+		CourseListResponse response = courseService.selectMyCourseList(request);
+		return ResponseEntity.ok(response);
+	}
+	
+	//내가 작성한 댓글 수정
+	@PutMapping("/comments/{boardCommentNo}")
+  	public ResponseEntity<?> updateBoardComment(@RequestBody BoardComment comment){
+  		int result = boardService.updateBoardComment(comment);
+  		return ResponseEntity.ok(result);
+  	}
+	
+	//내가 작성한 댓글 삭제
+	@DeleteMapping(value = "/comments/{boardCommentNo}")
+	public ResponseEntity<?> deleteBoardComment(@PathVariable Integer boardCommentNo){
+		int result = boardService.deleteBoardComment(boardCommentNo);
+  	    return ResponseEntity.ok(result);
+	}
+	
+	//아이디 찾기 이메일 발송
+	@PostMapping(value = "/email-search")
+	public ResponseEntity<?> emailSearch(@RequestBody Member m) {
+		// 1. 이름, 전화번호, 이메일이 일치하는 회원이 있는지 먼저 조회
+		Member member = memberService.selectMemberIdSearch(m);
+		
+		if(member == null) {
+			return ResponseEntity.status(404).body("일치하는 회원 정보가 없습니다.");
+		}
+		
+		String emailTitle = "LeafyGo 아이디 찾기 인증 메일입니다.";
+		Random r = new Random();
+		StringBuffer sb = new StringBuffer();
+		for(int i=0; i<6; i++) {
+			int flag = r.nextInt(3);
+			if(flag == 0) {
+				int randomCode = r.nextInt(10);
+				sb.append(randomCode);
+			} else if(flag == 1) {
+				char randomCode = (char)(r.nextInt(26)+65);
+				sb.append(randomCode);
+			} else if(flag == 2) {
+				char randomCode = (char)(r.nextInt(26)+97);
+				sb.append(randomCode);
+			}	
+		}
+		String authCode = sb.toString();
+		
+		String emailContent = "<h1>안녕하세요. LeafyGo입니다.</h1>"
+							+ "<h3>아이디 찾기 인증번호는 "
+							+ "[<b>" + authCode + "</b>] 입니다.</h3>";
+		
+		sender.sendMail(emailTitle, m.getMemberEmail(), emailContent);
+		
+		return ResponseEntity.ok(authCode);
+	}
+
+	//아이디 조회 ----------------------------------------------
+	@GetMapping(value = "/searchId")
+	public ResponseEntity<?> searchId(@ModelAttribute Member m) {
+		String memberId = memberService.searchId(m);
+		return ResponseEntity.ok(memberId);
+	}
+	
+	//비밀번호 조회 이메일 발송
+	@PostMapping(value = "/email-search-pw")
+	public ResponseEntity<?> pwEmailSearch(@RequestBody Member m){
+		Member member = memberService.selectMemberPwSearch(m);
+		if(member == null) {
+			return ResponseEntity.status(404).body("일치하는 회원 정보가 없습니다.");
+		}
+		
+		String emailTitle = "LeafyGo 비밀번호 재설정 인증 메일입니다.";
+	    Random r = new Random();
+	    StringBuffer sb = new StringBuffer();
+	    for(int i=0; i<6; i++) {
+	        int flag = r.nextInt(3);
+	        if(flag == 0) {
+	            sb.append(r.nextInt(10));
+	        } else if(flag == 1) {
+	            sb.append((char)(r.nextInt(26)+65));
+	        } else if(flag == 2) {
+	            sb.append((char)(r.nextInt(26)+97));
+	        }	
+	    }
+	    String authCode = sb.toString();
+	    
+	    String emailContent = "<h1>안녕하세요. LeafyGo입니다.</h1>"
+	                        + "<h3>비밀번호 재설정을 위한 인증번호는 "
+	                        + "[<b>" + authCode + "</b>] 입니다.</h3>";
+	    
+	    // 메일 발송
+	    sender.sendMail(emailTitle, member.getMemberEmail(), emailContent);
+	    
+	    // 인증코드 반환
+	    return ResponseEntity.ok(authCode);
+	}
+	
 	
 	
 }

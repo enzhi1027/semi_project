@@ -34,6 +34,12 @@ public interface MemberDao {
 
 	int changeMemberGrade(Member member);
 
+	Member selectMemberIdSearch(Member m);
+
+	String searchId(Member m);
+
+	Member selectMemberPwSearch(Member m);
+
 
 
 

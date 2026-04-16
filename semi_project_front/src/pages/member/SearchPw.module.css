@@ -1,0 +1,42 @@
+/* 비밀번호 찾기 랩 */
+.search_pw_wrap form {
+  width: 500px;
+  min-height: 450px;
+  margin: 70px auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  text-align: center;
+  background-color: var(--gray8);
+  border-radius: 16px;
+  border: solid 1px var(--gray5);
+}
+
+.search_pw_input_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.email_wrap {
+  display: flex;
+  gap: 12px;
+}
+.check_wrap {
+  display: flex;
+  gap: 12px;
+}
+.input_wrap button {
+  width: 130px;
+  font-size: 14px;
+}
+.pw_re_wrap {
+  font-size: 14px;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.pw_re_wrap button {
+  flex-grow: 1;
+}

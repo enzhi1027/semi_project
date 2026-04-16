@@ -25,6 +25,8 @@ import TourMyPage from "./pages/tour/TourMyPage";
 import AdminModifyTour from "./pages/member(admin)/AdminModifyTour";
 import CourseUpdatePage from "./pages/course/CourseUpdatePage";
 import TourDetailPage from "./pages/tour/TourDetailPage";
+import SearchId from "./pages/member/SearchId";
+import SearchPw from "./pages/member/SearchPw";
 import TourCartPage from "./pages/tour/TourCartPage";
 
 function App() {
@@ -76,6 +78,8 @@ function App() {
             {/*로그인, 회원가입 마이페이지------------------------------- */}
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
+            <Route path="/searchId" element={<SearchId />} />
+            <Route path="/searchPw" element={<SearchPw />} />
             <Route path="/mypage/*" element={<Mypage />} />
             <Route
               path="/admin/tour/insertitem"

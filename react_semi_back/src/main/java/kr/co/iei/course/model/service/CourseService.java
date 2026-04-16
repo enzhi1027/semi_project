@@ -176,6 +176,15 @@ public class CourseService {
 		CourseListResponse response = new CourseListResponse(list, totalPage);
 		return response;
 	}
+	
+	//내가 작성한 코스 조회
+	public CourseListResponse selectMyCourseList(CourseListItem request) {
+		List<CourseList> list = courseDao.selectMyCourseList(request);
+		int courseCount = courseDao.selectMyCourseCount(request);
+		int totalPage = (int) Math.ceil(courseCount/(double)request.getSize());
+		CourseListResponse response = new CourseListResponse(list, totalPage);
+		return response;
+	}
 
 	
 

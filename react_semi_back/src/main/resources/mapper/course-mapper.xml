@@ -146,7 +146,7 @@
   </select>
   
   
-  
+  <!-- 좋아요 누른 코스 조회 쿼리 -->
   <select id="selectLikeCourseCount" resultType="int">
   	select count(*) from course_like_tbl 
     where member_id = #{memberId}
@@ -175,7 +175,35 @@
     offset #{page} * #{size} rows fetch next #{size} rows only
   </select>
   
+  <!-- 내가 작성한 코스 목록 조회 -->
+  <select id="selectMyCourseCount" resultType="int">
+	select count(*)
+		from course_tbl
+	where course_writer = #{memberId}
+  </select>
   
+  <select id="selectMyCourseList" resultType="courseList">
+  	select 
+        course_no,
+        course_title,
+        course_content,
+        (select member_name from member_tbl where member_id = c.course_writer) as course_writer,
+        (select count(course_index) from course_attraction_tbl where course_no = c.course_no) as course_count,
+        (select attraction_thumb from course_attraction_tbl where course_no = c.course_no and 
+        course_index = (select min(course_index) from course_attraction_tbl where course_no = c.course_no)) as course_thumb,
+        (select count(*) from course_like_tbl where course_no = c.course_no and member_id = #{memberId}) as is_like
+    from course_tbl c
+    where course_writer = #{memberId}
+    
+    <if test="order == 1">
+        order by course_no desc
+    </if>
+    <if test="order == 2">
+        order by course_no asc
+    </if>
+    
+    offset #{page} * #{size} rows fetch next #{size} rows only
+  </select>
   
   
 </mapper>

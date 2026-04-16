@@ -114,4 +114,33 @@
 			member_grade = #{memberGrade}
 		where member_id = #{memberId}
 	</update>
+	
+	
+	<!-- 아이디 찾기 -->
+	<select id="selectMemberIdSearch" resultType="member">
+    	select
+        	member_id,
+        	member_name,
+        	member_email,
+        	member_phone from member_tbl
+    	where member_name = #{memberName}
+        	and member_email = #{memberEmail} 
+        	and member_phone = #{memberPhone}
+	</select>
+	
+	<select id="searchId" resultType="String">
+		select member_id from member_tbl
+			where member_name = #{memberName}
+			and member_email = #{memberEmail}
+			and member_phone = #{memberPhone}
+	</select>
+	
+	<select id="selectMemberPwSearch" resultType="member">
+		select 
+			member_id, 
+			member_email 
+		from member_tbl
+		where member_id = #{memberId}
+			and member_email = #{memberEmail}
+	</select>
 </mapper>
