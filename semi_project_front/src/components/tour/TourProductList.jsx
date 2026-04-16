@@ -24,6 +24,8 @@ const ListPage = ({
   setOpenIndex,
   allClickedItems,
   setAllClickedItems,
+  startDate,
+  setStartDate,
 }) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -101,6 +103,8 @@ const ListPage = ({
                     setClickedList={(newList) =>
                       updateItemWishStatus(item.tourItemNo, newList)
                     }
+                    startDate={startDate}
+                    setStartDate={setStartDate}
                   />
                 </SwiperSlide>
               );
@@ -133,6 +137,8 @@ const ListPage = ({
                 setClickedList={(newList) =>
                   updateItemWishStatus(item.tourItemNo, newList)
                 }
+                startDate={startDate}
+                setStartDate={setStartDate}
               />
             );
           })}
@@ -153,6 +159,8 @@ const SearchPage = ({
   setOpenIndex,
   allClickedItems,
   setAllClickedItems,
+  startDate,
+  setStartDate,
 }) => {
   return (
     <>
@@ -180,6 +188,8 @@ const SearchPage = ({
                   setClickedList={(newList) =>
                     updateItemWishStatus(item.tourItemNo, newList)
                   }
+                  startDate={startDate}
+                  setStartDate={setStartDate}
                 />
               </div>
             );
@@ -208,6 +218,8 @@ const TourProductList = ({
   type,
   allClickedItems,
   setAllClickedItems,
+  startDate,
+  setStartDate,
 }) => {
   const [openIndex, setOpenIndex] = useState(null);
 
@@ -225,6 +237,8 @@ const TourProductList = ({
       setOpenIndex={setOpenIndex}
       allClickedItems={allClickedItems}
       setAllClickedItems={setAllClickedItems}
+      startDate={startDate}
+      setStartDate={setStartDate}
     />
   ) : (
     <SearchPage
@@ -238,6 +252,8 @@ const TourProductList = ({
       setOpenIndex={setOpenIndex}
       allClickedItems={allClickedItems}
       setAllClickedItems={setAllClickedItems}
+      startDate={startDate}
+      setStartDate={setStartDate}
     />
   );
 };

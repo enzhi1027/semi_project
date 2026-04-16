@@ -1,7 +1,6 @@
 import styles from "./TourSearchPage.module.css";
 import SearchIcon from "@mui/icons-material/Search";
 import SellIcon from "@mui/icons-material/Sell";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { use, useEffect, useState } from "react";
@@ -32,6 +31,8 @@ const TourSearchPage = () => {
   const [priceMax, setPriceMax] = useState();
 
   const [allClickedItems, setAllClickedItems] = useState({});
+
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
     axios
@@ -84,9 +85,6 @@ const TourSearchPage = () => {
       });
   }, [searchWhere, searchPriceMin, searchPriceMax, searchWhen]);
 
-  useEffect(() => {
-    console.log(searchPriceMin);
-  }, [searchPriceMin]);
   return (
     <>
       <section className={styles.tour_search_wrap}>
@@ -127,7 +125,7 @@ const TourSearchPage = () => {
               <SearchIcon />
             </div>
             <div className={styles.search_when}>
-              <OwnCalendar />
+              <OwnCalendar startDate={startDate} setStartDate={setStartDate} />
             </div>
           </div>
           <div className={styles.menubar_icon_wrap}>
@@ -155,7 +153,7 @@ const TourSearchPage = () => {
                     icon: "warning",
                   });
                 } else {
-                  navigate("/tour/mypage");
+                  navigate("/tour/cart");
                 }
               }}
             >
@@ -180,6 +178,8 @@ const TourSearchPage = () => {
               type="list"
               allClickedItems={allClickedItems}
               setAllClickedItems={setAllClickedItems}
+              startDate={startDate}
+              setStartDate={setStartDate}
             />
           ) : (
             <TourProductList
@@ -192,6 +192,8 @@ const TourSearchPage = () => {
               type="search"
               allClickedItems={allClickedItems}
               setAllClickedItems={setAllClickedItems}
+              startDate={startDate}
+              setStartDate={setStartDate}
             />
           )}
         </div>

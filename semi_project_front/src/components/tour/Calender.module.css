@@ -3,6 +3,8 @@
   display: inline-block;
   width: 150px;
   display: flex;
+  z-index: 10;
+  align-items: center;
 }
 
 .datepicker_container * {
@@ -11,7 +13,7 @@
 
 .custom_input {
   width: 100%;
-  padding: 12px 40px 12px 15px;
+  padding: 12px 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
@@ -35,6 +37,19 @@
   color: var(--gray8);
 }
 
-.datepicker_container {
-  z-index: 10;
+:global(.react-datepicker__day--disabled) {
+  color: var(--gray5);
+  cursor: not-allowed;
+}
+
+:global(.react-datepicker__day--outside-month) {
+  color: var(--gray5);
+}
+
+:global(.react-datepicker__day--keyboard-selected) {
+  background-color: var(--gray8);
+}
+
+:global(.react-datepicker-popper) {
+  margin-top: 5px;
 }

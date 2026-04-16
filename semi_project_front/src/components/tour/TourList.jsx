@@ -17,6 +17,8 @@ const TourList = ({
   item,
   clickedList,
   setClickedList,
+  startDate,
+  setStartDate,
 }) => {
   const navigate = useNavigate();
   const [coords, setCoords] = useState({ top: 0, left: 0 });
@@ -59,42 +61,53 @@ const TourList = ({
     <>
       <div
         className={styles.tour_list_item_wrap}
-        onClick={() => {
-          navigate(`/tour/detail/${item.tourItemNo}`);
-        }}
+        onClick={() =>
+          navigate(`/tour/detail/${item.tourItemNo}`, {
+            state: {
+              startDate: startDate,
+            },
+          })
+        }
       >
         <div className={styles.tour_list_item_img}>
           <img
             src={
               item.tourItemImgPath
                 ? `${import.meta.env.VITE_BACKSERVER}/tourItemImg/${item.tourItemImgPath}`
-                : "https://img.freepik.com/premium-vector/default-image-icon-vector-missing-picture-page-website-design-mobile-app-no-photo-available_87543-11093.jpg"
+                : "기본이미지주소"
             }
+            alt={item.tourItemName}
           />
         </div>
-        <div className={styles.tour_list_item_header}>
-          <div className={styles.tour_list_item_title}>{item.tourItemName}</div>
-          <div
-            className={styles.tour_list_item_heart}
-            onClick={handleHeartClick}
-          >
-            {clickedList.length != 0 ? (
-              <FavoriteIcon />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
+
+        <div className={styles.tour_list_item_info_container}>
+          <div className={styles.tour_list_item_header}>
+            <div className={styles.tour_list_item_title}>
+              {item.tourItemName}
+            </div>
+            <div
+              className={styles.tour_list_item_heart}
+              onClick={handleHeartClick}
+            >
+              {clickedList.length !== 0 ? (
+                <FavoriteIcon />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
+            </div>
           </div>
-        </div>
-        <div className={styles.tour_list_item_price}>
-          성인: {item.tourItemAdultPrice.toLocaleString()}₩ | 미취학 아동:{" "}
-          {item.tourItemKidPrice.toLocaleString()}₩
-        </div>
-        <div className={styles.tour_list_item_schedule}>
-          {item.startPeriod.substring(0, 10).replaceAll("-", ".")} ~{" "}
-          {item.endPeriod.substring(0, 10).replaceAll("-", ".")} /{" "}
-          {item.tourItemDays - 1 === 0
-            ? "당일치기"
-            : item.tourItemDays - 1 + "박 " + item.tourItemDays + "일"}
+
+          <div className={styles.tour_list_item_price}>
+            {item.tourItemAdultPrice.toLocaleString()}원 <span>(성인)</span>
+          </div>
+
+          <div className={styles.tour_list_item_schedule}>
+            📅{item.startPeriod.substring(0, 10).replaceAll("-", ".")} ~{" "}
+            {item.endPeriod.substring(0, 10).replaceAll("-", ".")} |{" "}
+            {item.tourItemDays - 1 === 0
+              ? "당일"
+              : `${item.tourItemDays - 1}박 ${item.tourItemDays}일`}
+          </div>
         </div>
       </div>
 

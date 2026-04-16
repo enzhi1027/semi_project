@@ -182,8 +182,6 @@ const ShowList = ({
   clickedList = [],
   setClickedList,
 }) => {
-  const safeClickedList = Array.isArray(clickedList) ? clickedList : [];
-
   return (
     <>
       <div className={styles.show_list_header} onClick={onAddClick}>

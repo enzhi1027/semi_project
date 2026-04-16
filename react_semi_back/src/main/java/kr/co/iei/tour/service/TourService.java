@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.tour.model.dao.TourDao;
 import kr.co.iei.tour.model.vo.Emoji;
+import kr.co.iei.tour.model.vo.TourCartItem;
 import kr.co.iei.tour.model.vo.TourWishItem;
 import kr.co.iei.tour.model.vo.TourWishlist;
 import kr.co.iei.touritem.model.vo.TourItem;
@@ -99,6 +100,23 @@ public class TourService {
 
 	public List<TourItem> selectWishItemList(String memberId) {
 		List<TourItem> list = dao.selectWishItemList(memberId);
+		return list;
+	}
+
+	@Transactional
+	public int deleteWish(Integer wishlistNo) {
+		int result = dao.deleteWish(wishlistNo);
+		return result;
+	}
+
+	@Transactional
+	public int deleteWishlist(Integer wishlistNo) {
+		int result = dao.deleteWishlist(wishlistNo);
+		return result;
+	}
+
+	public List<TourCartItem> selectTourCartList(String memberId) {
+		List<TourCartItem> list = dao.selectTourCartList(memberId);
 		return list;
 	}
 }

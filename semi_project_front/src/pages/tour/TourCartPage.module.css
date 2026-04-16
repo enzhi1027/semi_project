@@ -1,0 +1,15 @@
+.cart_page_container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+.page_title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 30px;
+}
+.cart_content_wrap {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
