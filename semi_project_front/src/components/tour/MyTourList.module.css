@@ -1,0 +1,29 @@
+.my_tour_list_wrap {
+  background-color: var(--gray8);
+  border: 1px solid var(--color2);
+  border-radius: 0 7px 7px 7px;
+  display: flex;
+}
+
+.my_tour_list_sidebar {
+  width: 30%;
+  border: 1px solid #000;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.my_tour_list_name {
+  font-size: 1.1em;
+}
+
+.my_tour_list_name.active_list {
+  font-weight: 700;
+}
+
+.my_tour_list_content {
+  flex: 1;
+  padding: 10px;
+}

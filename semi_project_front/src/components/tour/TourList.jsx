@@ -15,25 +15,28 @@ const TourList = ({
   wishlistList,
   setWishlistList,
   item,
+  clickedList,
+  setClickedList,
 }) => {
   const navigate = useNavigate();
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
-  const [clickedList, setClickedList] = useState([]);
-
   useEffect(() => {
-    const tourItemNo = item.tourItemNo;
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKSERVER}/tours/wishlistNoList/${memberId}/${tourItemNo}`,
-      )
-      .then((res) => {
-        setClickedList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+    if (memberId && clickedList.length === 0) {
+      axios
+        .get(
+          `${import.meta.env.VITE_BACKSERVER}/tours/wishlistNoList/${memberId}/${item.tourItemNo}`,
+        )
+        .then((res) => {
+          if (res.data && res.data.length > 0) {
+            setClickedList(res.data);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [memberId, item.tourItemNo, clickedList, setClickedList]);
 
   const handleHeartClick = (e) => {
     e.stopPropagation();

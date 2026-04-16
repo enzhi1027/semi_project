@@ -113,7 +113,6 @@ const CourseWritePage = () => {
       )
       .then((res) => {
         setAttractionList(res.data);
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);
@@ -134,9 +133,17 @@ const CourseWritePage = () => {
 
   //추가하기 버튼 눌렀을때 밑에 코스 출력
   const addCourseList = () => {
-    setCreateAttractionList((prev) => [...prev, ...addAttractionList]);
+    setCreateAttractionList((prev) => {
+      const merged = [...prev, ...addAttractionList];
+      const unique = merged.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.attractionNo === item.attractionNo),
+      );
+      return unique;
+    });
     setAddAttractionList([]);
   };
+
   return (
     <>
       <div className={styles.main_wrap}>
@@ -155,6 +162,7 @@ const CourseWritePage = () => {
           order={order}
           setOrder={setOrder}
         />
+
         {createAttractionList.length !== 0 && (
           <>
             <section className={styles.courseInfo_wrap}>
@@ -209,25 +217,48 @@ const AttractionSearchItem = ({
   order,
   setOrder,
 }) => {
+  const [toggleBtn, setToggleBtn] = useState(false);
   return (
     <>
-      <section className={styles.attraction_search_wrap}>
-        <div className={styles.attraction_list}>
-          {attractionList.length === 0 && (
-            <div className={styles.search_none_text}>
-              <p>일치하는 검색 결과를 찾을 수 없습니다.</p>
-            </div>
-          )}
-          {attractionList.map((attraction, index) => {
-            return (
-              <AttractionItem
-                key={"key-" + attraction.attractionNo}
-                attraction={attraction}
-                setAddAttractionList={setAddAttractionList}
-                addAttractionList={addAttractionList}
-              />
-            );
-          })}
+      <section
+        className={
+          toggleBtn
+            ? `${styles.attraction_search_wrap} ${styles.big}`
+            : styles.attraction_search_wrap
+        }
+      >
+        <div className={styles.attraction_list_wrap}>
+          <div className={styles.attraction_list}>
+            {attractionList.length === 0 && (
+              <div
+                className={
+                  toggleBtn
+                    ? styles.search_none_text_big
+                    : styles.search_none_text
+                }
+              >
+                <p>일치하는 검색 결과를 찾을 수 없습니다.</p>
+              </div>
+            )}
+            {attractionList.map((attraction, index) => {
+              return (
+                <AttractionItem
+                  key={"key-" + attraction.attractionNo}
+                  attraction={attraction}
+                  setAddAttractionList={setAddAttractionList}
+                  addAttractionList={addAttractionList}
+                />
+              );
+            })}
+          </div>
+          <button
+            className={styles.toggle_btn}
+            onClick={() => {
+              setToggleBtn(!toggleBtn);
+            }}
+          >
+            {toggleBtn ? "▲ 줄이기" : "▼ 늘리기"}
+          </button>
         </div>
         <div className={styles.attraction_search}>
           <div className={styles.search_content_wrap}>

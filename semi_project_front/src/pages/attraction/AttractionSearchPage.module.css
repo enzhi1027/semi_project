@@ -212,13 +212,13 @@
   padding: 20px;
   margin-top: 15px;
   border-radius: 14px;
-  min-height: 550px;
 }
 
 .content .content_right {
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-height: 635px;
 }
 
 .content .content_list_wrap {

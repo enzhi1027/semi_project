@@ -89,7 +89,7 @@
   display: flex;
   gap: 16px;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 .content_title > div {
   width: 35px;
@@ -109,6 +109,10 @@
   font-size: 26px;
   font-weight: 600;
 }
+.attraction_addr {
+  margin-bottom: 12px;
+  color: var(--text2);
+}
 .img_wrap {
   width: 582px;
   height: 350px;
@@ -120,11 +124,11 @@
   border-radius: 10px;
 }
 .attraction_content {
-  height: 305px;
+  height: 282px;
   overflow: hidden;
   line-height: 1.6;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 12;
+  -webkit-line-clamp: 11;
   -webkit-box-orient: vertical;
 }

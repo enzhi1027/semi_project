@@ -51,7 +51,7 @@
 }
 .course_title {
   width: 258px;
-  height: 24px;
+  height: 26px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

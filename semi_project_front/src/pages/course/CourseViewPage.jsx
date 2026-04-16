@@ -98,16 +98,19 @@ const CourseViewPage = () => {
 
   //코스 좋아요 여부 확인하는 요청
   useEffect(() => {
-    axios
-      .get(
-        `${import.meta.env.VITE_BACKSERVER}/courses/courseView?memberId=${memberId}&courseNo=${courseNo}`,
-      )
-      .then((res) => {
-        setLike(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (
+      memberId &&
+      axios
+        .get(
+          `${import.meta.env.VITE_BACKSERVER}/courses/courseView?memberId=${memberId}&courseNo=${courseNo}`,
+        )
+        .then((res) => {
+          setLike(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    );
   }, []);
 
   //좋아요 해제하는 함수 - 좋아요 삭제하는 DELETE요청
@@ -209,7 +212,7 @@ const CourseViewPage = () => {
         <div className={styles.delete_btn}>
           {memberId === attractionList[0].courseWriter && (
             <>
-              <Button className="btn cancle" onClick={deleteCourse}>
+              <Button className="btn cancel" onClick={deleteCourse}>
                 코스 삭제하기
               </Button>
               <Button className="btn" onClick={courseUpdate}>
@@ -234,6 +237,9 @@ const AttractionItem = ({ attraction }) => {
                 <p>{attraction.courseIndex}</p>
               </div>
               <h3>{attraction.attractionTitle}</h3>
+            </div>
+            <div className={styles.attraction_addr}>
+              {"[ " + attraction.attractionAddr + " ]"}
             </div>
             <div className={styles.attraction_content}>
               {attraction.attractionSummary}
@@ -266,6 +272,9 @@ const AttractionItem = ({ attraction }) => {
                 <p>{attraction.courseIndex}</p>
               </div>
               <h3>{attraction.attractionTitle}</h3>
+            </div>
+            <div className={styles.attraction_addr}>
+              {"[ " + attraction.attractionAddr + " ]"}
             </div>
             <div className={styles.attraction_content}>
               {attraction.attractionSummary}
