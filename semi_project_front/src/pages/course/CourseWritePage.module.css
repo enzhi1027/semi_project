@@ -8,7 +8,7 @@
   display: flex;
   gap: 36px;
   height: 494px;
-  transition: height 0.3s ease;
+  transition: 0.3s ease;
   padding-bottom: 6px;
   justify-content: space-between;
 }
@@ -39,14 +39,14 @@
   border: none;
   display: flex;
   justify-content: center;
-  transition: margin 0.3s ease;
+  transition: 0.3s ease;
   margin-top: 210px;
 }
 .attraction_list > .search_none_text_big {
   border: none;
   display: flex;
   justify-content: center;
-  transition: margin 0.3s ease;
+  transition: 0.3s ease;
   margin-top: 320px;
 }
 .toggle_btn {
