@@ -25,10 +25,8 @@ import TourMyPage from "./pages/tour/TourMyPage";
 import AdminModifyTour from "./pages/member(admin)/AdminModifyTour";
 import CourseUpdatePage from "./pages/course/CourseUpdatePage";
 import TourDetailPage from "./pages/tour/TourDetailPage";
-
 import SearchId from "./pages/member/SearchId";
 import SearchPw from "./pages/member/SearchPw";
-
 import TourCartPage from "./pages/tour/TourCartPage";
 
 function App() {
