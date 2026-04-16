@@ -116,7 +116,6 @@ const CourseUpdatePage = () => {
         `${import.meta.env.VITE_BACKSERVER}/courses/update/attraction/${courseNo}`,
       )
       .then((res) => {
-        console.log(res);
         setCreateAttractionList(res.data);
       })
       .catch((err) => {

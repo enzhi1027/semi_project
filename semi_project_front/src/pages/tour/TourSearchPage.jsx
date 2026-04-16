@@ -1,7 +1,6 @@
 import styles from "./TourSearchPage.module.css";
 import SearchIcon from "@mui/icons-material/Search";
 import SellIcon from "@mui/icons-material/Sell";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { use, useEffect, useState } from "react";
@@ -10,6 +9,7 @@ import useAuthStore from "../../components/utils/useAuthStore";
 import Swal from "sweetalert2";
 import TourProductList from "../../components/tour/TourProductList";
 import axios from "axios";
+import OwnCalendar from "../../components/tour/Calender";
 
 const TourSearchPage = () => {
   const navigate = useNavigate();
@@ -29,6 +29,10 @@ const TourSearchPage = () => {
 
   const [priceMin, setPriceMin] = useState();
   const [priceMax, setPriceMax] = useState();
+
+  const [allClickedItems, setAllClickedItems] = useState({});
+
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
     axios
@@ -81,9 +85,6 @@ const TourSearchPage = () => {
       });
   }, [searchWhere, searchPriceMin, searchPriceMax, searchWhen]);
 
-  useEffect(() => {
-    console.log(searchPriceMin);
-  }, [searchPriceMin]);
   return (
     <>
       <section className={styles.tour_search_wrap}>
@@ -124,10 +125,7 @@ const TourSearchPage = () => {
               <SearchIcon />
             </div>
             <div className={styles.search_when}>
-              <div className={styles.search_when_btn}>
-                <CalendarMonthIcon />
-                <div>출발일 선택</div>
-              </div>
+              <OwnCalendar startDate={startDate} setStartDate={setStartDate} />
             </div>
           </div>
           <div className={styles.menubar_icon_wrap}>
@@ -146,7 +144,19 @@ const TourSearchPage = () => {
             >
               <AccountCircleIcon />
             </div>
-            <div className={styles.icon_cart}>
+            <div
+              className={styles.icon_cart}
+              onClick={() => {
+                if (isReady && memberId == null) {
+                  Swal.fire({
+                    title: "로그인 후 이용 가능합니다.",
+                    icon: "warning",
+                  });
+                } else {
+                  navigate("/tour/cart");
+                }
+              }}
+            >
               <ShoppingCartIcon />
             </div>
           </div>
@@ -156,52 +166,35 @@ const TourSearchPage = () => {
           {searchWhere === "" &&
           searchPriceMin === "" &&
           searchPriceMax === "" ? (
-            <>
-              <div className={styles.tour_product_recommend}>
-                <div className={styles.product_list_title}>추천 상품</div>
-                <TourProductList
-                  memberId={memberId}
-                  isReady={isReady}
-                  wishlistList={wishlistList}
-                  setWishlistList={setWishlistList}
-                  order={0}
-                  recommendItemList={recommendItemList}
-                  setRecommendItemList={setRecommendItemList}
-                  allItemList={allItemList}
-                  setAllItemList={setAllItemList}
-                  type="list"
-                />
-              </div>
-              <div className={styles.tour_product_all}>
-                <div className={styles.product_list_title}>전체 상품</div>
-                <TourProductList
-                  memberId={memberId}
-                  isReady={isReady}
-                  wishlistList={wishlistList}
-                  setWishlistList={setWishlistList}
-                  order={1}
-                  recommendItemList={recommendItemList}
-                  setRecommendItemList={setRecommendItemList}
-                  allItemList={allItemList}
-                  setAllItemList={setAllItemList}
-                  type="list"
-                />
-              </div>
-            </>
+            <TourProductList
+              memberId={memberId}
+              isReady={isReady}
+              wishlistList={wishlistList}
+              setWishlistList={setWishlistList}
+              recommendItemList={recommendItemList}
+              setRecommendItemList={setRecommendItemList}
+              allItemList={allItemList}
+              setAllItemList={setAllItemList}
+              type="list"
+              allClickedItems={allClickedItems}
+              setAllClickedItems={setAllClickedItems}
+              startDate={startDate}
+              setStartDate={setStartDate}
+            />
           ) : (
-            <div>
-              <div className={styles.product_list_title}>검색 결과</div>
-              <TourProductList
-                memberId={memberId}
-                isReady={isReady}
-                wishlistList={wishlistList}
-                setWishlistList={setWishlistList}
-                order={1}
-                searchItemList={searchItemList}
-                setSearchItemList={setSearchItemList}
-                type="search"
-              />
-            </div>
+            <TourProductList
+              memberId={memberId}
+              isReady={isReady}
+              wishlistList={wishlistList}
+              setWishlistList={setWishlistList}
+              searchItemList={searchItemList}
+              setSearchItemList={setSearchItemList}
+              type="search"
+              allClickedItems={allClickedItems}
+              setAllClickedItems={setAllClickedItems}
+              startDate={startDate}
+              setStartDate={setStartDate}
+            />
           )}
         </div>
       </section>

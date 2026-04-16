@@ -23,6 +23,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   cursor: pointer;
+  background-color: var(--gray8);
 }
 .create_btn {
   padding: 6px 36px;

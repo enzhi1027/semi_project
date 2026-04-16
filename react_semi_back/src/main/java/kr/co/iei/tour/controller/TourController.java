@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.iei.tour.model.vo.Emoji;
+import kr.co.iei.tour.model.vo.TourCartItem;
 import kr.co.iei.tour.model.vo.TourWishItem;
 import kr.co.iei.tour.model.vo.TourWishlist;
 import kr.co.iei.tour.service.TourService;
@@ -108,5 +109,29 @@ public class TourController {
 	public ResponseEntity<?> selectTourItemImg(@PathVariable Integer tourItemNo) {
 		List<TourItemImg> imgs = service.selectTourItemImg(tourItemNo);
 		return ResponseEntity.ok(imgs);
+	}
+	
+	@GetMapping(value = "/wishItem/{memberId}")
+	public ResponseEntity<?> selectWishItemList(@PathVariable String memberId) {
+		List<TourItem> list = service.selectWishItemList(memberId);
+		return ResponseEntity.ok(list);
+	}
+	
+	@DeleteMapping(value = "/deleteWish/{wishlistNo}")
+	public ResponseEntity<?> deleteWish(@PathVariable Integer wishlistNo) {
+		int result = service.deleteWish(wishlistNo);
+		return ResponseEntity.ok(result);
+	}
+	
+	@DeleteMapping(value = "/deleteWishlist/{wishlistNo}")
+	public ResponseEntity<?> deleteWishlist(@PathVariable Integer wishlistNo) {
+		int result = service.deleteWishlist(wishlistNo);
+		return ResponseEntity.ok(result);
+	}
+	
+	@GetMapping(value = "/cartList/{memberId}")
+	public ResponseEntity<?> selectTourCartList(@PathVariable String memberId) {
+		List<TourCartItem> list = service.selectTourCartList(memberId);
+		return ResponseEntity.ok(list);
 	}
 }

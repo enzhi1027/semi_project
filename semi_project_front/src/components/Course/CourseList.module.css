@@ -1,10 +1,13 @@
 /*코스 리스트*/
+.course_list_wrap {
+  height: 720px;
+  margin: 24px 0;
+  margin-bottom: 36px;
+}
 .course_item_wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  margin: 24px 0;
-  margin-bottom: 36px;
 }
 
 /*코스 아이템*/
@@ -51,7 +54,7 @@
 }
 .course_title {
   width: 258px;
-  height: 24px;
+  height: 26px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;

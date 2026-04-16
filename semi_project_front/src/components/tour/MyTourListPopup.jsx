@@ -179,7 +179,7 @@ const ShowList = ({
   emojiList,
   memberId,
   item,
-  clickedList,
+  clickedList = [],
   setClickedList,
 }) => {
   return (
@@ -194,17 +194,18 @@ const ShowList = ({
           const targetEmoji = emojiList.find(
             (e) => e.emojiNo === wishlist.emojiNo,
           );
-
           const emojiName = targetEmoji?.emojiName;
-
           const IconComponent = EMOJI_COMPONENTS[emojiName];
-
+          const isClicked =
+            clickedList &&
+            Array.isArray(clickedList) &&
+            clickedList.includes(wishlist.tourWishlistNo);
           return (
             <div
               key={wishlist.tourWishlistNo}
-              className={`${styles.wishlist_row} ${clickedList.includes(wishlist.tourWishlistNo) ? styles.wishlist_clicked : ""}`}
+              className={`${styles.wishlist_row} ${isClicked ? styles.wishlist_clicked : ""}`}
               onClick={() => {
-                if (clickedList.includes(wishlist.tourWishlistNo)) {
+                if (isClicked) {
                   // delete
                   axios
                     .delete(`${import.meta.env.VITE_BACKSERVER}/tours/wish`, {
@@ -222,9 +223,12 @@ const ShowList = ({
                       console.log(res.data);
                       if (res.data) {
                         // delete 성공
-                        setClickedList((prev) =>
-                          prev.filter((id) => id !== wishlist.tourWishlistNo),
-                        );
+                        setClickedList((prev) => {
+                          const current = Array.isArray(prev) ? prev : [];
+                          return current.filter(
+                            (id) => id !== wishlist.tourWishlistNo,
+                          );
+                        });
                       } else {
                         // delete 실패
                         Swal.fire({
@@ -256,10 +260,10 @@ const ShowList = ({
                       console.log(res.data);
                       if (res.data) {
                         // insert 성공
-                        setClickedList((prev) => [
-                          ...prev,
-                          wishlist.tourWishlistNo,
-                        ]);
+                        setClickedList((prev) => {
+                          const current = Array.isArray(prev) ? prev : [];
+                          return [...current, wishlist.tourWishlistNo];
+                        });
                       } else {
                         // insert 실패
                         Swal.fire({
