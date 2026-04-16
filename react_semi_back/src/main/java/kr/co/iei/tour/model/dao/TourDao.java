@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.iei.tour.model.vo.Emoji;
+import kr.co.iei.tour.model.vo.TourCartItem;
 import kr.co.iei.tour.model.vo.TourWishItem;
 import kr.co.iei.tour.model.vo.TourWishlist;
 import kr.co.iei.touritem.model.vo.TourItem;
@@ -44,5 +45,11 @@ public interface TourDao {
 	List<TourItemImg> selectTourItemImg(Integer tourItemNo);
 
 	List<TourItem> selectWishItemList(String memberId);
+
+	int deleteWish(Integer wishlistNo);
+
+	int deleteWishlist(Integer wishlistNo);
+
+	List<TourCartItem> selectTourCartList(String memberId);
 
 }

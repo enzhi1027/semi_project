@@ -191,10 +191,46 @@
 		     , T.TOUR_ITEM_DAYS
 		     , T.TOUR_ITEM_STATUS
 		     , W.TOUR_WISHLIST_NO
+		     , (SELECT I.TOUR_ITEM_IMG_PATH
+	              FROM TOUR_ITEM_IMG_TBL I
+	             WHERE I.TOUR_ITEM_NO = T.TOUR_ITEM_NO
+	               AND I.TOUR_ITEM_IMG_ORDER = 1) AS TOUR_ITEM_IMG_PATH
 		  FROM TOUR_ITEM_TBL T
 		  JOIN TOUR_WISH_TBL W ON T.TOUR_ITEM_NO = W.TOUR_ITEM_NO
 		  JOIN TOUR_WISHLIST_TBL L ON W.TOUR_WISHLIST_NO = L.TOUR_WISHLIST_NO
 		 WHERE L.MEMBER_ID = #{memberId}
 		 ORDER BY W.TOUR_WISHLIST_NO, T.TOUR_ITEM_NO
- </select>
+	</select>
+	
+	<delete id="deleteWish">
+		DELETE
+		  FROM TOUR_WISH_TBL
+		 WHERE TOUR_WISHLIST_NO = #{wishlistNo}
+	</delete>
+	
+	<delete id="deleteWishlist">
+		DELETE
+		  FROM TOUR_WISHLIST_TBL
+		 WHERE TOUR_WISHLIST_NO = #{wishlistNo}
+	</delete>
+	
+	<select id="selectTourCartList" resultType="tourCartItem">
+		SELECT C.TOUR_CART_NO
+		     , C.MEMBER_ID
+		     , C.TOUR_ITEM_NO
+		     , C.TOUR_CART_START_DATE
+		     , C.TOUR_CART_ADULT
+		     , C.TOUR_CART_KID
+		     , T.TOUR_ITEM_NAME
+		     , T.TOUR_ITEM_ADULT_PRICE
+		     , T.TOUR_ITEM_KID_PRICE
+		     , T.TOUR_ITEM_DAYS
+		     , (SELECT I.TOUR_ITEM_IMG_PATH
+		          FROM TOUR_ITEM_IMG_TBL I
+		         WHERE I.TOUR_ITEM_NO = T.TOUR_ITEM_NO
+		           AND I.TOUR_ITEM_IMG_ORDER = 1) AS TOUR_ITEM_IMG_PATH
+		  FROM TOUR_CART_TBL C
+		  JOIN TOUR_ITEM_TBL T ON (C.TOUR_ITEM_NO = T.TOUR_ITEM_NO)
+		 WHERE C.MEMBER_ID = #{memberId}
+	</select>
 </mapper>

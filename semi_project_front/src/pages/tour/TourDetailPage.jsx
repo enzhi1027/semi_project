@@ -21,8 +21,10 @@ import "swiper/css/scrollbar";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { entries } from "lodash";
+import OwnCalendar from "../../components/tour/Calender";
 
 const TourDetailPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const { tourItemNo } = useParams();
   const { memberId, isReady } = useAuthStore();
@@ -36,6 +38,14 @@ const TourDetailPage = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const targetRef = useRef(null);
+
+  const [startDate, setStartDate] = useState(
+    location.state?.startDate ? new Date(location.state.startDate) : new Date(),
+  );
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [adultCount, setAdultCount] = useState(1);
+  const [kidCount, setKidCount] = useState(0);
 
   const checkReservationDeadline = () => {
     const endDate = new Date(item.endPeriod);
@@ -66,6 +76,57 @@ const TourDetailPage = () => {
   const removeTags = (str) => {
     if (!str) return "";
     return str.replace(/<[^>]*>?/gm, "");
+  };
+
+  const handleAddToCart = () => {
+    const cartData = {
+      tourItemNo,
+      memberId,
+      startDate: makePrettyDate(startDate),
+      adultCount,
+      kidCount,
+      totalPrice:
+        item.tourItemAdultPrice * adultCount + item.tourItemKidPrice * kidCount,
+    };
+
+    // axios.post(`${import.meta.env.VITE_BACKSERVER}/tours/cart`, cartData)...
+    console.log("장바구니 담기:", cartData);
+
+    Swal.fire({
+      title: "장바구니에 담겼습니다!",
+      icon: "success",
+      confirmButtonColor: "var(--color1)",
+    });
+    setIsModalOpen(false);
+  };
+
+  const handleShare = () => {
+    const currentUrl = window.location.href;
+
+    Swal.fire({
+      title: "공유하기",
+      input: "text",
+      inputValue: currentUrl,
+      inputAttributes: {
+        readonly: true,
+      },
+      showCancelButton: true,
+      confirmButtonText: "링크 복사",
+      cancelButtonText: "닫기",
+      confirmButtonColor: "var(--color1)",
+      preConfirm: () => {
+        navigator.clipboard.writeText(currentUrl);
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "복사 완료!",
+          icon: "success",
+          timer: 1000,
+          showConfirmButton: false,
+        });
+      }
+    });
   };
 
   useEffect(() => {
@@ -146,6 +207,10 @@ const TourDetailPage = () => {
     return () => observer.disconnect();
   });
 
+  useEffect(() => {
+    console.log(clickedList);
+  }, [clickedList]);
+
   return (
     <>
       {item &&
@@ -209,9 +274,16 @@ const TourDetailPage = () => {
                   <div className={styles.header_title}>{item.tourItemName}</div>
                   <div className={styles.header_icons}>
                     <div className={styles.header_icons_heart}>
-                      <FavoriteIcon /> <FavoriteBorderIcon />
+                      {clickedList.length > 0 ? (
+                        <FavoriteIcon />
+                      ) : (
+                        <FavoriteBorderIcon />
+                      )}
                     </div>
-                    <div className={styles.header_icons_share}>
+                    <div
+                      className={styles.header_icons_share}
+                      onClick={handleShare}
+                    >
                       <ShareIcon />
                     </div>
                   </div>
@@ -219,20 +291,26 @@ const TourDetailPage = () => {
                 <div className={styles.header_middle}>
                   <div className={styles.middle_date}>
                     {checkReservationDeadline() ? "[판매 마감]" : "[예약 가능]"}{" "}
-                    {makePrettyDate(new Date())} |{" "}
+                    {item.tourItemDays - 1 === 0
+                      ? makePrettyDate(startDate)
+                      : `${makePrettyDate(startDate)} ~ ${makePrettyDate(
+                          new Date(
+                            new Date(startDate).setDate(
+                              startDate.getDate() + (item.tourItemDays - 1),
+                            ),
+                          ),
+                        )}`}{" "}
+                    |{" "}
                     {item.tourItemDays - 1 === 0
                       ? "당일치기"
-                      : item.tourItemDays -
-                        1 +
-                        "박 " +
-                        item.tourItemDays +
-                        "일"}
+                      : `${item.tourItemDays - 1}박 ${item.tourItemDays}일`}
                   </div>
                   <div className={styles.middle_cal}>
-                    <CalendarMonthIcon />
-                    <div className={styles.middle_cal_text}>
-                      다른 출발일 선택
-                    </div>
+                    <OwnCalendar
+                      startDate={startDate}
+                      setStartDate={setStartDate}
+                      className={styles.middle_cal_text}
+                    />
                   </div>
                 </div>
                 <div className={styles.header_footer}>
@@ -335,13 +413,134 @@ const TourDetailPage = () => {
                 </div>
               </div>
             </div>
+            {/*
             <div className={styles.tour_detail_recommend}>
               <div className={styles.recommend_header}>비슷한 상품 추천</div>
             </div>
+             */}
             <div className={styles.tour_detail_btns}>
-              <div className={styles.btns_btn1}></div>
-              <div className={styles.btns_btn2}></div>
+              <div
+                className={styles.btns_btn1}
+                onClick={() => {
+                  if (isReady && memberId == null) {
+                    Swal.fire({
+                      title: "로그인 후 이용 가능합니다.",
+                      icon: "warning",
+                    });
+                  } else {
+                    setIsModalOpen(true);
+                  }
+                }}
+              >
+                장바구니
+              </div>
+              <div
+                className={styles.btns_btn2}
+                onClick={() => {
+                  if (isReady && memberId == null) {
+                    Swal.fire({
+                      title: "로그인 후 이용 가능합니다.",
+                      icon: "warning",
+                    });
+                  } else {
+                    /* 예약 페이지 이동 */
+                  }
+                }}
+              >
+                예약하기
+              </div>
             </div>
+
+            {isModalOpen && (
+              <div
+                className={styles.modal_overlay}
+                onClick={() => setIsModalOpen(false)}
+              >
+                <div
+                  className={styles.modal_content}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h2>옵션 선택</h2>
+
+                  <div className={styles.modal_row}>
+                    <span>출발 일자</span>
+                    <strong>{makePrettyDate(startDate)}</strong>
+                  </div>
+
+                  <div className={styles.modal_row}>
+                    <span>
+                      성인 ({item.tourItemAdultPrice.toLocaleString()}₩)
+                    </span>
+                    <div className={styles.count_controls}>
+                      <button
+                        className={styles.count_btn}
+                        onClick={() =>
+                          setAdultCount(Math.max(1, adultCount - 1))
+                        }
+                      >
+                        -
+                      </button>
+                      <span>{adultCount}</span>
+                      <button
+                        className={styles.count_btn}
+                        onClick={() => setAdultCount(adultCount + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={styles.modal_row}>
+                    <span>
+                      미취학 아동 ({item.tourItemKidPrice.toLocaleString()}₩)
+                    </span>
+                    <div className={styles.count_controls}>
+                      <button
+                        className={styles.count_btn}
+                        onClick={() => setKidCount(Math.max(0, kidCount - 1))}
+                      >
+                        -
+                      </button>
+                      <span>{kidCount}</span>
+                      <button
+                        className={styles.count_btn}
+                        onClick={() => setKidCount(kidCount + 1)}
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  <hr
+                    style={{ margin: "15px 0", border: "0.5px solid #eee" }}
+                  />
+
+                  <div className={styles.modal_row}>
+                    <span>총 합계</span>
+                    <span
+                      style={{
+                        fontSize: "1.2em",
+                        fontWeight: "bold",
+                        color: "var(--color1)",
+                      }}
+                    >
+                      {(
+                        item.tourItemAdultPrice * adultCount +
+                        item.tourItemKidPrice * kidCount
+                      ).toLocaleString()}
+                      ₩
+                    </span>
+                  </div>
+
+                  <button
+                    className={styles.modal_submit_btn}
+                    onClick={handleAddToCart}
+                  >
+                    장바구니 담기
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
     </>
