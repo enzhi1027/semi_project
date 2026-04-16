@@ -51,11 +51,16 @@
 
 .product_list_allItem {
   display: flex;
-  gap: 15px;
   flex-wrap: wrap;
   margin-top: 15px;
 }
 
 .product_list_allItem > div {
   width: calc(100% / 4 - 15px);
+  margin-right: 20px;
+  margin-bottom: 15px;
+}
+
+.product_list_allItem > div:nth-child(4n) {
+  margin-right: 0;
 }
