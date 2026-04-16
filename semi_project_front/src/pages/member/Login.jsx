@@ -91,7 +91,7 @@ const Login = () => {
             <p
               className={styles.search_id}
               onClick={() => {
-                navigate("/member/searchId");
+                navigate("/searchId");
               }}
             >
               아이디 찾기
@@ -100,7 +100,7 @@ const Login = () => {
             <p
               className={styles.search_pw}
               onClick={() => {
-                navigate("/member/searchPw");
+                navigate("/searchPw");
               }}
             >
               비밀번호 찾기

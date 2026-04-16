@@ -124,6 +124,21 @@ public class MemberService {
 		return result;
 	}
 
+	public Member selectMemberIdSearch(Member m) {
+		Member member = memberDao.selectMemberIdSearch(m);
+		return member;
+	}
+
+	public String searchId(Member m) {
+		String memberId = memberDao.searchId(m);
+		return memberId;
+	}
+
+	public Member selectMemberPwSearch(Member m) {
+		Member member = memberDao.selectMemberPwSearch(m);
+		return member;
+	}
+
 
 
 	

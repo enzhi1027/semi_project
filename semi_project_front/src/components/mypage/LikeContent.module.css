@@ -9,12 +9,6 @@
   padding: 0px 16px;
 }
 
-/*검색 ------------------------------------------------*/
-.search_wrap {
-  display: flex;
-  gap: 24px;
-}
-
 /*탭 전환 ---------------------------------------------*/
 
 .like_content_tab_wrap {
@@ -73,7 +67,104 @@
   cursor: pointer;
 }
 
+/*좋아요 표시한 컨텐츠 없을 때*/
+.content_empty {
+  /* 가운데 정렬을 위한 Flexbox 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* 영역 크기 확보 (원하는 여백에 맞게 px 조절 가능) */
+  width: 100%;
+  min-height: 300px;
+  grid-column: 1 / -1; /* 만약 부모 영역이 grid라면 전체 너비를 차지하도록 설정 */
+
+  /* 폰트 설정 */
+  font-size: 24px;
+  font-weight: 600;
+
+  /* 텍스트 색상 (선택 사항: 디자인에 맞게 변경하세요) */
+  color: #888;
+}
+
 /*페이지네이션*/
 .pagination {
   padding: 32px 0px;
+}
+
+/* 팝업 전체 배경 */
+.attraction_detail_wrap {
+  background-color: #00000050;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* 너비를 뷰포트 전체로 */
+  height: 100vh; /* 높이를 뷰포트 전체로 */
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 배경 자체에는 스크롤이 절대 안 생기게 함 */
+}
+
+/* 흰색 팝업창 */
+.attraction_detail_popup {
+  width: 1000px;
+  height: 700px;
+  max-height: 90vh; /* 화면 높이의 90%를 넘지 않도록 설정 */
+  background-color: var(--gray8);
+  border-radius: 20px;
+  padding: 30px 40px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto; /* 내용이 많을 때만 내부 스크롤 생성 */
+}
+
+.detail_menubar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px; /* 아래 내용과 간격 */
+}
+
+.detail_menubar .detail_mini {
+  display: flex;
+}
+
+.detail_menubar .detail_cancel {
+  cursor: pointer;
+}
+
+.detail_menubar .detail_mini > div {
+  padding: 7px 14px;
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
+/* 활성화된 탭 스타일 */
+.detail_menubar .detail_mini .detail_mini_active {
+  border: 1px solid var(--border);
+  border-bottom: 1px solid var(--gray8);
+  border-radius: 5px 5px 0 0;
+}
+
+/* 비활성화된 탭 스타일 */
+.detail_menubar .detail_mini > div:not(.detail_mini_active) {
+  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--gray8);
+}
+
+.reviewCategory {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  margin-bottom: 15px; /* 아래 리뷰 리스트와 간격 */
+  gap: 10px;
+}
+
+.reviewCategory input[type="radio"] {
+  display: none; /* 라디오 기본 버튼 숨기기 (원래 코드 디자인 의도에 맞춰) */
+}
+
+.reviewCategory label {
+  cursor: pointer;
 }

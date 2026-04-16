@@ -263,7 +263,7 @@
 		select board_content from board_tbl where board_no = #{boardNo}
 	</select>
 	
-	<!-- 좋아요 표시한 게시글 페이지 조회 -->
+	<!-- 유저 아이디 기준 게시글 페이지 조회 -->
 	<select id="selectLikeBoardCount" resultType="int">
 		select count(*) 
 			from board_like_tbl
@@ -296,6 +296,76 @@
     	</if>
     
     	offset #{page} * #{size} rows fetch next #{size} rows only
+	</select>
+	
+	<!-- 내가 작성한 게시글 목록 페이지 조회 -->
+	<select id="selectMyBoardCount" resultType="int">
+		select count(*) 
+			from board_tbl 
+		where board_writer = #{memberId}
+	</select>
+	
+	<!-- 내가 작성한 게시글 목록 조회 -->
+	<select id="selectMyBoardList" resultType="board">
+		select 
+        	board_tbl.board_no,
+        	board_tbl.board_category,
+        	board_tbl.board_title,
+        	board_tbl.board_thumb,
+        	board_tbl.board_writer,
+        	board_tbl.board_status,
+        	to_char(board_tbl.board_date, 'yyyy-mm-dd') as board_date,
+        	member_tbl.member_thumb
+    	from board_tbl
+    	join member_tbl on (board_tbl.board_writer = member_tbl.member_id)
+    	where board_tbl.board_writer = #{memberId}
+      		and board_tbl.board_status = 1
+      	
+      	<if test="order == 2">
+        	order by board_tbl.board_no asc
+    	</if>
+    	<if test="order != 2">
+        	order by board_tbl.board_no desc
+    	</if>
+    
+    	offset #{page} * #{size} rows fetch next #{size} rows only
+	</select>
+	
+	<!-- 내가 작성한 댓글 조회 -->
+	<select id="selectMyCommentCount">
+		select count(*)
+			from board_comment_tbl
+		where board_comment_writer = #{memberId}
+	</select>
+	
+	<select id="selectMyCommentList" resultType="myCommentList">
+		select 
+        	c.board_comment_no,
+        	c.board_comment_content,
+        	c.board_comment_writer,
+        	to_char(c.board_comment_date, 'yyyy-mm-dd') as board_comment_date,
+        	c.comment_status,
+        	c.board_no,
+        	b.board_title,
+        	b.board_writer,
+        	b.board_status,
+        	b.board_category,
+        	to_char(b.board_date, 'yyyy-mm-dd') as board_date
+    	from board_comment_tbl c
+    	join board_tbl b on (c.board_no = b.board_no)
+    	join member_tbl m on (c.board_comment_writer = m.member_id)
+    	where c.board_comment_writer = #{memberId}
+    		and b.board_status = 1
+    	<choose>
+        	<when test="order == 2">
+            	order by c.board_comment_no asc
+        	</when>
+        	<otherwise>
+            	order by c.board_comment_no desc
+        	</otherwise>
+    	</choose>
+    
+    offset #{page} * #{size} rows fetch next #{size} rows only
 	</select>
 
 	

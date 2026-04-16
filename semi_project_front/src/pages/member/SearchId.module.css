@@ -1,0 +1,44 @@
+/* 아이디 찾기 랩 */
+.search_id_wrap form {
+  width: 500px;
+  min-height: 450px;
+  margin: 70px auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  text-align: center;
+  background-color: var(--gray8);
+  border-radius: 16px;
+  border: solid 1px var(--gray5);
+}
+
+/* 인풋 랩 */
+.phone_input_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.email_input_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.email_input_wrap button {
+  width: 130px;
+  font-size: 14px;
+}
+.check_input_wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.check_input_wrap button {
+  width: 130px;
+  font-size: 14px;
+}
+.input_wrap {
+  display: flex;
+  gap: 12px;
+}

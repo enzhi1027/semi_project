@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import kr.co.iei.board.model.vo.Board;
 import kr.co.iei.board.model.vo.BoardComment;
 import kr.co.iei.board.model.vo.ListItem;
+import kr.co.iei.board.model.vo.MyCommentList;
+import kr.co.iei.board.model.vo.MyCommentResponse;
 
 
 @Mapper
@@ -56,6 +58,14 @@ public interface BoardDao {
 	Integer selectLikeBoardCount(ListItem request);
 
 	List<Board> selectLikeBoardList(ListItem request);
+
+	Integer selectMyBoardCount(ListItem request);
+
+	List<Board> selectMyBoardList(ListItem request);
+
+	Integer selectMyCommentCount(ListItem request);
+
+	List<MyCommentList> selectMyCommentList(ListItem request);
 
 
 

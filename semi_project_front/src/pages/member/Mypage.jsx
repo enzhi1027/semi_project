@@ -13,7 +13,6 @@ import MyInfo from "../../components/mypage/MyInfo";
 import MyPw from "../../components/mypage/MyPw";
 import LikeContent from "../../components/mypage/LikeContent";
 import MyActive from "../../components/mypage/MyActive";
-import Mypayment from "../../components/mypage/MyPayment";
 import userImg from "../../assets/img/mainPage/user.png";
 import { useEffect, useRef } from "react";
 import axios from "axios";
@@ -86,7 +85,6 @@ const Mypage = () => {
                 }
               />
               <Route path="myactive" element={<MyActive /> /*내 활동 관리 */} />
-              <Route path="mypayment" element={<Mypayment /> /*결제 내역 */} />
               <Route path="admin/content" element={<AdminContent />} />
               <Route
                 path="admin/tour"
@@ -159,14 +157,6 @@ const SideMenu = () => {
         to="/mypage/myactive"
       >
         내 활동 관리
-      </NavLink>
-
-      {/*결제 내역----------------------------------------------------- */}
-      <NavLink
-        className={({ isActive }) => (isActive ? styles.active_menu : "")}
-        to="/mypage/mypayment"
-      >
-        결제 내역
       </NavLink>
 
       {/*관리자 전용 --------------------------------------------------- */}
