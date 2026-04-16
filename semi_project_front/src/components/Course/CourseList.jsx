@@ -10,10 +10,12 @@ import axios from "axios";
 
 const CourseList = ({ courseList }) => {
   return (
-    <div className={styles.course_item_wrap}>
-      {courseList.map((course, index) => {
-        return <CourseItem key={"course-" + index} course={course} />;
-      })}
+    <div className={styles.course_list_wrap}>
+      <div className={styles.course_item_wrap}>
+        {courseList.map((course, index) => {
+          return <CourseItem key={"course-" + index} course={course} />;
+        })}
+      </div>
     </div>
   );
 };
