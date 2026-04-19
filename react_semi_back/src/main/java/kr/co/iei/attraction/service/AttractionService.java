@@ -112,4 +112,9 @@ public class AttractionService {
 		AttractionListResponse response = new AttractionListResponse(dao.selectLikeAttractionList(request), likePage);
 		return response;
 	}
+
+	public List<Attraction> selecttAddressList(AttractionListItem request) {
+		List<Attraction> list = dao.selecttAddressList(request);
+		return list;
+	}
 }

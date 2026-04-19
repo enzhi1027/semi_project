@@ -18,7 +18,6 @@ const TourSearchPage = () => {
   const [searchWhere, setSearchWhere] = useState("");
   const [searchPriceMin, setSearchPriceMin] = useState("");
   const [searchPriceMax, setSearchPriceMax] = useState("");
-  const [searchWhen, setSearchWhen] = useState("");
 
   const [wishlistList, setWishlistList] = useState([]);
 
@@ -32,7 +31,9 @@ const TourSearchPage = () => {
 
   const [allClickedItems, setAllClickedItems] = useState({});
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(null);
+
+  const [isSearched, setIsSearched] = useState(false);
 
   useEffect(() => {
     axios
@@ -68,22 +69,25 @@ const TourSearchPage = () => {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_BACKSERVER}/tours/searchItem`, {
-        params: {
-          searchWhere: searchWhere,
-          searchPriceMin: searchPriceMin,
-          searchPriceMax: searchPriceMax,
-          searchWhen: searchWhen,
-        },
-      })
-      .then((res) => {
-        setSearchItemList(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [searchWhere, searchPriceMin, searchPriceMax, searchWhen]);
+    const isInitialState =
+      searchWhere === "" &&
+      searchPriceMin === "" &&
+      searchPriceMax === "" &&
+      startDate === null;
+
+    if (!isInitialState) {
+      setIsSearched(true);
+
+      axios
+        .get(`${import.meta.env.VITE_BACKSERVER}/tours/searchItem`, {
+          params: { searchWhere, searchPriceMin, searchPriceMax, startDate },
+        })
+        .then((res) => setSearchItemList(res.data))
+        .catch((err) => console.log(err));
+    } else {
+      setIsSearched(false);
+    }
+  }, [searchWhere, searchPriceMin, searchPriceMax, startDate]);
 
   return (
     <>
@@ -125,7 +129,11 @@ const TourSearchPage = () => {
               <SearchIcon />
             </div>
             <div className={styles.search_when}>
-              <OwnCalendar startDate={startDate} setStartDate={setStartDate} />
+              <OwnCalendar
+                startDate={startDate}
+                setStartDate={setStartDate}
+                clearable={true}
+              />
             </div>
           </div>
           <div className={styles.menubar_icon_wrap}>
@@ -163,9 +171,7 @@ const TourSearchPage = () => {
         </div>
 
         <div className={styles.tour_product_wrap}>
-          {searchWhere === "" &&
-          searchPriceMin === "" &&
-          searchPriceMax === "" ? (
+          {!isSearched ? (
             <TourProductList
               memberId={memberId}
               isReady={isReady}

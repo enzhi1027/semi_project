@@ -49,4 +49,6 @@ public interface AttractionDao {
 	Integer selectLikeAttractionCount(AttractionListItem request);
 
 	List<Attraction> selectLikeAttractionList(AttractionListItem request);
+
+	List<Attraction> selecttAddressList(AttractionListItem request);
 }
