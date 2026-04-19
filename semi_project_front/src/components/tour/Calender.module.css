@@ -1,7 +1,7 @@
 .datepicker_container {
   position: relative;
   display: inline-block;
-  width: 150px;
+  width: 200px;
   display: flex;
   z-index: 10;
   align-items: center;
@@ -13,7 +13,6 @@
 
 .custom_input {
   width: 100%;
-  padding: 12px 15px;
   border: 1px solid #ddd;
   border-radius: 8px;
   outline: none;
@@ -52,4 +51,16 @@
 
 :global(.react-datepicker-popper) {
   margin-top: 5px;
+}
+
+:global(.react-datepicker__close-icon) {
+  padding: 0;
+}
+
+:global(.react-datepicker__close-icon::after) {
+  background-color: var(--color1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(0.8);
 }

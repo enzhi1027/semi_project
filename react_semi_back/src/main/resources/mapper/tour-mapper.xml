@@ -135,12 +135,16 @@
 	        AND T.TOUR_ITEM_NAME LIKE '%' || #{searchWhere} || '%'
 	    </if>
 	    
-	    <if test="searchPriceMin != null and searchPriceMin != ''">
+	    <if test="searchPriceMin != null">
 	        <![CDATA[ AND T.TOUR_ITEM_ADULT_PRICE >= #{searchPriceMin} ]]>
 	    </if>
 	    
-	    <if test="searchPriceMax != null and searchPriceMax != ''">
+	    <if test="searchPriceMax != null">
 	        <![CDATA[ AND T.TOUR_ITEM_ADULT_PRICE <= #{searchPriceMax} ]]>
+	    </if>
+	    
+	    <if test="sqlDate != null">
+	    	AND #{sqlDate} BETWEEN T.START_PERIOD AND T.END_PERIOD
 	    </if>
 	</select>
    
@@ -233,4 +237,35 @@
 		  JOIN TOUR_ITEM_TBL T ON (C.TOUR_ITEM_NO = T.TOUR_ITEM_NO)
 		 WHERE C.MEMBER_ID = #{memberId}
 	</select>
+	
+	<update id="updateWishlistName">
+		UPDATE TOUR_WISHLIST_TBL
+		   SET TOUR_WISHLIST_NAME = #{newName}
+		 WHERE TOUR_WISHLIST_NAME = #{originName}
+		   AND MEMBER_ID = #{memberId}
+	</update>
+	
+	<insert id="insertTourCart">
+		INSERT
+		  INTO TOUR_CART_TBL
+	    VALUES 
+	         (
+	           TOUR_CART_SEQ.NEXTVAL
+	         , #{memberId}
+	         , #{tourItemNo}
+	         , #{tourCartStartDate}
+	         , #{tourCartAdult}
+	         , #{tourCartKid}
+	         )
+	</insert>
+	
+	<delete id="deleteTourCart">
+		DELETE
+		  FROM TOUR_CART_TBL
+		 WHERE MEMBER_ID = #{memberId}
+		   AND TOUR_CART_NO 
+		    IN <foreach collection="cartNos" item="item" open="(" separator="," close=")">
+			   	    #{item}
+			   </foreach>
+	</delete>
 </mapper>

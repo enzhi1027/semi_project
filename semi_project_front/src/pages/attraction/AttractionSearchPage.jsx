@@ -1,37 +1,36 @@
-import { useEffect, useState, useRef } from 'react';
-import Map from '../../components/attraction/Map';
-import styles from './AttractionSearchPage.module.css';
-import axios from 'axios';
-import SearchIcon from '@mui/icons-material/Search';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import Pagination from '../../components/ui/Pagination';
-import AttractionList from '../../components/Attraction/AttractionList';
-import useAuthStore from '../../components/utils/useAuthStore';
-import { useNavigate, useLocation } from 'react-router-dom';
-import CloseIcon from '@mui/icons-material/Close';
-import AttractionInfo from '../../components/attraction/AttractionInfo';
-import AttractionReview from '../../components/attraction/AttractionReview';
+import { useEffect, useState, useRef, use } from "react";
+import Map from "../../components/attraction/Map";
+import styles from "./AttractionSearchPage.module.css";
+import axios from "axios";
+import SearchIcon from "@mui/icons-material/Search";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import Pagination from "../../components/ui/Pagination";
+import AttractionList from "../../components/Attraction/AttractionList";
+import useAuthStore from "../../components/utils/useAuthStore";
+import { useNavigate, useLocation } from "react-router-dom";
+import CloseIcon from "@mui/icons-material/Close";
+import AttractionInfo from "../../components/attraction/AttractionInfo";
+import AttractionReview from "../../components/attraction/AttractionReview";
+import qs from "qs";
 
 const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
   const navigate = useNavigate();
-  const location = useLocation(); // 현재 페이지의 상태값을 가져옴
-  // 게시글 작성 페이지에서 왔는지 확인
+  const location = useLocation();
   const isFromWrite = location.state?.fromWrite;
 
   const [areaList, setAreaList] = useState([]);
   const [sigunguList, setSigunguList] = useState([]);
   const [attractionList, setAttractionList] = useState([]);
+  const [addressList, setAddressList] = useState([]);
 
-  // 페이징 처리
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(5);
   const [totalPage, setTotalPage] = useState(0);
 
-  // 검색
-  const [areaCode, setAreaCode] = useState('1'); // 0: 전체
-  const [sigunguCode, setSigunguCode] = useState('0'); // 0: 전체
-  const [searchKeyword, setSearchKeyword] = useState(''); // 키워드 포함시 출력(일치X 포함O)
+  const [areaCode, setAreaCode] = useState("1"); // 0: 전체
+  const [sigunguCode, setSigunguCode] = useState("0"); // 0: 전체
+  const [searchKeyword, setSearchKeyword] = useState(""); // 키워드 포함시 출력(일치X 포함O)
   const [fee, setFee] = useState(0); // 0: 전체, 1: 무료
   const [restroom, setRestroom] = useState(0); // 0: 전체, 1: 화장실 있음
   const [accessible, setAccessible] = useState(0); // 0: 전체, 1: 장애인 편의 시설 있음
@@ -64,6 +63,28 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_BACKSERVER}/attractions/addressList`, {
+        params: {
+          areaCode: areaCode,
+          sigunguCode: sigunguCode,
+          searchKeyword: searchKeyword,
+          fee: fee,
+          restroom: restroom,
+          accessible: accessible,
+          parking: parking,
+          checkedItems: checkedItems,
+        },
+      })
+      .then((res) => {
+        setAddressList(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [searchKeyword, fee, restroom, accessible, parking, checkedItems]);
 
   useEffect(() => {
     axios
@@ -128,11 +149,11 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
     };
 
     if (isWhereOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isWhereOpen]);
 
@@ -159,7 +180,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
           `${import.meta.env.VITE_BACKSERVER}/attractions/wishList/${memberId}/${attractionNo}`,
         )
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -172,7 +193,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
           attractionNo: attractionNo,
         })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -209,13 +230,13 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
                       if (item.code) {
                         return (
                           <div
-                            key={'area-' + index}
-                            className={`${styles.select_where_content_area} ${index === areaList.length - 2 ? styles.select_where_content_area_bdrs : ''} ${String(item.code) === String(areaCode) ? styles.active : ''}`}
+                            key={"area-" + index}
+                            className={`${styles.select_where_content_area} ${index === areaList.length - 2 ? styles.select_where_content_area_bdrs : ""} ${String(item.code) === String(areaCode) ? styles.active : ""}`}
                             onClick={() => {
                               setAreaCode(item.code);
                               setSigunguCode(0);
                               setPage(0);
-                              setSearchKeyword('');
+                              setSearchKeyword("");
                             }}
                           >
                             {item.name}
@@ -224,7 +245,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
                       } else {
                         return (
                           <div
-                            key={'area-' + index}
+                            key={"area-" + index}
                             className={styles.select_where_content_area_null}
                           ></div>
                         );
@@ -236,35 +257,35 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
                     {sigunguList && (
                       <>
                         <div
-                          key={'sigungu-all'}
+                          key={"sigungu-all"}
                           className={styles.select_where_content_sigungu}
                         >
                           <div>
                             <input
                               type="checkbox"
-                              id={'gunguAll'}
+                              id={"gunguAll"}
                               checked={isAllChecked}
                               onChange={handleAllCheck}
                             />
-                            <label htmlFor={'gunguAll'}>전체</label>
+                            <label htmlFor={"gunguAll"}>전체</label>
                           </div>
                         </div>
 
                         {sigunguList.map((item, index) => (
                           <div
-                            key={'sigungu-' + index}
+                            key={"sigungu-" + index}
                             className={styles.select_where_content_sigungu}
                           >
                             <div>
                               <input
                                 type="checkbox"
-                                id={'gungu' + index}
+                                id={"gungu" + index}
                                 checked={checkedItems.includes(item.sigunguNo)}
                                 onChange={() =>
                                   handleSingleCheck(item.sigunguNo)
                                 }
                               />
-                              <label htmlFor={'gungu' + index}>
+                              <label htmlFor={"gungu" + index}>
                                 {item.name}
                               </label>
                             </div>
@@ -345,12 +366,15 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
           </div>
         </div>
         <div className={styles.content}>
-          <Map></Map>
+          <Map
+            addressList={addressList}
+            currentList={attractionList.map((item) => item.addr)}
+          ></Map>
           <div className={styles.content_right}>
             <div className={styles.content_list_wrap}>
               {attractionList.length !== 0 ? (
                 attractionList.map((item, index) => {
-                  const infoStr = `${item.attractionHoliday ? '휴무일: ' + item.attractionHoliday + ' | ' : ''}${item.attractionFee ? '이용요금: ' + item.attractionFee + ' | ' : ''}${item.attractionRestroom ? '화장실: ' + item.attractionRestroom + ' | ' : ''}${item.attractionAccessible ? '장애인편의시설: ' + item.attractionAccessible + ' | ' : ''}${item.attractionParking ? '주차장: ' + item.attractionParking + ' | ' : ''}${item.tel ? '기타문의: ' + item.tel : ''}`;
+                  const infoStr = `${item.attractionHoliday ? "휴무일: " + item.attractionHoliday + " | " : ""}${item.attractionFee ? "이용요금: " + item.attractionFee + " | " : ""}${item.attractionRestroom ? "화장실: " + item.attractionRestroom + " | " : ""}${item.attractionAccessible ? "장애인편의시설: " + item.attractionAccessible + " | " : ""}${item.attractionParking ? "주차장: " + item.attractionParking + " | " : ""}${item.tel ? "기타문의: " + item.tel : ""}`;
                   return (
                     <AttractionList
                       attractionNo={item.attractionNo}
@@ -366,7 +390,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
                       isFromWrite={isFromWrite} // 현재 페이지가 게시글 작성에서 온건지 확인
                       selectAttraction={() => {
                         if (isFromWrite) {
-                          navigate('/board/write', {
+                          navigate("/board/write", {
                             state: {
                               selectedPlace: item.title,
                               placeName: item.title, //게시글 상세보기
@@ -378,7 +402,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
                           setCategoryTest(0);
                         }
                       }}
-                      key={'attractionList-' + index}
+                      key={"attractionList-" + index}
                     />
                   );
                 })
@@ -409,7 +433,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
             <div className={styles.detail_menubar}>
               <div className={styles.detail_mini}>
                 <div
-                  className={`${styles.detail_mimi_info} ${attractionDetailTap === 0 ? styles.detail_mini_active : ''}`}
+                  className={`${styles.detail_mimi_info} ${attractionDetailTap === 0 ? styles.detail_mini_active : ""}`}
                   onClick={() => {
                     setAttractionDetailTap(0);
                   }}
@@ -417,7 +441,7 @@ const AttractionSearchPage = ({ categoryTest, setCategoryTest }) => {
                   INFO
                 </div>
                 <div
-                  className={`${styles.detail_mimi_review} ${attractionDetailTap === 1 ? styles.detail_mini_active : ''}`}
+                  className={`${styles.detail_mimi_review} ${attractionDetailTap === 1 ? styles.detail_mini_active : ""}`}
                   onClick={() => {
                     setAttractionDetailTap(1);
                   }}

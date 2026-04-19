@@ -1,13 +1,18 @@
 package kr.co.iei.tour.controller;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.co.iei.tour.model.vo.DeleteCartItem;
 import kr.co.iei.tour.model.vo.Emoji;
 import kr.co.iei.tour.model.vo.TourCartItem;
 import kr.co.iei.tour.model.vo.TourWishItem;
@@ -86,11 +92,19 @@ public class TourController {
 	}
 
 	@GetMapping(value = "/searchItem")
-	public ResponseEntity<?> searchTourItemList(@RequestParam(required = false) String searchWhere,
-			@RequestParam(required = false) String searchPriceMin,
-			@RequestParam(required = false) String searchPriceMax, @RequestParam(required = false) String searchWhen) {
-		List<TourItem> list = service.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, searchWhen);
-		return ResponseEntity.ok(list);
+	public ResponseEntity<?> searchTourItemList(
+	        @RequestParam(required = false) String searchWhere,
+	        @RequestParam(required = false) Integer searchPriceMin,
+	        @RequestParam(required = false) Integer searchPriceMax,
+	        // @DateTimeFormat을 붙여주면 문자열을 자동으로 날짜 객체로 변환해줍니다.
+	        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate startDate) {
+
+	    LocalDate targetDate = (startDate == null) ? LocalDate.now() : startDate;
+
+	    Date sqlDate = Date.valueOf(targetDate);
+
+	    List<TourItem> list = service.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, sqlDate);
+	    return ResponseEntity.ok(list);
 	}
 	
 	@GetMapping(value = "/tourItem/{tourItemNo}")
@@ -133,5 +147,23 @@ public class TourController {
 	public ResponseEntity<?> selectTourCartList(@PathVariable String memberId) {
 		List<TourCartItem> list = service.selectTourCartList(memberId);
 		return ResponseEntity.ok(list);
+	}
+	
+	@PatchMapping(value = "/updateWishlistName/{memberId}/{originName}/{newName}")
+	public ResponseEntity<?> updateWishlistName(@PathVariable String memberId, @PathVariable String originName, @PathVariable String newName) {
+		int result = service.updateWishlistName(memberId, originName, newName);
+		return ResponseEntity.ok(result);
+	}
+	
+	@PostMapping(value = "/cart")
+	public ResponseEntity<?> insertTourCart(@RequestBody TourCartItem cartData) {
+		int result = service.insertTourCart(cartData);
+		return ResponseEntity.ok(result);
+	}
+	
+	@DeleteMapping(value = "/deleteCart")
+	public ResponseEntity<?> deleteTourCart(@RequestBody DeleteCartItem data) {
+		int result = service.deleteTourCart(data);
+		return ResponseEntity.ok(result);
 	}
 }
