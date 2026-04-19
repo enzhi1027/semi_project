@@ -17,22 +17,20 @@ const TourCartPage = () => {
         .get(`${import.meta.env.VITE_BACKSERVER}/tours/cartList/${memberId}`)
         .then((res) => {
           setTourCartList(res.data);
-          // 처음에 전체 선택 상태로 시작
           setSelectedIds(res.data.map((item) => item.tourCartNo));
         })
         .catch((err) => console.log(err));
     }
   }, [isReady, memberId]);
 
-  // 수량 변경 함수 (type: 'adult' or 'kid', delta: 1 or -1)
   const updateQuantity = (cartNo, type, delta) => {
     setTourCartList((prev) =>
       prev.map((item) => {
         if (item.tourCartNo === cartNo) {
           const currentVal =
             type === "adult" ? item.tourCartAdult : item.tourCartKid;
-          if (currentVal + delta < 0) return item; // 0 미만 방지
-          if (type === "adult" && currentVal + delta < 1) return item; // 성인은 최소 1명
+          if (currentVal + delta < 0) return item;
+          if (type === "adult" && currentVal + delta < 1) return item;
           return {
             ...item,
             [type === "adult" ? "tourCartAdult" : "tourCartKid"]:
@@ -44,7 +42,6 @@ const TourCartPage = () => {
     );
   };
 
-  // 선택 삭제
   const deleteSelected = () => {
     if (selectedIds.length === 0) return;
 
@@ -57,10 +54,24 @@ const TourCartPage = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         // 실제로는 axios.delete(URL, { data: selectedIds }) 호출 필요
-        setTourCartList((prev) =>
-          prev.filter((item) => !selectedIds.includes(item.tourCartNo)),
-        );
-        setSelectedIds([]);
+        console.log(selectedIds);
+        axios
+          .delete(`${import.meta.env.VITE_BACKSERVER}/tours/deleteCart`, {
+            data: {
+              memberId: memberId,
+              cartNos: selectedIds,
+            },
+          })
+          .then((res) => {
+            console.log(res.data);
+            setTourCartList((prev) =>
+              prev.filter((item) => !selectedIds.includes(item.tourCartNo)),
+            );
+            setSelectedIds([]);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     });
   };

@@ -22,6 +22,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { entries } from "lodash";
 import OwnCalendar from "../../components/tour/Calender";
+import MyTourListPopup from "../../components/tour/MyTourListPopup";
 
 const TourDetailPage = () => {
   const location = useLocation();
@@ -47,18 +48,30 @@ const TourDetailPage = () => {
   const [adultCount, setAdultCount] = useState(1);
   const [kidCount, setKidCount] = useState(0);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+  const heartRef = useRef(null);
+
+  const onToggle = () => {
+    if (!isOpen && heartRef.current) {
+      const rect = heartRef.current.getBoundingClientRect();
+      // 아이콘 위치 기준으로 팝업 위치 계산 (수치는 CSS에 따라 조정 필요)
+      setCoords({
+        top: rect.top + window.scrollY + 40,
+        left: rect.left + window.scrollX - 218,
+      });
+    }
+    setIsOpen(!isOpen);
+  };
+
   const checkReservationDeadline = () => {
-    const endDate = new Date(item.endPeriod);
-
-    const nights = item.tourItemDays - 1;
-    const deadlineDate = new Date(endDate);
-    deadlineDate.setDate(endDate.getDate() - nights);
-
+    const lastDepartureDate = new Date(item.endPeriod);
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    deadlineDate.setHours(0, 0, 0, 0);
 
-    return today >= deadlineDate;
+    today.setHours(0, 0, 0, 0);
+    lastDepartureDate.setHours(0, 0, 0, 0);
+
+    return today > lastDepartureDate;
   };
 
   const makePrettyDate = (date) => {
@@ -80,23 +93,28 @@ const TourDetailPage = () => {
 
   const handleAddToCart = () => {
     const cartData = {
-      tourItemNo,
       memberId,
-      startDate: makePrettyDate(startDate),
-      adultCount,
-      kidCount,
-      totalPrice:
-        item.tourItemAdultPrice * adultCount + item.tourItemKidPrice * kidCount,
+      tourItemNo,
+      tourCartStartDate: startDate,
+      tourCartAdult: adultCount,
+      tourCartKid: kidCount,
     };
 
-    // axios.post(`${import.meta.env.VITE_BACKSERVER}/tours/cart`, cartData)...
-    console.log("장바구니 담기:", cartData);
+    axios
+      .post(`${import.meta.env.VITE_BACKSERVER}/tours/cart`, cartData)
+      .then((res) => {
+        Swal.fire({
+          title: "장바구니에 담겼습니다!",
+          icon: "success",
+        });
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "잠시 후 다시 시도해주세요",
+          icon: "error",
+        });
+      });
 
-    Swal.fire({
-      title: "장바구니에 담겼습니다!",
-      icon: "success",
-      confirmButtonColor: "var(--color1)",
-    });
     setIsModalOpen(false);
   };
 
@@ -207,10 +225,6 @@ const TourDetailPage = () => {
     return () => observer.disconnect();
   });
 
-  useEffect(() => {
-    console.log(clickedList);
-  }, [clickedList]);
-
   return (
     <>
       {item &&
@@ -237,7 +251,19 @@ const TourDetailPage = () => {
               >
                 <AccountCircleIcon />
               </div>
-              <div className={styles.header_cart}>
+              <div
+                className={styles.header_cart}
+                onClick={() => {
+                  if (isReady && memberId == null) {
+                    Swal.fire({
+                      title: "로그인 후 이용 가능합니다.",
+                      icon: "warning",
+                    });
+                  } else {
+                    navigate("/tour/cart");
+                  }
+                }}
+              >
                 <ShoppingCartIcon />
               </div>
             </div>
@@ -273,7 +299,12 @@ const TourDetailPage = () => {
                 <div className={styles.header_header}>
                   <div className={styles.header_title}>{item.tourItemName}</div>
                   <div className={styles.header_icons}>
-                    <div className={styles.header_icons_heart}>
+                    <div
+                      className={styles.header_icons_heart}
+                      ref={heartRef}
+                      onClick={onToggle} // 클릭 시 팝업 토글
+                      style={{ cursor: "pointer" }}
+                    >
                       {clickedList.length > 0 ? (
                         <FavoriteIcon />
                       ) : (
@@ -308,7 +339,9 @@ const TourDetailPage = () => {
                   <div className={styles.middle_cal}>
                     <OwnCalendar
                       startDate={startDate}
+                      endDate={item.endPeriod}
                       setStartDate={setStartDate}
+                      clearable={false}
                       className={styles.middle_cal_text}
                     />
                   </div>
@@ -543,6 +576,19 @@ const TourDetailPage = () => {
             )}
           </div>
         )}
+
+      {isOpen && (
+        <MyTourListPopup
+          coords={coords}
+          wishlistList={wishlistList}
+          setWishlistList={setWishlistList}
+          onToggle={onToggle}
+          memberId={memberId}
+          item={item}
+          clickedList={clickedList}
+          setClickedList={setClickedList}
+        />
+      )}
     </>
   );
 };
