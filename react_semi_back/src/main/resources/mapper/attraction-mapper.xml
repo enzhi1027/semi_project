@@ -57,7 +57,7 @@
 		  INTO ATTRACTION_TBL
 		VALUES
 		     (
-		       TEST_ATTRACTION_SEQ.NEXTVAL
+		       ATTRACTION_SEQ.NEXTVAL
 		     , #{attractionAddr}
 		     , #{attractionContentId}
 		     , #{attractionThumbnail}
@@ -198,7 +198,7 @@
 		  INTO ATTRACTION_WISH_TBL
 		VALUES
 		     (
-		       TEST_ATTRACTION_WISH_SEQ.NEXTVAL
+		       ATTRACTION_WISH_SEQ.NEXTVAL
 		     , #{memberId}
 		     , #{attractionNo} 
 		     )
