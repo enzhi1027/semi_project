@@ -112,14 +112,17 @@
   background: var(--color1);
 }
 
-.header_nav li:hover::after {
+.header_nav li:hover::after,
+.header_nav li.isPage::after {
   transform: scaleX(1);
 }
 
 .header_wrap_main .header_nav li:hover a {
   color: var(--color1);
 }
-
+.header_nav .isPage a {
+  font-weight: 800;
+}
 /*푸터*/
 .footer_wrap {
   background-color: var(--color6);
