@@ -241,9 +241,12 @@ const AttractionItem = ({ attraction }) => {
             <div className={styles.attraction_addr}>
               {"[ " + attraction.attractionAddr + " ]"}
             </div>
-            <div className={styles.attraction_content}>
-              {attraction.attractionSummary}
-            </div>
+            <div
+              className={styles.attraction_content}
+              dangerouslySetInnerHTML={{
+                __html: attraction.attractionSummary,
+              }}
+            ></div>
           </div>
           <div className={styles.img_wrap}>
             <img
@@ -276,9 +279,12 @@ const AttractionItem = ({ attraction }) => {
             <div className={styles.attraction_addr}>
               {"[ " + attraction.attractionAddr + " ]"}
             </div>
-            <div className={styles.attraction_content}>
-              {attraction.attractionSummary}
-            </div>
+            <div
+              className={styles.attraction_content}
+              dangerouslySetInnerHTML={{
+                __html: attraction.attractionSummary,
+              }}
+            ></div>
           </div>
         </div>
       )}
