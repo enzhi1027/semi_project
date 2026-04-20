@@ -40,7 +40,7 @@ const BoardItem = ({ board }) => {
           confirmButtonColor: "var(--color1)",
           confirmButtonText: "변경하기",
           showCancelButton: true,
-          cancelButtonColor: "var(--gray4)",
+          cancelButtonColor: "var(--color5)",
           cancelButtonText: "취소",
         }).then((res) => {
           if (res.isConfirmed) {

@@ -61,7 +61,7 @@ const AdminTour = () => {
       title: "상품을 삭제하시겠습니까?",
       text: "삭제한 상품은 복구할 수 없습니다.",
       icon: "warning",
-      confirmButtonColor: "var(--gray4)",
+      confirmButtonColor: "var(--color5)",
       confirmButtonText: "삭제하기",
       showCancelButton: true,
       cancelButtonColor: "var(--color1)",
@@ -74,6 +74,7 @@ const AdminTour = () => {
             Swal.fire({
               title: "상품이 삭제되었습니다!",
               icon: "success",
+              confirmButtonColor: "var(--color1)",
             }).then((res) => {
               setDelCheck(!delCheck);
             });
@@ -161,7 +162,7 @@ const AdminTour = () => {
               confirmButtonText: "전환",
               confirmButtonColor: "var(--color1)",
               showCancelButton: true,
-              cancelButtonColor: "var(--gray4)",
+              cancelButtonColor: "var(--color5)",
               cancelButtonText: "취소",
             }).then((res) => {
               if (res.isConfirmed) {
@@ -228,8 +229,11 @@ const AdminTour = () => {
 
                   <div className={styles.tour_item_bottom_wrap}>
                     <span className={styles.tour_item_days}>
-                      일정 : {tourItem.tourItemDays - 1}박{" "}
-                      {tourItem.tourItemDays}일
+                      일정 :{" "}
+                      {Number(tourItem.tourItemDays) === 1
+                        ? "당일치기"
+                        : `${tourItem.tourItemDays - 1}박${" "}
+                      ${tourItem.tourItemDays}일`}
                     </span>
                     <div className={styles.tour_item_status}>
                       <div>

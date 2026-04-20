@@ -112,7 +112,7 @@ const AdminBoard = () => {
             setPage(0);
           }}
         >
-          <option value={0}>전체</option>
+          <option value={0}>카테고리 전체</option>
           <option value={1}>Review</option>
           <option value={2}>Forum</option>
         </select>
@@ -132,7 +132,7 @@ const AdminBoard = () => {
             setPage(0);
           }}
         >
-          <option value={2}>전체</option>
+          <option value={2}>상태 전체</option>
           <option value={1}>공개</option>
           <option value={0}>비공개</option>
         </select>

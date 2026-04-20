@@ -35,6 +35,9 @@ const Join = () => {
     setMember(newMember);
   };
 
+  //이름 입력 메시지
+  const [nameTouched, setNameTouched] = useState(false);
+
   //비밀번호 재입력
   const [memberPwRe, setMemberPwRe] = useState("");
 
@@ -43,9 +46,17 @@ const Join = () => {
   const [checkId, setCheckId] = useState(0);
 
   const idDupCheck = () => {
+    // 아이디 정규표현식: 영문/숫자 조합 6자 이상
+    const idRegex = /^[a-zA-Z0-9]{6,}$/;
+
     if (member.memberId === "") {
-      //공백일 때
-      setCheckId(3);
+      setCheckId(3); // 공백
+      return;
+    }
+
+    if (!idRegex.test(member.memberId)) {
+      // 6글자 미만이거나 정규식에 어긋날 때
+      setCheckId(4); // 4 : "6자 이상 입력해주세요"
       return;
     }
 
@@ -135,7 +146,7 @@ const Join = () => {
 
   const phoneDupCheck = () => {
     //전화번호 정규표현식(010으로 시작하는 핸드폰 번호만)
-    //▽010으로 시작하고 - 3~4자리 숫자 - 4자리 숫자
+    //010으로 시작하고 - 3~4자리 숫자 - 4자리 숫자
     const phoneRegex = /^010-\d{3,4}-\d{4}$/;
     const phoneValue = member.memberPhone;
 
@@ -301,6 +312,7 @@ const Join = () => {
                 type="text"
                 name="memberId"
                 id="memberId"
+                value={member.memberId}
                 placeholder="아이디"
                 onChange={inputMember}
                 autoComplete="username"
@@ -317,9 +329,10 @@ const Join = () => {
                     : styles.check_msg + " " + styles.invalid
                 }
               >
-                {checkId == 2 && "사용 가능한 아이디입니다!"}
-                {checkId == 1 && "이미 사용 중인 아이디입니다."}
-                {checkId == 3 && "아이디를 입력해주세요."}
+                {checkId === 2 && "사용 가능한 아이디입니다!"}
+                {checkId === 1 && "이미 사용 중인 아이디입니다."}
+                {checkId === 3 && "아이디를 입력해주세요."}
+                {checkId === 4 && "아이디는 영문/숫자 6자 이상이어야 합니다."}
               </p>
             )}
           </div>
@@ -377,8 +390,11 @@ const Join = () => {
               id="memberName"
               placeholder="이름"
               onChange={inputMember}
+              onBlur={() => setNameTouched(true)}
             />
-            {member.memberName === "" ? <p>이름을 입력해주세요.</p> : null}
+            {nameTouched && member.memberName === "" ? (
+              <p className={styles.dup_false}>이름을 입력해주세요.</p>
+            ) : null}
           </div>
 
           <div className={styles.input_wrap}>
@@ -395,7 +411,7 @@ const Join = () => {
               <p className={styles.dup_false}>이미 사용 중인 전화번호입니다.</p>
             )}
             {checkPhone === 2 && (
-              <p className={styles.dup_ture}>사용 가능한 전화번호입니다!</p>
+              <p className={styles.dup_true}>사용 가능한 전화번호입니다!</p>
             )}
             {checkPhone === 3 && (
               <p className={styles.dup_false}>전화번호를 입력해주세요.</p>

@@ -1,44 +1,87 @@
-/* 아이디 찾기 랩 */
+/* 아이디 찾기 전체 */
 .search_id_wrap form {
   width: 500px;
   min-height: 450px;
-  margin: 70px auto;
+  margin: 100px auto;
   padding: 32px;
   display: flex;
   flex-direction: column;
-  gap: 26px;
+  gap: 26px; /* 기존 간격 유지 */
   text-align: center;
   background-color: var(--gray8);
   border-radius: 16px;
   border: solid 1px var(--gray5);
 }
 
-/* 인풋 랩 */
-.phone_input_wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.email_input_wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.email_input_wrap button {
-  width: 130px;
-  font-size: 14px;
-}
-.check_input_wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.check_input_wrap button {
-  width: 130px;
-  font-size: 14px;
-}
+/* 인풋랩 */
 .input_wrap {
   display: flex;
   gap: 12px;
+  flex-direction: column; /* 내부 에러 메시지와 타이머를 세로로 배치하기 위함 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+}
+
+/* 이메일, 인증번호 */
+.email_wrap,
+.check_wrap {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+/* 버튼 */
+.input_wrap button {
+  width: 130px;
+  font-size: 14px;
+  flex-shrink: 0; /* 버튼 크기 유지 */
+}
+
+/* 타이머 스타일 */
+.timer {
+  font-size: 0.85rem;
+  margin-top: 5px;
+  padding-left: 5px;
+  color: #ff4d4f; /* 시간 경고 느낌의 붉은 계열 (또는 var(--color1)) */
+  text-align: left;
+}
+
+/* 에러 */
+.error {
+  color: red;
+  font-size: 16px;
+  padding-left: 12px;
+  text-align: left;
+}
+
+/* 인증 성공 메시지 */
+.success_msg {
+  color: blue;
+  font-size: 16px;
+  padding-left: 12px;
+  padding-left: 5px;
+  text-align: left;
+}
+
+/* 비활성화 상태 스타일 */
+input:disabled {
+  background-color: var(--gray7); /* 배경을 살짝 어둡게 */
+  cursor: not-allowed;
+}
+
+button:disabled {
+  background-color: var(--gray5);
+  cursor: not-allowed;
+  border: none;
+}
+
+/* 하단 조회 버튼 랩 */
+.search_id_btn_wrap {
+  display: flex;
+  width: 100%;
+}
+
+.search_id_btn_wrap button {
+  font-size: 16px;
+  margin: 20px 0px;
+  flex-grow: 1;
 }

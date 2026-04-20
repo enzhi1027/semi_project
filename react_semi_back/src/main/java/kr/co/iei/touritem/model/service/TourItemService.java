@@ -5,6 +5,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,6 +141,15 @@ public class TourItemService {
 		}
 		return null;
 	}
+	
+	//예약 가능 기간 지난 상품 상태 자동 업데이트(Scheduled 사용)
+	//자정이 되면 자동으로 업데이트(0초에 실행, 0분에 실행, 00시에 실행, 매일, 매달, 요일 무관)
+	@Scheduled(cron = "0 0 0 * * *")
+	@Transactional
+	public void autoUpdateTourItems() {
+		int result = tourItemDao.autoUpdateTourItemStatus();
+	}
+	
 	
 	
 }

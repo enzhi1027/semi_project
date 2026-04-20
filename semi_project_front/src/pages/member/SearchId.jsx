@@ -197,8 +197,8 @@ const SearchId = () => {
                 }}
                 onBlur={handleBlur}
               />
-              {errorMsg.name && <div style={errorStyle}>{errorMsg.name}</div>}
             </div>
+            {errorMsg.name && <div style={errorStyle}>{errorMsg.name}</div>}
           </div>
           <div className={styles.phone_input_wrap}>
             <div className={styles.input_wrap}>
@@ -211,11 +211,11 @@ const SearchId = () => {
                 onBlur={handleBlur}
                 maxLength={13}
               />
-              {errorMsg.phone && <div style={errorStyle}>{errorMsg.email}</div>}
             </div>
+            {errorMsg.phone && <div style={errorStyle}>{errorMsg.phone}</div>}
           </div>
-          <div className={styles.email_input_wrap}>
-            <div className={styles.input_wrap}>
+          <div className={styles.input_wrap}>
+            <div className={styles.email_wrap}>
               <Input
                 name="memberEmail"
                 type="text"
@@ -230,55 +230,58 @@ const SearchId = () => {
               <Button type="button" className="btn" onClick={sendMail}>
                 인증메일 발송
               </Button>
-              {errorMsg.email && (
-                <div className={styles.error_msg}>{errorMsg.email}</div>
-              )}
+            </div>
+            {errorMsg.email && (
+              <div className={styles.error}>{errorMsg.email}</div>
+            )}
+          </div>
+
+          {/* 인증번호 (mailAuthStatus가 2 이상일 때만 표시) */}
+          <div className={styles.input_wrap}>
+            <div className={styles.check_wrap}>
+              <Input
+                type="text"
+                placeholder="인증번호 입력"
+                value={mailAuthInput}
+                onChange={(e) => {
+                  setMailAuthInput(e.target.value);
+                  updateError("auth", "");
+                }}
+                disabled={mailAuthStatus < 2 || mailAuthStatus === 3}
+              />
+              <Button
+                type="button"
+                className="btn"
+                onClick={authCheck}
+                disabled={mailAuthStatus < 2 || mailAuthStatus === 3}
+              >
+                인증하기
+              </Button>
             </div>
 
+            {/* 타이머 (왼쪽 정렬을 위해 클래스 적용) */}
             {mailAuthStatus === 2 && (
-              <div style={{ fontSize: "0.85rem", marginTop: "5px" }}>
+              <div className={styles.timer}>
                 남은 시간: {Math.floor(time / 60)}:
                 {String(time % 60).padStart(2, "0")}
               </div>
             )}
+
+            {/* 인증 성공 메시지 */}
             {mailAuthStatus === 3 && (
-              <div
-                style={{ color: "blue", fontSize: "0.85rem", marginTop: "5px" }}
-              >
-                인증이 완료되었습니다.
-              </div>
+              <div className={styles.success_msg}>인증이 완료되었습니다.</div>
             )}
-            {errorMsg.auth && <div style={errorStyle}>{errorMsg.auth}</div>}
+
+            {errorMsg.auth && (
+              <div className={styles.error}>{errorMsg.auth}</div>
+            )}
           </div>
 
-          {/* 인증번호 (mailAuthStatus가 2 이상일 때만 표시) */}
-          {mailAuthStatus >= 2 && (
-            <div className={styles.check_input_wrap}>
-              <div className={styles.input_wrap}>
-                <Input
-                  type="text"
-                  placeholder="인증번호 입력"
-                  value={mailAuthInput}
-                  onChange={(e) => {
-                    setMailAuthInput(e.target.value);
-                    updateError("auth", "");
-                  }}
-                />
-                <Button
-                  type="button"
-                  className="btn"
-                  onClick={authCheck}
-                  disabled={mailAuthStatus === 3}
-                >
-                  인증하기
-                </Button>
-              </div>
-              {errorMsg.auth && <div style={errorStyle}>{errorMsg.auth}</div>}
-            </div>
-          )}
-          <Button type="button" className="btn" onClick={searchId}>
-            아이디 조회
-          </Button>
+          <div className={styles.search_id_btn_wrap}>
+            <Button type="button" className="btn" onClick={searchId}>
+              아이디 조회
+            </Button>
+          </div>
         </form>
       </div>
     </section>

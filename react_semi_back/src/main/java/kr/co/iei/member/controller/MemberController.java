@@ -39,7 +39,7 @@ import kr.co.iei.member.model.vo.Member;
 import kr.co.iei.utils.EmailSender;
 import kr.co.iei.utils.FileUtils;
 
-@CrossOrigin(value="*")
+@CrossOrigin(value = "*")
 @RestController
 @RequestMapping(value="members")
 public class MemberController {
@@ -333,6 +333,27 @@ public class MemberController {
 	    return ResponseEntity.ok(authCode);
 	}
 	
+	
+	//비밀번호 재설정(로그인)
+	@PatchMapping(value = "reset-pw")
+	public ResponseEntity<?> resetPw(@RequestBody Member m) {
+		int result = memberService.updateMemberPw(m);
+		return ResponseEntity.ok(result);
+	}
+	
+	//프로필 이미지 삭제
+	@DeleteMapping(value="/{memberId}/thumbnail")
+	public ResponseEntity<?> deleteThumbnail(@PathVariable String memberId){
+	    // 현재 저장된 파일명 가져오기
+	    Member m = memberService.selectOneMember(memberId);
+	    if(m != null && m.getMemberThumb() != null) {
+	        // 파일 삭제
+	        String savepath = root + "member/";
+	        fileUtils.deleteFile(savepath, m.getMemberThumb());
+	    }
+	    int result = memberService.deleteThumbnail(memberId);
+	    return ResponseEntity.ok(result);
+	}
 	
 	
 }

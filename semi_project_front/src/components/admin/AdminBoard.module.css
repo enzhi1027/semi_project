@@ -12,6 +12,10 @@
   font-size: 16px;
 }
 
+.select:hover {
+  cursor: pointer;
+}
+
 .list_option_wrap {
   margin: 32px 0px;
   display: flex;

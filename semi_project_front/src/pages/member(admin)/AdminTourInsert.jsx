@@ -278,7 +278,7 @@ const AdminTourInsert = () => {
       confirmButtonText: "등록하기",
       confirmButtonColor: "var(--color1)",
       cancelButtonText: "취소",
-      cancelButtonColor: "var(--gray4)",
+      cancelButtonColor: "var(--color5)",
     }).then((result) => {
       if (result.isConfirmed) {
         registTour();
