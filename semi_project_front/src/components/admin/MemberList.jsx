@@ -3,6 +3,7 @@ import styles from "./MemberList.module.css";
 import userImg from "../../assets/img/mainPage/user.png"; // 사용자 기본 이미지
 import { useState } from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const MemberList = ({ memberList }) => {
   return (
@@ -21,28 +22,54 @@ const MemberItem = ({ member }) => {
   const changeGrade = (e) => {
     const newGrade = e.target.value;
 
-    if (window.confirm("회원 등급을 변경하시겠습니까?")) {
-      const data = {
-        memberId: member.memberId,
-        memberGrade: newGrade,
-      };
+    // 2. Swal.fire를 이용한 컨펌창 구성
+    Swal.fire({
+      title: "회원 등급 변경",
+      text: "회원 등급을 변경하시겠습니까?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "var(--color1)",
+      cancelButtonColor: "var(--color5)",
+      confirmButtonText: "변경",
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const data = {
+          memberId: member.memberId,
+          memberGrade: newGrade,
+        };
 
-      axios
-        .patch(
-          `${import.meta.env.VITE_BACKSERVER}/admin/changeMemberGrade`,
-          data,
-        )
-        .then((res) => {
-          if (res.data > 0) {
-            alert("등급 변경 완료");
-            window.location.reload();
-          }
-        })
-        .catch((err) => {
-          alert("등급 변경 실패");
-          window.location.reload();
-        });
-    }
+        axios
+          .patch(
+            `${import.meta.env.VITE_BACKSERVER}/admin/changeMemberGrade`,
+            data,
+          )
+          .then((res) => {
+            if (res.data > 0) {
+              Swal.fire({
+                title: "완료",
+                text: "등급 변경이 완료되었습니다.",
+                icon: "success",
+                confirmButtonColor: "var(--color1)",
+                confirmButtonText: "닫기",
+              }).then(() => {
+                window.location.reload();
+              });
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              title: "실패",
+              text: "등급 변경 중 오류가 발생했습니다.",
+              icon: "error",
+              confirmButtonColor: "var(--color1)",
+              confirmButtonText: "닫기",
+            }).then(() => {
+              window.location.reload();
+            });
+          });
+      }
+    });
   };
 
   return (
@@ -58,7 +85,7 @@ const MemberItem = ({ member }) => {
           <img
             src={
               member.memberThumb
-                ? `${import.meta.env.VITE_BACKSERVER}/member/thumb/${member.memberThumb}`
+                ? `${import.meta.env.VITE_IMG_SERVER}/member/thumb/${member.memberThumb}`
                 : userImg
             }
           />

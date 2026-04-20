@@ -1,0 +1,50 @@
+/* 비밀번호 재설정 전체 컨테이너 (기존 form 스타일 계승) */
+.reset_pw {
+  width: 500px;
+  min-height: 450px;
+  margin: 100px auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  text-align: center;
+  background-color: var(--gray8);
+  border-radius: 16px;
+  border: solid 1px var(--gray5);
+}
+
+/* 안내 문구 스타일 */
+.reset_pw p {
+  font-size: 16px;
+  color: var(--gray2);
+  line-height: 1.5;
+}
+
+.reset_pw p strong {
+  color: var(--color1); /* 포인트 컬러가 있다면 적용 */
+  font-weight: 600;
+}
+
+/* 입력창 감싸는 영역 */
+.input_wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+}
+
+/* 버튼 감싸는 영역 */
+.reset_btn_wrap {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+/* 버튼 스타일 상세 */
+.reset_btn_wrap button {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 0;
+  flex-grow: 1;
+}

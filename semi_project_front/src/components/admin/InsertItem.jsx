@@ -29,17 +29,58 @@ const InsertItem = ({
   //가격 계산 (아동가격 = 성인가격 * 0.8) ------------------------------------
   //체크박스 상태 관리 스테이트(기본 체크 상태 유지할거니 true)
   const [isKidEnabled, setIsKidEnabled] = useState(true);
+
   useEffect(() => {
     if (isKidEnabled && tourItem.tourItemAdultPrice) {
-      //숫자 타입 변환 후 성인가 * 0.8
-      const rawKidPrice = Number(tourItem.tourItemAdultPrice) * 0.8;
-      //1원 단위 버리기
-      const autoTourItemKidPrice = Math.floor(rawKidPrice / 10) * 10;
-      inputTourItem({
-        target: { name: "tourItemKidPrice", value: autoTourItemKidPrice },
-      });
+      // 성인 가격에서 콤마 제거 후 숫자로 변환 (이미 adultPriceNum을 만드셨으니 활용)
+      const adultPriceNum = Number(
+        tourItem.tourItemAdultPrice.toString().replace(/,/g, ""),
+      );
+
+      // 숫자가 정상일 때만 계산 진행
+      if (!isNaN(adultPriceNum)) {
+        // 성인가 * 0.8 계산
+        const rawKidPrice = adultPriceNum * 0.8;
+        // 1원 단위 버리기
+        const autoTourItemKidPrice = Math.floor(rawKidPrice / 10) * 10;
+
+        // 계산된 아동 가격에도 콤마(,) 포맷팅 적용하여 문자열로 변환
+        const formattedKidPrice = autoTourItemKidPrice
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // 가공된 값을 inputTourItem에 전달
+        inputTourItem({
+          target: { name: "tourItemKidPrice", value: formattedKidPrice },
+        });
+      }
     }
   }, [tourItem.tourItemAdultPrice, isKidEnabled]);
+
+  // 1. 가격용 핸들러 (숫자만 허용 + 3자리 ,)
+  const handlePriceChange = (e) => {
+    const { name, value } = e.target;
+    // 숫자 외의 모든 문자 제거
+    const onlyNumber = value.replace(/[^0-9]/g, "");
+    // 3자리마다 콤마 추가
+    const formattedValue = onlyNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // inputTourItem에 값 전달
+    inputTourItem({
+      target: { name, value: formattedValue },
+    });
+  };
+
+  // 2. 숫자 전용 핸들러 (일정/박수 등)
+  const handleNumberChange = (e) => {
+    const { name, value } = e.target;
+    // 숫자 외의 모든 문자 제거
+    const onlyNumber = value.replace(/[^0-9]/g, "");
+
+    inputTourItem({
+      target: { name, value: onlyNumber },
+    });
+  };
 
   return (
     <div className={styles.insert_wrap}>
@@ -118,7 +159,7 @@ const InsertItem = ({
             name="tourItemAdultPrice"
             id="tourItemAdultPrice"
             value={tourItem.tourItemAdultPrice || ""}
-            onChange={inputTourItem}
+            onChange={handlePriceChange}
           />
         </div>
         {/*아동 ------------------------------------------------ */}
@@ -155,7 +196,7 @@ const InsertItem = ({
             value={tourItem.tourItemKidPrice || ""}
             disabled={!isKidEnabled}
             placeholder={isKidEnabled ? "" : "선택불가"}
-            onChange={inputTourItem}
+            onChange={handlePriceChange}
           />
         </div>
       </div>
@@ -197,7 +238,7 @@ const InsertItem = ({
           id="tourItemDays"
           value={tourItem.tourItemDays}
           min="1" //최소값 1
-          onChange={inputTourItem}
+          onChange={handleNumberChange}
         ></Input>
       </div>
 

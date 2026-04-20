@@ -39,6 +39,10 @@
   font-size: 16px;
 }
 
+.select_wrap select:hover {
+  cursor: pointer;
+}
+
 /*페이지 네이션 ---------------------------------------------------*/
 .member_list_pagination {
   margin: 32px 0px;

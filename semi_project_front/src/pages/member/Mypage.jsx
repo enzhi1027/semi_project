@@ -113,7 +113,7 @@ const MemberProfileSide = () => {
         <img
           src={
             memberThumb
-              ? `${import.meta.env.VITE_BACKSERVER}/member/thumb/${memberThumb}`
+              ? `${import.meta.env.VITE_IMG_SERVER}/member/thumb/${memberThumb}`
               : userImg
           }
         />

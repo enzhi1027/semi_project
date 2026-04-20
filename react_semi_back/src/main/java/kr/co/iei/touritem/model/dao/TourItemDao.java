@@ -40,6 +40,8 @@ public interface TourItemDao {
 
 	int deleteTourItem(Integer tourItemNo);
 
+	int autoUpdateTourItemStatus();
+
 
 
 }

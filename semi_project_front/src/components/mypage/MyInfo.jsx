@@ -22,12 +22,9 @@ const MyInfo = () => {
     axios
       .get(`${import.meta.env.VITE_BACKSERVER}/members/${memberId}`)
       .then((res) => {
-        console.log(res);
         setMember(res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, []);
 
   //회원 탈퇴 -------------------------------------------------------------
@@ -40,7 +37,7 @@ const MyInfo = () => {
       cancelButtonText: "닫기",
       confirmButtonText: "탈퇴하기",
       cancelButtonColor: "var(--color1)",
-      confirmButtonColor: "var(--gray4)",
+      confirmButtonColor: "var(--color5)",
     }).then((res) => {
       if (res.isConfirmed) {
         Swal.fire({
@@ -52,13 +49,12 @@ const MyInfo = () => {
           cancelButtonText: "닫기",
           confirmButtonText: "탈퇴하기",
           cancelButtonColor: "var(--color1)",
-          confirmButtonColor: "var(--gray4)",
+          confirmButtonColor: "var(--color5)",
         }).then((res) => {
           if (res.isConfirmed) {
             axios
               .delete(`${import.meta.env.VITE_BACKSERVER}/members/${memberId}`)
               .then((res) => {
-                console.log(res);
                 if (res.data === 1) {
                   useAuthStore.getState().logout();
                   delete axios.defaults.headers.common["Authorization"];
@@ -71,9 +67,7 @@ const MyInfo = () => {
                   });
                 }
               })
-              .catch((err) => {
-                console.log(err);
-              });
+              .catch((err) => {});
           }
         });
       }
@@ -153,7 +147,6 @@ const MyInfo = () => {
                 member,
               )
               .then((res) => {
-                console.log(res);
                 if (res.data === 1) {
                   Swal.fire({
                     title: "정보가 변경되었습니다!",
@@ -162,9 +155,7 @@ const MyInfo = () => {
                   });
                 }
               })
-              .catch((err) => {
-                console.log(err);
-              });
+              .catch((err) => {});
           }}
         >
           <div className={styles.thumb_and_info_wrap}>
@@ -246,8 +237,6 @@ const MyInfo = () => {
                 ></Input>
                 <PostcodePopup
                   onComplete={(data) => {
-                    console.log(data);
-
                     const roadAddress =
                       data.roadAddress +
                       (data.buildingName ? " (" + data.buildingName + ")" : "");
@@ -305,7 +294,7 @@ const MemberProfileInfo = () => {
     form.append("file", file);
     axios
       .patch(
-        `${import.meta.env.VITE_BACKSERVER}/members/${memberId}/thumbnail`,
+        `${import.meta.env.VITE_IMG_SERVER}/members/${memberId}/thumbnail`,
         form,
         {
           headers: {
@@ -314,26 +303,61 @@ const MemberProfileInfo = () => {
         },
       )
       .then((res) => {
-        console.log(res);
         useAuthStore.getState().setThumb(res.data);
-      });
+        // 파일 선택창 초기화(같은 파일 다시 올릴 때 대비)
+        e.target.value = "";
+      })
+      .catch((err) => {});
   };
+
+  /*프로필 이미지 삭제 ----------------------------------------------
+  const deleteThumb = () => {
+    Swal.fire({
+      title: "프로필 이미지 삭제",
+      text: "프로필 이미지를 삭제하시겠습니까?",
+      icon: "question",
+      confirmButtonColor: "var(--color5)",
+      confirmButtonText: "삭제",
+      showCancelButton: true,
+      cancelButtonColor: "var(--color1)",
+      cancelButtonText: "취소",
+    }).then((res) => {
+      if (res.isConfirmed) {
+        axios
+          .delete(
+            `${import.meta.env.VITE_IMG_SERVER}/members/${memberId}/thumbnail`,
+          )
+          .then((res) => {
+            if (res.data === 1 || res.data === true) {
+              useAuthStore.getState().setThumb(null);
+              Swal.fire({
+                title: "프로필 이미지 삭제 완료!",
+                text: "프로필 이미지가 삭제되었습니다!",
+                icon: "success",
+                confirmButtonColor: "var(--color1)",
+                confirmButtonText: "닫기",
+              });
+            }
+          });
+      }
+    });
+  };
+  */
+
   return (
     <div className={styles.member_profile_info}>
       <div
         className={
           memberThumb ? styles.member_thumb_exists : styles.member_thumb
         }
-        onClick={() => inputRef.current.click()}
-        style={{ cursor: "pointer" }}
       >
         <img
           src={
             memberThumb
-              ? `${import.meta.env.VITE_BACKSERVER}/member/thumb/${memberThumb}`
+              ? `${import.meta.env.VITE_IMG_SERVER}/member/thumb/${memberThumb}`
               : userImg
           }
-        ></img>
+        />
       </div>
       <input
         type="file"
@@ -342,6 +366,31 @@ const MemberProfileInfo = () => {
         style={{ display: "none" }}
         onChange={changeThumb}
       />
+      <div
+        className={styles.profile_btn_wrap}
+        style={{ display: "flex", gap: "10px", marginTop: "10px" }}
+      >
+        <Button
+          className="btn"
+          type="button"
+          onClick={() => inputRef.current.click()}
+        >
+          프로필 이미지 등록
+        </Button>
+
+        {/* 이미지가 있을 때만 삭제 버튼 표시 
+        {memberThumb && (
+          <Button
+            className="btn"
+            onClick={deleteThumb}
+            type="button"
+            style={{ backgroundColor: "var(--color5)" }}
+          >
+            이미지 삭제
+          </Button>
+        )}
+          */}
+      </div>
     </div>
   );
 };

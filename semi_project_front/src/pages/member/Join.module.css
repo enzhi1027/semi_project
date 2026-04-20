@@ -20,6 +20,7 @@
   margin-top: 6px;
   margin-left: 6px;
   font-size: 12px;
+  color: var(--gray1);
 }
 
 /*인풋 랩-----------------------------*/
@@ -64,7 +65,7 @@
   color: var(--gray1);
 }
 .dup_false {
-  color: red;
+  color: red !important; /* !important : 강제 적용*/
 }
 
 /*이메일 인증 ---------------------------------------*/

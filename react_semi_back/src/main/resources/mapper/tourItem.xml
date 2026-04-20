@@ -46,13 +46,16 @@
 	<select id="selectAdminTourCount" resultType="Integer">
 		select count(*) from tour_item_tbl
 			<where>
-				<if test="status == 0 or status == 1">
-					tour_item_status = #{status}
-					and end_period >= trunc(sysdate)
-				</if>
-				<if test="status == 2">
-					and end_period &lt; trunc(sysdate)
-				</if>
+				<if test="status == 0">
+            		tour_item_status = 0
+            		and end_period >= trunc(sysdate)
+        		</if>
+        		<if test="status == 1">
+            		tour_item_status = 1
+        		</if>
+        		<if test="status == 2">
+            		and end_period &lt; trunc(sysdate)
+        		</if>
 			<!-- 서치키워드가 null이 아니면서 공백이 아닐 때 (아무것도 입력하지 않고 검색 방지용) -->
 				<if test="searchKeyword != null and searchKeyword != ''">
 					and tour_item_name like '%' || #{searchKeyword} || '%'
@@ -60,6 +63,7 @@
 			</where>
 	</select>
 	
+	<!-- 관리자 투어 상품 조회 -->
 	<select id="selectTourItemList" resultType="tourItem">
 		select
 			tour_item_no,
@@ -81,14 +85,16 @@
 				) as tour_item_img_path
 		from tour_item_tbl item_tbl
 			<where>
-				<if test="status == 0 or status == 1">
-					tour_item_status = #{status}
-					and end_period >= trunc(sysdate)
-				</if>
-				<if test="status == 2">
-					tour_item_status = 1
-					and end_period &lt; trunc(sysdate)
-				</if>
+				<if test="status == 0">
+            		tour_item_status = 0
+            		and end_period >= trunc(sysdate)
+        		</if>
+        		<if test="status == 1">
+            		tour_item_status = 1
+        		</if>
+        		<if test="status == 2">
+            		and end_period &lt; trunc(sysdate)
+        		</if>
 				<!-- 서치키워드가 null이 아니면서 공백이 아닐 때 (아무것도 입력하지 않고 검색 방지용) -->
 				<if test="searchKeyword != null and searchKeyword != ''">
 					and tour_item_name like '%' || #{searchKeyword} || '%'
@@ -152,5 +158,13 @@
 	<delete id="deleteTourItem">
 		delete from tour_item_tbl where tour_item_no = #{tourItemNo}
 	</delete>
+	
+	<!-- 상품 상태 자동 업데이트 -->
+	<update id="autoUpdateTourItemStatus">
+		update tour_item_tbl
+    		set tour_item_status = 1
+    		where end_period &lt; trunc(sysdate) 
+      	and tour_item_status = 0
+	</update>
 	
 </mapper>

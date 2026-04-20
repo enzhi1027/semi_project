@@ -135,7 +135,7 @@ const AdminModifyTour = () => {
       confirmButtonColor: "var(--color1)",
       confirmButtonText: "수정하기",
       showCancelButton: true,
-      cancelButtonColor: "var(--gray4)",
+      cancelButtonColor: "var(--color5)",
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {

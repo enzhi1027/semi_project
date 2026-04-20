@@ -30,4 +30,22 @@ public class FileUtils {
 		}
 		return filepath;
 	}
+
+	public void deleteFile(String savepath, String memberThumb) {
+	    if (memberThumb == null || memberThumb.isEmpty()) {
+	        return; // 파일명 없으면 종료
+	    }
+	    
+	    // 실제 파일이 저장된 전체 경로 객체 생성
+	    File file = new File(savepath + memberThumb);
+	    
+	    // 파일이 실제로 존재하는지 확인 후 삭제
+	    if (file.exists()) {
+	        if (file.delete()) {
+	            System.out.println("파일 삭제 성공: " + memberThumb);
+	        } else {
+	            System.out.println("파일 삭제 실패: " + memberThumb);
+	        }
+	    }
+	}
 }
