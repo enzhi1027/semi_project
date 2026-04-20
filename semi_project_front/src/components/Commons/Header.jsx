@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useMatch, useNavigate } from "react-router-dom";
 import styles from "./Commons.module.css";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
@@ -17,6 +17,10 @@ const Header = () => {
     useAuthStore.getState().logout();
     delete axios.defaults.headers.common["Authorization"];
   };
+  const attractionPage = useMatch("/attraction/*");
+  const coursePage = useMatch("/course/*");
+  const boardPage = useMatch("/board/*");
+  const tourPage = useMatch("/tour/*");
   return (
     <>
       <div className={mainPage ? styles.header_wrap_main : styles.header_wrap}>
@@ -25,16 +29,16 @@ const Header = () => {
             <Link to="/">LeafyGo</Link>
           </div>
           <ul className={styles.header_nav}>
-            <li>
+            <li className={attractionPage ? styles.isPage : ""}>
               <Link to="/attraction/list">생태관광지</Link>
             </li>
-            <li>
+            <li className={coursePage ? styles.isPage : ""}>
               <Link to="/course/list">관광코스</Link>
             </li>
-            <li>
+            <li className={boardPage ? styles.isPage : ""}>
               <Link to="/board/list">커뮤니티</Link>
             </li>
-            <li>
+            <li className={tourPage ? styles.isPage : ""}>
               <Link to="/tour/list">투어상품</Link>
             </li>
           </ul>

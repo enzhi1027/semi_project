@@ -29,11 +29,16 @@
 .search_page_container {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
 }
 
 .search_page_item_wrap {
   width: calc(100% / 4 - 15px);
+  margin-right: 20px;
+  margin-bottom: 15px;
+}
+
+.search_page_item_wrap:nth-child(4n) {
+  margin-right: 0;
 }
 
 .none_result {
@@ -51,11 +56,16 @@
 
 .product_list_allItem {
   display: flex;
-  gap: 15px;
   flex-wrap: wrap;
   margin-top: 15px;
 }
 
 .product_list_allItem > div {
   width: calc(100% / 4 - 15px);
+  margin-right: 20px;
+  margin-bottom: 15px;
+}
+
+.product_list_allItem > div:nth-child(4n) {
+  margin-right: 0;
 }

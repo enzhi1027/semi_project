@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.co.iei.attraction.model.vo.Area;
@@ -84,6 +85,12 @@ public class AttractionController {
 	@GetMapping(value = "/reviewList/{attractionNo}/{reviewCategory}")
 	public ResponseEntity<?> selectReviewList(@PathVariable Integer attractionNo, @PathVariable String reviewCategory) {
 		List<Board> list = service.selectReviewList(attractionNo, reviewCategory);
+		return ResponseEntity.ok(list);
+	}
+	
+	@GetMapping(value = "/addressList")
+	public ResponseEntity<?> selecttAddressList(@ModelAttribute AttractionListItem request) {
+		List<Attraction> list = service.selecttAddressList(request);
 		return ResponseEntity.ok(list);
 	}
 

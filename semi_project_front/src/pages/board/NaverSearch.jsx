@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './NaverSearch.css';
+import Swal from 'sweetalert2';
 
 const NaverSearch = () => {
   const navigate = useNavigate();
@@ -98,11 +99,22 @@ const NaverSearch = () => {
 
     if (isManual) {
       const cleanTitle = place.title.replace(/<[^>]*>?/gm, '');
-      if (window.confirm(`'${cleanTitle}'을(를) 선택하시겠습니까?`)) {
-        navigate('/board/write', {
-          state: { selectedPlace: cleanTitle, category: 2 },
-        });
-      }
+      Swal.fire({
+        icon: 'question',
+        iconColor: '#f39c12',
+        text: `'${cleanTitle}'을(를) 선택하시겠습니까?`,
+        showCancelButton: true,
+        confirmButtonColor: 'var(--color1)',
+        cancelButtonColor: 'var(--color5)',
+        confirmButtonText: '선택',
+        cancelButtonText: '취소',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          navigate('/board/write', {
+            state: { selectedPlace: cleanTitle, category: 2 },
+          });
+        }
+      });
     }
   };
 

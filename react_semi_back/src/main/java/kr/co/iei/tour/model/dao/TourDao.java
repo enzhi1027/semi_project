@@ -1,9 +1,11 @@
 package kr.co.iei.tour.model.dao;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import kr.co.iei.tour.model.vo.DeleteCartItem;
 import kr.co.iei.tour.model.vo.Emoji;
 import kr.co.iei.tour.model.vo.TourCartItem;
 import kr.co.iei.tour.model.vo.TourWishItem;
@@ -35,8 +37,8 @@ public interface TourDao {
 	
 	int selectPriceMax();
 
-	List<TourItem> searchTourItemList(String searchWhere, String searchPriceMin, String searchPriceMax,
-			String searchWhen);
+	List<TourItem> searchTourItemList(String searchWhere, Integer searchPriceMin, Integer searchPriceMax,
+			Date sqlDate);
 
 	TourItem selectTourItem(Integer tourItemNo);
 
@@ -51,5 +53,11 @@ public interface TourDao {
 	int deleteWishlist(Integer wishlistNo);
 
 	List<TourCartItem> selectTourCartList(String memberId);
+
+	int updateWishlistName(String memberId, String originName, String newName);
+
+	int insertTourCart(TourCartItem cartData);
+
+	int deleteTourCart(DeleteCartItem data);
 
 }

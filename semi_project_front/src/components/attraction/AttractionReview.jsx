@@ -32,7 +32,8 @@ const AttractionReview = ({ attractionNo, reviewCategory }) => {
                     className={styles.attraction_review}
                     key={"review" + index}
                     onClick={() => {
-                      navigate(`board/view/${review.boardNo}`);
+                      console.log("dpd");
+                      navigate(`/board/view/${review.boardNo}`);
                     }}
                   >
                     <div className={styles.review_img}>

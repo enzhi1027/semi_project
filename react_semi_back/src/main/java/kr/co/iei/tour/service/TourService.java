@@ -1,5 +1,6 @@
 package kr.co.iei.tour.service;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.co.iei.tour.model.dao.TourDao;
+import kr.co.iei.tour.model.vo.DeleteCartItem;
 import kr.co.iei.tour.model.vo.Emoji;
 import kr.co.iei.tour.model.vo.TourCartItem;
 import kr.co.iei.tour.model.vo.TourWishItem;
@@ -77,9 +79,9 @@ public class TourService {
 		return result;
 	}
 
-	public List<TourItem> searchTourItemList(String searchWhere, String searchPriceMin, String searchPriceMax,
-			String searchWhen) {
-		List<TourItem> list = dao.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, searchWhen);
+	public List<TourItem> searchTourItemList(String searchWhere, Integer searchPriceMin, Integer searchPriceMax,
+			Date sqlDate) {
+		List<TourItem> list = dao.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, sqlDate);
 		return list;
 	}
 
@@ -118,5 +120,23 @@ public class TourService {
 	public List<TourCartItem> selectTourCartList(String memberId) {
 		List<TourCartItem> list = dao.selectTourCartList(memberId);
 		return list;
+	}
+
+	@Transactional
+	public int updateWishlistName(String memberId, String originName, String newName) {
+		int result = dao.updateWishlistName(memberId, originName, newName);
+		return result;
+	}
+
+	@Transactional
+	public int insertTourCart(TourCartItem cartData) {
+		int result = dao.insertTourCart(cartData);
+		return result;
+	}
+
+	@Transactional
+	public int deleteTourCart(DeleteCartItem data) {
+		int result = dao.deleteTourCart(data);
+		return result;
 	}
 }

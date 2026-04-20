@@ -220,7 +220,6 @@ const ShowList = ({
                       },
                     })
                     .then((res) => {
-                      console.log(res.data);
                       if (res.data) {
                         // delete 성공
                         setClickedList((prev) => {
@@ -257,7 +256,6 @@ const ShowList = ({
                       tourItemNo: item.tourItemNo,
                     })
                     .then((res) => {
-                      console.log(res.data);
                       if (res.data) {
                         // insert 성공
                         setClickedList((prev) => {
