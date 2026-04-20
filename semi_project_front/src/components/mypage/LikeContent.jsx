@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import styles from "./LikeContent.module.css";
 import useAuthStore from "../utils/useAuthStore";
 import axios from "axios";
-import CourseList from "../Course/CourseList";
 import Pagination from "../../components/ui/Pagination";
 import AttractionList from "../Attraction/AttractionList";
 import CloseIcon from "@mui/icons-material/Close";
 import AttractionInfo from "../../components/attraction/AttractionInfo";
 import AttractionReview from "../../components/attraction/AttractionReview";
 import MyBoardList from "./mycontentcomponents/MyBoardList";
+import LikeCourseList from "../Course/LikeCourseList";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const LikeContent = () => {
   const [tab, setTab] = useState("likeAttraction");
@@ -27,8 +28,11 @@ const LikeContent = () => {
   const [order, setOrder] = useState(1);
   const [size, setSize] = useState(9);
 
+  const navigate = useNavigate();
+
   const orderChange = (e) => {
     setOrder(Number(e.target.value));
+    setTotalPage(0);
     setPage(0); //정렬 바뀌면 첫 페이지부터
   };
 
@@ -83,13 +87,10 @@ const LikeContent = () => {
             `${import.meta.env.VITE_BACKSERVER}/members/like-attraction?order=${order}&memberId=${memberId}&page=${page}&size=${size}`,
           )
           .then((res) => {
-            console.log(res);
             setLikeAttractionList(res.data.items);
             setTotalPage(res.data.totalPage);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       }
       //좋아요 표시한 게시글 조회
       if (tab === "likeBoard" && memberId) {
@@ -101,9 +102,7 @@ const LikeContent = () => {
             setLikeBoardList(res.data.items);
             setTotalPage(res.data.totalPage);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       }
       //좋아요 표시한 코스 목록 조회
       if (tab === "likeCourse" && memberId) {
@@ -115,9 +114,7 @@ const LikeContent = () => {
             setLikeCourseList(res.data.items);
             setTotalPage(res.data.totalPage);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       }
     }
   }, [tab, memberId, order, page]);
@@ -179,7 +176,7 @@ const LikeContent = () => {
           {tab === "likeAttraction" &&
             (likeAttractionList.length > 0 ? (
               likeAttractionList.map((item, index) => {
-                // 원래 페이지에서 사용하던 방식대로 info 문자열을 조합 (데이터가 있다면)
+                // 원래 페이지에서 사용하던 방식대로 info 조합 (데이터가 있다면)
                 const infoStr = `${item.attractionHoliday ? "휴무일: " + item.attractionHoliday + " | " : ""}${item.attractionFee ? "이용요금: " + item.attractionFee + " | " : ""}${item.attractionRestroom ? "화장실: " + item.attractionRestroom + " | " : ""}${item.attractionAccessible ? "장애인편의시설: " + item.attractionAccessible + " | " : ""}${item.attractionParking ? "주차장: " + item.attractionParking + " | " : ""}${item.tel ? "기타문의: " + item.tel : ""}`;
 
                 return (
@@ -199,7 +196,10 @@ const LikeContent = () => {
               })
             ) : (
               <div className={styles.content_empty}>
-                좋아요 한 관광지가 없습니다.
+                좋아요 표시한 관광지가 없습니다.
+                <span onClick={() => navigate("/attraction/list")}>
+                  관광지 보러가기
+                </span>
               </div>
             ))}
 
@@ -209,17 +209,23 @@ const LikeContent = () => {
               <MyBoardList boardList={likeBoardList} />
             ) : (
               <div className={styles.content_empty}>
-                좋아요 한 게시글이 없습니다.
+                좋아요 표시한 게시글이 없습니다.
+                <span onClick={() => navigate("/board/list")}>
+                  게시글 보러가기
+                </span>
               </div>
             ))}
 
           {/* 코스 탭 */}
           {tab === "likeCourse" &&
             (likeCourseList.length > 0 ? (
-              <CourseList courseList={likeCourseList} />
+              <LikeCourseList courseList={likeCourseList} />
             ) : (
               <div className={styles.content_empty}>
-                좋아요 한 코스가 없습니다.
+                좋아요 표시한 코스가 없습니다.
+                <span onClick={() => navigate("/course/list")}>
+                  관광 코스 보러가기
+                </span>
               </div>
             ))}
         </div>

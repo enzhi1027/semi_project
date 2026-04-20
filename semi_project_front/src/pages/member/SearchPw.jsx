@@ -71,7 +71,6 @@ const SearchPw = () => {
         memberEmail,
       })
       .then((res) => {
-        console.log(res);
         setMailAuthCode(res.data);
         setMailAuthStatus(2); // 인증 대기
         setTime(180);

@@ -57,7 +57,7 @@ const InsertItem = ({
     }
   }, [tourItem.tourItemAdultPrice, isKidEnabled]);
 
-  // 1. 가격용 핸들러 (숫자만 허용 + 3자리 ,)
+  // 가격용 핸들러 (숫자만 허용 + 3자리 ,)
   const handlePriceChange = (e) => {
     const { name, value } = e.target;
     // 숫자 외의 모든 문자 제거
@@ -71,7 +71,7 @@ const InsertItem = ({
     });
   };
 
-  // 2. 숫자 전용 핸들러 (일정/박수 등)
+  // 숫자 전용 핸들러 (일정/박수 등)
   const handleNumberChange = (e) => {
     const { name, value } = e.target;
     // 숫자 외의 모든 문자 제거
@@ -81,6 +81,13 @@ const InsertItem = ({
       target: { name, value: onlyNumber },
     });
   };
+
+  //이용 가능 기간 종료는 오늘 이전을 선택 불가
+  const now = new Date();
+  // 2. 오늘 날짜에 +1일을 해서 내일로 만듦
+  const tomorrowDate = new Date(now.setDate(now.getDate() + 1));
+  // 3. YYYY-MM-DD 형식으로 변환
+  const tomorrow = tomorrowDate.toISOString().split("T")[0];
 
   return (
     <div className={styles.insert_wrap}>
@@ -132,16 +139,13 @@ const InsertItem = ({
               );
             })}
 
-          {files.map((file, index) => {
-            //새 파일-------------------------------------------------------
-            return (
-              <FileItem
-                key={"file-item-" + index}
-                file={file}
-                deleteFile={deleteFile}
-              ></FileItem>
-            );
-          })}
+          {files.map((file, index) => (
+            <FilePreviewItem
+              key={"file-item-" + index}
+              file={file}
+              deleteFile={deleteFile}
+            />
+          ))}
         </div>
       </div>
 
@@ -176,7 +180,6 @@ const InsertItem = ({
                 checked={isKidEnabled}
                 onChange={(e) => {
                   const isChecked = e.target.checked;
-                  console.log(isChecked);
                   setIsKidEnabled(e.target.checked);
                   if (!isChecked) {
                     inputTourItem({
@@ -221,7 +224,7 @@ const InsertItem = ({
               name="endPeriod"
               id="endPeriod"
               //이용 가능 기간(종료)는 시작일 이전은 선택 불가능하다.
-              min={tourItem.startPeriod}
+              min={tomorrow}
               value={tourItem.endPeriod}
               onChange={inputTourItem}
             />
@@ -231,7 +234,7 @@ const InsertItem = ({
 
       {/*몇박 며칠인지 ------------------------------------------------ */}
       <div className={`${styles.tour_days_wrap}`}>
-        <label htmlFor="tourItemDays">몇박 며칠 프로그램인지</label>
+        <label htmlFor="tourItemDays">일차 정보(몇박 며칠)</label>
         <Input
           type="text"
           name="tourItemDays"
@@ -307,6 +310,42 @@ const FileItem = ({ file, deleteFile }) => {
           onClick={() => {
             deleteFile(file); //파일을 가지고 있으면 동작
           }}
+        />
+      </li>
+    </ul>
+  );
+};
+
+const FilePreviewItem = ({ file, deleteFile }) => {
+  // 이미지 경로 설정 로직
+  let imgSrc = "";
+
+  if (file instanceof File) {
+    // 1. 새로 추가한 파일 (브라우저 임시 URL 생성)
+    imgSrc = URL.createObjectURL(file);
+  } else if (file.tourItemImgPath) {
+    // 2. 서버에서 불러온 기존 파일 (서버 주소와 결합)
+    imgSrc = `${import.meta.env.VITE_IMG_SERVER}/tourItem/${file.tourItemImgPath}`;
+  }
+
+  const fileName = file.name || file.tourItemImgName || "첨부 이미지";
+
+  return (
+    <ul className={styles.file_preview_item}>
+      <li className={styles.preview_img_wrap}>
+        {imgSrc ? (
+          <img src={imgSrc} alt="미리보기" className={styles.preview_img} />
+        ) : (
+          <div className={styles.no_img}>No Image</div>
+        )}
+      </li>
+      <li className={styles.file_name_text}>{fileName}</li>
+      <li>
+        <img
+          className={styles.delete_btn_img}
+          src={deleteImg}
+          alt="삭제"
+          onClick={() => deleteFile(file)}
         />
       </li>
     </ul>

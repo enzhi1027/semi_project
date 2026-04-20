@@ -214,8 +214,14 @@ const AdminTourInsert = () => {
 
     const form = new FormData();
     form.append("tourItemName", tourItem.tourItemName);
-    form.append("tourItemAdultPrice", Number(tourItem.tourItemAdultPrice));
-    form.append("tourItemKidPrice", Number(tourItem.tourItemKidPrice || 0));
+
+    // 콤마 제거 로직
+    const adultPrice = String(tourItem.tourItemAdultPrice).replace(/,/g, "");
+    const kidPrice = String(tourItem.tourItemKidPrice || 0).replace(/,/g, "");
+
+    form.append("tourItemAdultPrice", Number(adultPrice));
+    form.append("tourItemKidPrice", Number(kidPrice));
+
     form.append("startPeriod", tourItem.startPeriod);
     form.append("endPeriod", tourItem.endPeriod);
     form.append("tourItemDays", Number(tourItem.tourItemDays));

@@ -47,9 +47,7 @@ const AdminModifyTour = () => {
           setTourItemInfo([]);
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   }, [tourItemNo]);
 
   //장소 수정
@@ -188,7 +186,6 @@ const AdminModifyTour = () => {
             },
           })
           .then((res) => {
-            console.log(res);
             if (res.data > 0) {
               Swal.fire({
                 title: "수정이 완료되었습니다!",
@@ -198,9 +195,7 @@ const AdminModifyTour = () => {
               });
             }
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch((err) => {});
       }
     });
   };

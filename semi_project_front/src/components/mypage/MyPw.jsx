@@ -43,15 +43,12 @@ const MyPw = () => {
         memberPw: currentPw,
       })
       .then((res) => {
-        console.log(res);
         if (res.data) {
           setIsAuth(true);
           setMember({ ...member, memberPw: "" });
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   const changePw = () => {
@@ -69,14 +66,12 @@ const MyPw = () => {
       axios
         .patch(`${import.meta.env.VITE_BACKSERVER}/members/pw`, member)
         .then((res) => {
-          console.log(res);
           Swal.fire({
             title: "비밀번호 변경 완료!",
             text: "변경된 비밀번호로 로그인 해주세요!",
           });
         })
         .catch((err) => {
-          console.log(err);
           Swal.fire({
             title: "비밀번호 변경 실패",
             text: "다시 시도해주세요.",

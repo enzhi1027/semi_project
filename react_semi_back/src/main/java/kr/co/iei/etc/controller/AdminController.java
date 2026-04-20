@@ -96,7 +96,6 @@ public class AdminController {
 	//상품 상태 전환 -------------------------------------------------------------
 	@PatchMapping(value = "/tourItems/{tourItemNo}")
 	public ResponseEntity<?> changeTourItemStatus(@RequestBody TourItem tourItem){
-		System.out.println(tourItem);
 		int result = tourItemService.changeTourItemStatus(tourItem);
 		return ResponseEntity.ok(result);
 	}
@@ -105,7 +104,6 @@ public class AdminController {
 	@GetMapping(value = "{tourItemNo}")
 	public ResponseEntity<?> selectOneTourItem(@PathVariable Integer tourItemNo){
 		TourItem tourItem = tourItemService.selectOneTourItem(tourItemNo);
-		System.out.println(tourItem);
 		
 		if(tourItem != null) {
 			List<TourItemInfo> placeList = tourItemService.selectPlaceList(tourItemNo);
@@ -114,7 +112,6 @@ public class AdminController {
 			List<TourItemImg> fileList = tourItemService.selectImgList(tourItemNo);
 			tourItem.setFileList(fileList);
 		}
-		System.out.println(tourItem);
 		return ResponseEntity.ok(tourItem);
 	}
 	//상품 수정 -----------------------------------------------------------------
@@ -178,7 +175,6 @@ public class AdminController {
 	@GetMapping(value = "memberList")
 	public ResponseEntity<?> selectMemberList(@ModelAttribute MemberListItem request) {
 		MemberListResponse response = memberService.selectMemberList(request);
-		System.out.println(response);
 		return ResponseEntity.ok(response);
 	}
 	
