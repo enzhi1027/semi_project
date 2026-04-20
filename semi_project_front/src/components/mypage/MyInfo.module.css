@@ -85,6 +85,7 @@
   display: flex;
   gap: 20px;
   width: 100%;
+  align-items: center;
 }
 .input_wrap > label {
   width: 100px;

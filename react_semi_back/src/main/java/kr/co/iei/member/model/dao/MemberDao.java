@@ -40,7 +40,7 @@ public interface MemberDao {
 
 	Member selectMemberPwSearch(Member m);
 
-	int deleteThumbnail(String memberId);
+	//int deleteThumbnail(String memberId);
 
 
 

@@ -144,8 +144,10 @@
 			and member_email = #{memberEmail}
 	</select>
 	
+	<!-- 
 	<update id="deleteThumbnail">
     	update member_tbl SET member_thumb = null where member_id = #{memberId}
 	</update>
-
+	 -->
+	 
 </mapper>

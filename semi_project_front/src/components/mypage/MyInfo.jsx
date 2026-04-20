@@ -310,7 +310,7 @@ const MemberProfileInfo = () => {
       .catch((err) => {});
   };
 
-  //프로필 이미지 삭제 ----------------------------------------------
+  /*프로필 이미지 삭제 ----------------------------------------------
   const deleteThumb = () => {
     Swal.fire({
       title: "프로필 이미지 삭제",
@@ -342,6 +342,7 @@ const MemberProfileInfo = () => {
       }
     });
   };
+  */
 
   return (
     <div className={styles.member_profile_info}>
@@ -374,10 +375,10 @@ const MemberProfileInfo = () => {
           type="button"
           onClick={() => inputRef.current.click()}
         >
-          이미지 등록
+          프로필 이미지 등록
         </Button>
 
-        {/* 이미지가 있을 때만 삭제 버튼 표시 */}
+        {/* 이미지가 있을 때만 삭제 버튼 표시 
         {memberThumb && (
           <Button
             className="btn"
@@ -388,6 +389,7 @@ const MemberProfileInfo = () => {
             이미지 삭제
           </Button>
         )}
+          */}
       </div>
     </div>
   );

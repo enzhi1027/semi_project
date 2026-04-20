@@ -54,10 +54,10 @@
 	
 	<insert id="insertAttraction">
 		INSERT
-		  INTO TEST_ATTRACTION_TBL
+		  INTO ATTRACTION_TBL
 		VALUES
 		     (
-		       TEST_ATTRACTION_SEQ.NEXTVAL
+		       ATTRACTION_SEQ.NEXTVAL
 		     , #{attractionAddr}
 		     , #{attractionContentId}
 		     , #{attractionThumbnail}
@@ -88,7 +88,7 @@
 	         , ATTRACTION_PARKING
 	         , ATTRACTION_PHONE
 	         , ATTRACTION_TITLE
-          FROM TEST_ATTRACTION_TBL
+          FROM ATTRACTION_TBL
 	      JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
 	      JOIN AREA_TBL USING (AREA_NO)
 	     <where>
@@ -126,7 +126,7 @@
 	
 	<select id="selectAttractionCount" resultType="Integer">
 		SELECT COUNT(*)
-		  FROM TEST_ATTRACTION_TBL
+		  FROM ATTRACTION_TBL
 		  JOIN SIGUNGU_TBL USING (SIGUNGU_NO)
           JOIN AREA_TBL USING (AREA_NO)
 		 <where>
@@ -182,23 +182,23 @@
 	
 	<select id="selectWishList" resultType="Integer">
 		SELECT ATTRACTION_NO
-		  FROM TEST_ATTRACTION_WISH_TBL
+		  FROM ATTRACTION_WISH_TBL
 		 WHERE MEMBER_ID = #{memberId}
 	</select>
 	
 	<delete id="deleteWish">
 		DELETE
-		  FROM TEST_ATTRACTION_WISH_TBL
+		  FROM ATTRACTION_WISH_TBL
 		 WHERE MEMBER_ID = #{memberId}
 		   AND ATTRACTION_NO = #{attractionNo}
 	</delete>
 	
 	<insert id="insertWish">
 		INSERT
-		  INTO TEST_ATTRACTION_WISH_TBL
+		  INTO ATTRACTION_WISH_TBL
 		VALUES
 		     (
-		       TEST_ATTRACTION_WISH_SEQ.NEXTVAL
+		       ATTRACTION_WISH_SEQ.NEXTVAL
 		     , #{memberId}
 		     , #{attractionNo} 
 		     )
@@ -238,7 +238,7 @@
 	<!-- 좋아요 표시한 관광지 목록 조회 -->
 <select id="selectLikeAttractionCount" resultType="int">
     SELECT COUNT(*)
-    FROM TEST_ATTRACTION_WISH_TBL
+    FROM ATTRACTION_WISH_TBL
     WHERE MEMBER_ID = #{memberId}
 </select>
 
@@ -256,8 +256,8 @@
         A.ATTRACTION_PARKING,
         A.ATTRACTION_PHONE, 
         A.ATTRACTION_TITLE
-    FROM TEST_ATTRACTION_TBL A
-    JOIN TEST_ATTRACTION_WISH_TBL W ON (A.ATTRACTION_NO = W.ATTRACTION_NO)
+    FROM ATTRACTION_TBL A
+    JOIN ATTRACTION_WISH_TBL W ON (A.ATTRACTION_NO = W.ATTRACTION_NO)
     WHERE W.MEMBER_ID = #{memberId}
     ORDER BY W.ATTRACTION_WISH_NO DESC
     OFFSET (#{page} * #{size}) ROWS FETCH NEXT #{size} ROWS ONLY

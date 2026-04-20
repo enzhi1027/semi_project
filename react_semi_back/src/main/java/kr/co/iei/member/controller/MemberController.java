@@ -216,7 +216,6 @@ public class MemberController {
 	@GetMapping(value = "/like-course")
 	public ResponseEntity<?> selectLikeCourseList(@ModelAttribute CourseListItem request){
 		CourseListResponse response = courseService.selectLikeCourseList(request);
-		System.out.println(response);
 		return ResponseEntity.ok(response);
 	}
 
@@ -341,7 +340,7 @@ public class MemberController {
 		return ResponseEntity.ok(result);
 	}
 	
-	//프로필 이미지 삭제
+	/*프로필 이미지 삭제
 	@DeleteMapping(value="/{memberId}/thumbnail")
 	public ResponseEntity<?> deleteThumbnail(@PathVariable String memberId){
 	    // 현재 저장된 파일명 가져오기
@@ -354,6 +353,7 @@ public class MemberController {
 	    int result = memberService.deleteThumbnail(memberId);
 	    return ResponseEntity.ok(result);
 	}
+	*/
 	
 	
 }

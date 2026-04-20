@@ -139,12 +139,13 @@ public class MemberService {
 		Member member = memberDao.selectMemberPwSearch(m);
 		return member;
 	}
-
+	
+	/*
 	public int deleteThumbnail(String memberId) {
 		int result = memberDao.deleteThumbnail(memberId);
 		return result;
 	}
-
+	 */
 
 }
 
