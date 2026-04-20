@@ -9,7 +9,7 @@ const TourCartCalc = ({ selectedItems }) => {
     );
   }, 0);
 
-  const discount = 0; // 할인 로직이 있다면 여기에 추가
+  const discount = 0;
 
   return (
     <div className={styles.calc_container}>

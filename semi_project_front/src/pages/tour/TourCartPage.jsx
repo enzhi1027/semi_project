@@ -53,8 +53,6 @@ const TourCartPage = () => {
       confirmButtonText: "삭제",
     }).then((result) => {
       if (result.isConfirmed) {
-        // 실제로는 axios.delete(URL, { data: selectedIds }) 호출 필요
-        console.log(selectedIds);
         axios
           .delete(`${import.meta.env.VITE_BACKSERVER}/tours/deleteCart`, {
             data: {
@@ -63,7 +61,6 @@ const TourCartPage = () => {
             },
           })
           .then((res) => {
-            console.log(res.data);
             setTourCartList((prev) =>
               prev.filter((item) => !selectedIds.includes(item.tourCartNo)),
             );
