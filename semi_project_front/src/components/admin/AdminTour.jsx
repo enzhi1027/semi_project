@@ -154,140 +154,146 @@ const AdminTour = () => {
       */}
       <div className={styles.tour_item_list_wrap}>
         {/*공개 상태 변경 -------------------------------------*/}
-        {tourItemList.map((tourItem, index) => {
-          const changeStatus = () => {
-            Swal.fire({
-              title: "공개 상태를 변경하시겠습니까?",
-              icon: "question",
-              confirmButtonText: "전환",
-              confirmButtonColor: "var(--color1)",
-              showCancelButton: true,
-              cancelButtonColor: "var(--color5)",
-              cancelButtonText: "취소",
-            }).then((res) => {
-              if (res.isConfirmed) {
-                //상태가 0일 때는 1로, 1일 때는 0으로
-                const newStatus = Number(tourItem.tourItemStatus) === 0 ? 1 : 0;
-                const obj = {
-                  tourItemNo: tourItem.tourItemNo,
-                  tourItemStatus: newStatus,
-                };
-                axios
-                  .patch(
-                    `${import.meta.env.VITE_BACKSERVER}/admin/tourItems/${tourItem.tourItemNo}`,
-                    obj,
-                  )
-                  .then((res) => {
-                    if (res.data === 1) {
-                      const newTourItemList = [...tourItemList];
-                      newTourItemList[index].tourItemStatus =
-                        tourItem.tourItemStatus === 0 ? 1 : 0;
-                      setTourItemList(newTourItemList);
-                    }
-                  })
-                  .catch((err) => {});
-              }
-            });
-          };
+        {tourItemList.length > 0 ? (
+          tourItemList.map((tourItem, index) => {
+            const changeStatus = () => {
+              Swal.fire({
+                title: "공개 상태를 변경하시겠습니까?",
+                icon: "question",
+                confirmButtonText: "전환",
+                confirmButtonColor: "var(--color1)",
+                showCancelButton: true,
+                cancelButtonColor: "var(--color5)",
+                cancelButtonText: "취소",
+              }).then((res) => {
+                if (res.isConfirmed) {
+                  //상태가 0일 때는 1로, 1일 때는 0으로
+                  const newStatus =
+                    Number(tourItem.tourItemStatus) === 0 ? 1 : 0;
+                  const obj = {
+                    tourItemNo: tourItem.tourItemNo,
+                    tourItemStatus: newStatus,
+                  };
+                  axios
+                    .patch(
+                      `${import.meta.env.VITE_BACKSERVER}/admin/tourItems/${tourItem.tourItemNo}`,
+                      obj,
+                    )
+                    .then((res) => {
+                      if (res.data === 1) {
+                        const newTourItemList = [...tourItemList];
+                        newTourItemList[index].tourItemStatus =
+                          tourItem.tourItemStatus === 0 ? 1 : 0;
+                        setTourItemList(newTourItemList);
+                      }
+                    })
+                    .catch((err) => {});
+                }
+              });
+            };
 
-          return (
-            <div
-              className={`${styles.admin_tour_list}`}
-              key={"tour-" + tourItem.tourItemNo}
-            >
-              <div className={styles.thumb_and_info_wrap}>
-                <div className={styles.tour_item_thumb}>
-                  <img
-                    src={
-                      tourItem.tourItemImgPath
-                        ? `${import.meta.env.VITE_BACKSERVER}/tourItemImg/${tourItem.tourItemImgPath}`
-                        : imgNone
-                    }
-                    alt="상품 썸네일"
-                  />
-                </div>
-                <div className={styles.item_info}>
-                  <div className={styles.tour_item_name}>
-                    <span
-                      className={styles.item_name}
-                      onClick={() => {
-                        navigate(`/tour/list/`);
-                      }}
-                    >
-                      상품명 : {tourItem.tourItemName}
-                    </span>
+            return (
+              <div
+                className={`${styles.admin_tour_list}`}
+                key={"tour-" + tourItem.tourItemNo}
+              >
+                <div className={styles.thumb_and_info_wrap}>
+                  <div className={styles.tour_item_thumb}>
+                    <img
+                      src={
+                        tourItem.tourItemImgPath
+                          ? `${import.meta.env.VITE_IMG_SERVER}/tourItemImg/${tourItem.tourItemImgPath}`
+                          : imgNone
+                      }
+                      alt="상품 썸네일"
+                    />
                   </div>
-                  <div className={styles.tour_item_period}>
-                    예약 가능 기간 : {tourItem.startPeriod} ~{" "}
-                    {tourItem.endPeriod}
-                  </div>
-                  <div className={styles.tour_item_price}>
-                    {/*.toLocaleString() : 000,000,000원 (, 표시용) */}
-                    가격(성인) : {tourItem.tourItemAdultPrice.toLocaleString()}
-                    원
-                  </div>
+                  <div className={styles.item_info}>
+                    <div className={styles.tour_item_name}>
+                      <span
+                        className={styles.item_name}
+                        onClick={() => {
+                          navigate(`/tour/list/`);
+                        }}
+                      >
+                        상품명 : {tourItem.tourItemName}
+                      </span>
+                    </div>
+                    <div className={styles.tour_item_period}>
+                      예약 가능 기간 : {tourItem.startPeriod} ~{" "}
+                      {tourItem.endPeriod}
+                    </div>
+                    <div className={styles.tour_item_price}>
+                      {/*.toLocaleString() : 000,000,000원 (, 표시용) */}
+                      가격(성인) :{" "}
+                      {tourItem.tourItemAdultPrice.toLocaleString()}원
+                    </div>
 
-                  <div className={styles.tour_item_bottom_wrap}>
-                    <span className={styles.tour_item_days}>
-                      일정 :{" "}
-                      {Number(tourItem.tourItemDays) === 1
-                        ? "당일치기"
-                        : `${tourItem.tourItemDays - 1}박${" "}
+                    <div className={styles.tour_item_bottom_wrap}>
+                      <span className={styles.tour_item_days}>
+                        일정 :{" "}
+                        {Number(tourItem.tourItemDays) === 1
+                          ? "당일치기"
+                          : `${tourItem.tourItemDays - 1}박${" "}
                       ${tourItem.tourItemDays}일`}
-                    </span>
-                    <div className={styles.tour_item_status}>
-                      <div>
-                        {tourItem.tourItemStatus === 0 ? "공개" : "비공개"}
-                        <Switch
-                          sx={{
-                            "& input": {
-                              height: "100%",
-                              position: "absolute",
-                            },
-                            // 비공개 상태 스위치 색상
-                            "& .MuiSwitch-thumb": {
-                              backgroundColor: "white", // 원하는 색상으로 변경
-                            },
-                            // 공개 상태 스위치 색상
-                            "& .Mui-checked .MuiSwitch-thumb": {
-                              backgroundColor: "var(--color1)",
-                            },
-                            // 스위치가 켜졌을 때 배경 트랙 색상
-                            "& .Mui-checked + .MuiSwitch-track": {
-                              backgroundColor: "var(--color1) !important",
-                              opacity: "0.5 !important",
-                            },
-                          }}
-                          checked={tourItem.tourItemStatus === 0}
-                          onClick={() => {
-                            changeStatus();
-                          }}
-                        />
-                      </div>
-                      <div className={styles.item_no_up_del}>
-                        <span>상품 번호 : {tourItem.tourItemNo}</span>
+                      </span>
+                      <div className={styles.tour_item_status}>
                         <div>
-                          <span
-                            className={`${styles.modify} ${styles.btn}`}
-                            onClick={() => modifyTour(tourItem.tourItemNo)}
-                          >
-                            수정
-                          </span>
-                          <span
-                            className={`${styles.delete} ${styles.btn}`}
-                            onClick={() => deleteTour(tourItem.tourItemNo)}
-                          >
-                            삭제
-                          </span>
+                          {tourItem.tourItemStatus === 0 ? "공개" : "비공개"}
+                          <Switch
+                            sx={{
+                              "& input": {
+                                height: "100%",
+                                position: "absolute",
+                              },
+                              // 비공개 상태 스위치 색상
+                              "& .MuiSwitch-thumb": {
+                                backgroundColor: "white", // 원하는 색상으로 변경
+                              },
+                              // 공개 상태 스위치 색상
+                              "& .Mui-checked .MuiSwitch-thumb": {
+                                backgroundColor: "var(--color1)",
+                              },
+                              // 스위치가 켜졌을 때 배경 트랙 색상
+                              "& .Mui-checked + .MuiSwitch-track": {
+                                backgroundColor: "var(--color1) !important",
+                                opacity: "0.5 !important",
+                              },
+                            }}
+                            checked={tourItem.tourItemStatus === 0}
+                            onClick={() => {
+                              changeStatus();
+                            }}
+                          />
+                        </div>
+                        <div className={styles.item_no_up_del}>
+                          <span>상품 번호 : {tourItem.tourItemNo}</span>
+                          <div>
+                            <span
+                              className={`${styles.modify} ${styles.btn}`}
+                              onClick={() => modifyTour(tourItem.tourItemNo)}
+                            >
+                              수정
+                            </span>
+                            <span
+                              className={`${styles.delete} ${styles.btn}`}
+                              onClick={() => deleteTour(tourItem.tourItemNo)}
+                            >
+                              삭제
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          // 상품이 없을 때: 안내 문구 출력
+          <div className={styles.no_item_message}>등록된 상품이 없습니다.</div>
+        )}
       </div>
 
       <div className={styles.admin_tour_pagination}>

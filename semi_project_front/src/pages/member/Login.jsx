@@ -30,13 +30,11 @@ const Login = () => {
     axios
       .post(`${import.meta.env.VITE_BACKSERVER}/members/login`, member)
       .then((res) => {
-        console.log(res);
         useAuthStore.getState().login(res.data);
         axios.defaults.headers.common["Authorization"] = res.data.token;
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
         Swal.fire({
           title: "로그인 실패",
           text: "아이디, 혹은 비밀번호를 확인하세요.",

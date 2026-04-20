@@ -4,9 +4,10 @@ import useAuthStore from "../utils/useAuthStore";
 import axios from "axios";
 import MyBoardList from "./mycontentcomponents/MyBoardList";
 import Pagination from "../ui/Pagination";
-import CourseList from "../Course/CourseList";
 import MyCommentList from "./mycontentcomponents/MyCommentList";
 import Swal from "sweetalert2";
+import LikeCourseList from "../Course/LikeCourseList";
+import { useNavigate } from "react-router-dom";
 
 const MyActive = () => {
   const [tab, setTab] = useState("myBoard");
@@ -15,6 +16,8 @@ const MyActive = () => {
   const [myBoardList, setMyBoardList] = useState([]);
   const [myCommentList, setMyCommentList] = useState([]);
   const [myCourseList, setMyCourseList] = useState([]);
+
+  const navigate = useNavigate();
 
   const [totalPage, setTotalPage] = useState(0);
   const [page, setPage] = useState(0);
@@ -34,13 +37,10 @@ const MyActive = () => {
           `${import.meta.env.VITE_BACKSERVER}/members/my-board?order=${order}&memberId=${memberId}&page=${page}&size=${size}`,
         )
         .then((res) => {
-          console.log(res);
           setMyBoardList(res.data.items);
           setTotalPage(res.data.totalPage);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
 
     //내 댓글 조회
@@ -50,13 +50,10 @@ const MyActive = () => {
           `${import.meta.env.VITE_BACKSERVER}/members/my-comment?order=${order}&memberId=${memberId}&page=${page}&size=${size}`,
         )
         .then((res) => {
-          console.log(res);
           setMyCommentList(res.data.items);
           setTotalPage(res.data.totalPage);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
 
     //내 코스 조회
@@ -66,13 +63,10 @@ const MyActive = () => {
           `${import.meta.env.VITE_BACKSERVER}/members/my-course?order=${order}&memberId=${memberId}&page=${page}&size=${size}`,
         )
         .then((res) => {
-          console.log(res);
           setMyCourseList(res.data.items);
           setTotalPage(res.data.totalPage);
         })
-        .catch((err) => {
-          console.log(err);
-        });
+        .catch((err) => {});
     }
   }, [tab, order, page, size, memberId]);
 
@@ -172,6 +166,9 @@ const MyActive = () => {
           ) : (
             <div className={styles.content_empty}>
               작성한 게시글이 없습니다.
+              <span onClick={() => navigate("/board/write")}>
+                게시글 작성하기
+              </span>
             </div>
           ))}
 
@@ -190,27 +187,40 @@ const MyActive = () => {
               ))}
             </div>
           ) : (
-            <div className={styles.content_empty}>작성한 댓글이 없습니다.</div>
+            <div className={styles.content_empty}>
+              작성한 댓글이 없습니다.
+              <span onClick={() => navigate("/board/list")}>
+                게시글 보러가기
+              </span>
+            </div>
           ))}
 
         {/* 내 관광 코스 */}
         {tab === "myCourse" &&
           (myCourseList.length > 0 ? (
-            <CourseList courseList={myCourseList} />
+            <LikeCourseList courseList={myCourseList} />
           ) : (
-            <div className={styles.content_empty}>작성한 코스가 없습니다.</div>
+            <div className={styles.content_empty}>
+              작성한 코스가 없습니다.
+              <span onClick={() => navigate("/course/write")}>
+                코스 생성하기
+              </span>
+            </div>
           ))}
       </div>
-
-      {/* 페이지네이션 */}
-      <div className={styles.pagination}>
-        <Pagination
-          page={page}
-          setPage={setPage}
-          totalPage={totalPage}
-          naviSize={5}
-        />
-      </div>
+      {/* 페이지네이션: 데이터가 있을 때만 렌더링되도록 조건 추가 */}
+      {((tab === "myBoard" && myBoardList.length > 0) ||
+        (tab === "myComment" && myCommentList.length > 0) ||
+        (tab === "myCourse" && myCourseList.length > 0)) && (
+        <div className={styles.pagination}>
+          <Pagination
+            page={page}
+            setPage={setPage}
+            totalPage={totalPage}
+            naviSize={5}
+          />
+        </div>
+      )}
     </section>
   );
 };

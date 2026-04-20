@@ -80,7 +80,6 @@ const SearchId = () => {
         memberEmail: memberEmail,
       })
       .then((res) => {
-        console.log(res);
         setMailAuthCode(res.data);
         setMailAuthStatus(2);
         setTime(180);
@@ -146,7 +145,6 @@ const SearchId = () => {
         params: { memberName, memberPhone, memberEmail },
       })
       .then((res) => {
-        console.log(res);
         Swal.fire({
           title: "아이디 찾기",
           html: `회원님의 아이디는 <p>${res.data}</p>입니다!`,

@@ -122,7 +122,7 @@
 }
 
 .member_detail_info_btn:hover {
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
 }
 
@@ -134,6 +134,18 @@
 }
 
 .grade_change_wrap select {
-  padding: 8px 12px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 40px;
+  min-width: 100px;
+  text-align: center;
+  padding: 6px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
   font-size: 16px;
+}
+.grade_change_wrap select:hover {
+  cursor: pointer;
 }

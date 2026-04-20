@@ -65,7 +65,7 @@ const BoardItem = ({ board }) => {
       title: "게시글을 삭제하시겠습니까?",
       text: "삭제한 게시글은 복구할 수 없습니다.",
       icon: "question",
-      confirmButtonColor: "var(--gray4)",
+      confirmButtonColor: "var(--color5)",
       confirmButtonText: "삭제하기",
       showCancelButton: true,
       cancelButtonColor: "var(--color1)",
@@ -77,7 +77,7 @@ const BoardItem = ({ board }) => {
             `${import.meta.env.VITE_BACKSERVER}/admin/board/${board.boardNo}`,
           )
           .then((res) => {
-            if (res.isConfirmed) {
+            if (res.data > 0) {
               Swal.fire({
                 title: "게시글이 삭제되었습니다.",
                 icon: "success",

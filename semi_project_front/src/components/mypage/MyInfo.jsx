@@ -31,7 +31,7 @@ const MyInfo = () => {
   const outMember = () => {
     Swal.fire({
       title: "회원 탈퇴",
-      html: "정말로 탈퇴하시겠습니까?<br><br>아직 소개해드릴 곳이<br>남아있습니다.",
+      html: "정말로 탈퇴하시겠습니까?<br><br>아직 소개해드릴 곳이<br>남아있습니다!",
       icon: "warning",
       showCancelButton: true,
       cancelButtonText: "닫기",

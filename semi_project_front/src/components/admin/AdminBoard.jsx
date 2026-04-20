@@ -60,7 +60,15 @@ const AdminBoard = () => {
   };
   useEffect(() => {
     getBoardList();
-  }, [page, order, searchType, searchKeyword, category, statusFilter]);
+  }, [
+    page,
+    boardList,
+    order,
+    searchType,
+    searchKeyword,
+    category,
+    statusFilter,
+  ]);
 
   return (
     <section className={styles.board_wrap}>
@@ -90,16 +98,7 @@ const AdminBoard = () => {
           onChange={(e) => setKeyword(e.target.value)}
         />
 
-        <Button
-          type="submit"
-          className="btn primary"
-          style={{
-            width: "100px",
-            height: "40px",
-            fontSize: "14px",
-            lineHeight: "1",
-          }}
-        >
+        <Button type="submit" className="btn">
           검색
         </Button>
       </form>

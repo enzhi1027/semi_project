@@ -129,6 +129,7 @@
 .toggle_btn_wrap > p:hover {
   cursor: pointer;
   font-weight: 600;
+  text-decoration: underline;
 }
 
 /* 본문 요약 영역 (member_detail_info_wrap 양식 통일) */

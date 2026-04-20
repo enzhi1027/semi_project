@@ -71,6 +71,8 @@
 .content_empty {
   /* 가운데 정렬을 위한 Flexbox 설정 */
   display: flex;
+  flex-direction: column;
+  gap: 12px;
   justify-content: center;
   align-items: center;
 
@@ -85,6 +87,19 @@
 
   /* 텍스트 색상 (선택 사항: 디자인에 맞게 변경하세요) */
   color: #888;
+}
+
+.content_empty span {
+  /* 폰트 설정 */
+  font-size: 24px;
+  font-weight: 600;
+
+  /* 텍스트 색상 (선택 사항: 디자인에 맞게 변경하세요) */
+  color: var(--gray2);
+}
+.content_empty span:hover {
+  cursor: pointer;
+  font-weight: 700;
 }
 
 /*페이지네이션*/

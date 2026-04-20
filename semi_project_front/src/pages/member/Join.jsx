@@ -65,16 +65,13 @@ const Join = () => {
         `${import.meta.env.VITE_BACKSERVER}/members/exists?memberId=${member.memberId}`,
       )
       .then((res) => {
-        console.log(res);
         if (res.data) {
           setCheckId(2);
         } else {
           setCheckId(1);
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   //아이디 중복 체크---------------------------------------
 
@@ -123,7 +120,6 @@ const Join = () => {
     axios
       .post(`${import.meta.env.VITE_BACKSERVER}/members`, member)
       .then((res) => {
-        console.log(res);
         if (res.data == 1) {
           //로그인 페이지로 이동
           Swal.fire({
@@ -134,9 +130,7 @@ const Join = () => {
           navigate("/login");
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   //회원 가입 ----------------------------------------------------
 
@@ -177,16 +171,13 @@ const Join = () => {
         `${import.meta.env.VITE_BACKSERVER}/members/exists/phone?memberPhone=${onlyNumPhone}`,
       )
       .then((res) => {
-        console.log(res);
         if (res.data) {
           setCheckPhone(1);
         } else {
           setCheckPhone(2);
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   //이메일 중복 체크----------------------------------------------
@@ -214,16 +205,13 @@ const Join = () => {
         `${import.meta.env.VITE_BACKSERVER}/members/exists/email?memberEmail=${member.memberEmail}`,
       )
       .then((res) => {
-        console.log(res);
         if (res.data) {
           setCheckEmail(1); //중복
         } else {
           setCheckEmail(2); //사용 가능
         }
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
   //이메일 중복 체크----------------------------------------------
 
@@ -261,7 +249,6 @@ const Join = () => {
         memberEmail: member.memberEmail,
       })
       .then((res) => {
-        console.log(res);
         setMailAuthCode(res.data);
         setMailAuth(2);
         const intervalId = window.setInterval(() => {
@@ -275,9 +262,7 @@ const Join = () => {
         }, 1000);
         setTimeout(intervalId);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch((err) => {});
   };
 
   useEffect(() => {
@@ -290,7 +275,7 @@ const Join = () => {
   const showTime = () => {
     const min = Math.floor(time / 60);
     const sec = String(time % 60).padStart(2, "0"); //문자열은 반드시 2자리이고 남는 공간은 오른쪽 값으로 채운다.
-    console.log(time);
+
     return `${min}:${sec}`;
   };
   //이메일 인증 -----------------------------------------------------
@@ -507,8 +492,6 @@ const Join = () => {
             />
             <PostcodePopup
               onComplete={(data) => {
-                console.log(data);
-
                 const roadAddress =
                   data.roadAddress +
                   (data.buildingName ? " (" + data.buildingName + ")" : "");
