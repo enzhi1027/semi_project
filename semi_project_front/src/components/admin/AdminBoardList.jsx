@@ -135,10 +135,10 @@ const BoardItem = ({ board }) => {
     <li className={styles.board_item}>
       <div className={styles.board_main_info_wrap}>
         {" "}
-        {/* [추가] 레이아웃 구분을 위한 감싸기 */}
+        {/* 레이아웃 구분용 div */}
         <div
           className={styles.board_img_wrap}
-          onClick={() => navigate(`/board/view/${board.boardNo}`)} // [변경] 클릭 범위 조정
+          onClick={() => navigate(`/board/view/${board.boardNo}`)} //클릭 범위 조정
         >
           <img src={board.boardThumb ? board.boardThumb : defaultImage} />
         </div>
