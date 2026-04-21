@@ -202,7 +202,7 @@ const AdminTour = () => {
                     <img
                       src={
                         tourItem.tourItemImgPath
-                          ? `${import.meta.env.VITE_IMG_SERVER}/tourItemImg/${tourItem.tourItemImgPath}`
+                          ? tourItem.tourItemImgPath
                           : imgNone
                       }
                       alt="상품 썸네일"
