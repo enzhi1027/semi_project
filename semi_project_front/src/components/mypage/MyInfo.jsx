@@ -259,6 +259,7 @@ const MyInfo = () => {
                   type="text"
                   name="memberAddrDetail"
                   id="memberAddrDetail"
+                  placeholder="선택사항"
                   value={member.memberAddrDetail}
                   onChange={(e) => {
                     setMember({ ...member, memberAddrDetail: e.target.value });

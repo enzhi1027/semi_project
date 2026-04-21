@@ -25,6 +25,10 @@ const Join = () => {
     const name = e.target.name;
     const value = e.target.value;
 
+    //이름 6글자 제한(방어로직)
+    if (name === "memberName" && value.length > 6) {
+      return;
+    }
     if (name === "memberId") {
       setCheckId(0); //중복 체크 하기 전으로 초기화(입력이 달라질 때마다 체크해야 함)
     }
@@ -102,6 +106,28 @@ const Join = () => {
 
   //회원 가입 ----------------------------------------------------
   const joinMember = () => {
+    // 1. 아이디 중복 체크 여부 우선 검사
+    if (checkId === 0 || checkId === 3 || checkId === 4) {
+      Swal.fire({
+        title: "아이디 중복 확인 필요",
+        text: "아이디 중복 체크를 완료해야 가입이 가능합니다.",
+        icon: "warning",
+        confirmButtonColor: "var(--color1)",
+      });
+      return;
+    }
+
+    // 2. 이메일 인증 여부 검사
+    if (mailAuth !== 3) {
+      Swal.fire({
+        title: "이메일 인증 필요",
+        text: "이메일 인증을 완료해주세요.",
+        icon: "warning",
+        confirmButtonColor: "var(--color1)",
+      });
+      return;
+    }
+
     if (
       checkId !== 2 ||
       checkPw !== 1 ||
@@ -373,9 +399,10 @@ const Join = () => {
               type="text"
               name="memberName"
               id="memberName"
-              placeholder="이름"
+              placeholder="이름(최대 6글자)"
               onChange={inputMember}
               onBlur={() => setNameTouched(true)}
+              maxLength={6} //최대 6글자 제한
             />
             {nameTouched && member.memberName === "" ? (
               <p className={styles.dup_false}>이름을 입력해주세요.</p>
@@ -420,7 +447,12 @@ const Join = () => {
                 onBlur={EmailDupCheck}
                 onChange={inputMember}
               />
-              <Button className="btn" type="button" onClick={sendMail}>
+              <Button
+                className="btn"
+                type="button"
+                onClick={sendMail}
+                disabled={checkEmail !== 2}
+              >
                 메일 전송
               </Button>
             </div>
@@ -514,7 +546,7 @@ const Join = () => {
               type="text"
               name="memberAddrDetail"
               id="memberAddrDetail"
-              placeholder="상세 주소"
+              placeholder="상세 주소(선택사항)"
               onChange={inputMember}
             />
           </div>

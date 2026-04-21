@@ -115,15 +115,6 @@ const SearchPw = () => {
     }
   }, [time]);
 
-  //재설정 페이지 넘어갔을 때 새로고침해도 해당 페이지에 체류
-  useEffect(() => {
-    const savedId = sessionStorage.getItem("authMemberId");
-    if (savedId) {
-      setMemberId(savedId);
-      setMailAuthStatus(3); // 바로 재설정 컴포넌트가 보이게 함
-    }
-  }, []);
-
   return (
     <section className={styles.search_pw_wrap}>
       {mailAuthStatus === 3 ? (
