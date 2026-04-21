@@ -43,8 +43,8 @@ const AdminBoard = () => {
     }
   };
 
-  //조회 조건(전체 : 2, 공개 : 1, 비공개 : 0)
-  const [statusFilter, setStatusFilter] = useState(2);
+  //조회 조건(전체 : 0, 공개 : 1, 비공개 : 2)
+  const [statusFilter, setStatusFilter] = useState(0);
 
   // 게시글 목록 조회 ----------------------------------------------
   const getBoardList = () => {
@@ -60,15 +60,7 @@ const AdminBoard = () => {
   };
   useEffect(() => {
     getBoardList();
-  }, [
-    page,
-    boardList,
-    order,
-    searchType,
-    searchKeyword,
-    category,
-    statusFilter,
-  ]);
+  }, [page, order, searchType, searchKeyword, category, statusFilter]);
 
   return (
     <section className={styles.board_wrap}>
@@ -79,6 +71,16 @@ const AdminBoard = () => {
           e.preventDefault();
           setSearchType(type);
           setSearchKeyword(keyword);
+
+          // 빈 문자열 검색 시 방어 로직 추가
+          if (keyword.trim() === "") {
+            setSearchType(1); // 기본 검색 타입(제목)으로 초기화
+            setSearchKeyword("");
+          } else {
+            setSearchType(type);
+            setSearchKeyword(keyword);
+          }
+
           setPage(0);
         }}
       >
@@ -131,9 +133,9 @@ const AdminBoard = () => {
             setPage(0);
           }}
         >
-          <option value={2}>상태 전체</option>
+          <option value={0}>상태 전체</option>
           <option value={1}>공개</option>
-          <option value={0}>비공개</option>
+          <option value={2}>비공개</option>
         </select>
       </div>
 
