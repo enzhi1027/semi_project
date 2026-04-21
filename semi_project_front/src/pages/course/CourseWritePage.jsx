@@ -561,7 +561,10 @@ const AttractionItem = ({
         </div>
         <div className={styles.attraction_content} onClick={check}>
           <h3>{attraction.attractionTitle}</h3>
-          <p>기타문의 : {attraction.attractionPhone}</p>
+          <p>
+            기타문의 :{" "}
+            {attraction.attractionPhone ? attraction.attractionPhone : "없음"}
+          </p>
           <p>{attraction.attractionAddr}</p>
         </div>
         <div className={styles.attraction_like}>
