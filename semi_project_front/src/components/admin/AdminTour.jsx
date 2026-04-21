@@ -213,7 +213,7 @@ const AdminTour = () => {
                       <span
                         className={styles.item_name}
                         onClick={() => {
-                          navigate(`/tour/list/`);
+                          navigate(`/tour/detail/${tourItem.tourItemNo}`);
                         }}
                       >
                         상품명 : {tourItem.tourItemName}

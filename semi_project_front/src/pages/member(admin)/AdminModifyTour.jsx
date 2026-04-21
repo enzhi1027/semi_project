@@ -97,8 +97,46 @@ const AdminModifyTour = () => {
   const inputTourItem = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    const newTourItem = { ...tourItem, [name]: value };
+
+    // 1. 기본 정보 업데이트 (숫자형 변환 처리 포함)
+    const numValue = name === "tourItemDays" ? Number(value) : value;
+    const newTourItem = { ...tourItem, [name]: numValue };
     setTourItem(newTourItem);
+
+    // 2. 일차 정보(tourItemDays)가 변경될 때 입력창 리스트 조절 로직 추가
+    if (name === "tourItemDays") {
+      const newCount = Number(value) || 0; // 입력된 새 숫자
+      let newPlace = [...tourItemInfo]; // 기존 상세 일정 배열 복사
+
+      // 현재 리스트에 있는 최대 일차(day) 확인
+      let currentMaxDay = 0;
+      if (newPlace.length > 0) {
+        currentMaxDay = Math.max(
+          ...newPlace.map((item) => item.day || item.tourItemDay || 0),
+        );
+      }
+
+      if (newCount > currentMaxDay) {
+        // 일차가 늘어난 경우: 부족한 일차만큼 새 입력창(객체) 추가
+        const addedPlace = [...newPlace];
+        for (let i = currentMaxDay + 1; i <= newCount; i++) {
+          addedPlace.push({
+            id: Date.now() + Math.random(), // 고유 키값
+            day: i,
+            tourItemPlace: "",
+            tourItemPlan: "",
+          });
+        }
+        setTourItemInfo(addedPlace);
+      } else if (newCount < currentMaxDay && newCount > 0) {
+        // 일차가 줄어든 경우: 입력된 숫자보다 큰 일차의 데이터 삭제
+        const filteredPlace = newPlace.filter((item) => {
+          const itemDay = item.day || item.tourItemDay;
+          return itemDay <= newCount;
+        });
+        setTourItemInfo(filteredPlace);
+      }
+    }
   };
 
   //신규 추가 목록에서 특정 파일 삭제
