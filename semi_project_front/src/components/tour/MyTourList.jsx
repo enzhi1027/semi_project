@@ -260,7 +260,7 @@ const MyTourList = ({
                 >
                   <div className={styles.image_container}>
                     <img
-                      src={`${import.meta.env.VITE_BACKSERVER}/tourItemImg/${item.tourItemImgPath}`}
+                      src={`${item.tourItemImgPath}`}
                       alt={item.tourItemName}
                     />
                     <button className={styles.heart_button}>

@@ -73,7 +73,7 @@ const TourList = ({
           <img
             src={
               item.tourItemImgPath
-                ? `${import.meta.env.VITE_BACKSERVER}/tourItemImg/${item.tourItemImgPath}`
+                ? `${item.tourItemImgPath}`
                 : "기본이미지주소"
             }
             alt={item.tourItemName}

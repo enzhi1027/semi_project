@@ -29,6 +29,7 @@ public class WebConfig implements WebMvcConfigurer {
 		registry
 		.addResourceHandler("/tourItemImg/**")		//요청 주소 패턴
 		.addResourceLocations("file:///" + root + "tourItemImg/");	//실제 경로
+		System.out.println(registry);
 	}
 	
 }

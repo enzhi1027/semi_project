@@ -9,6 +9,7 @@ import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,8 +43,13 @@ import kr.co.iei.utils.FileUtils;
 public class AdminController {
 	@Autowired
 	private TourItemService tourItemService;
+	
 	@Value("${file.root}")
-	private String root;
+    private String root;
+	
+	@Value("${file.url-prefix}")
+	private String urlPrefix;
+	
 	@Autowired
 	private FileUtils fileUtils;
 	@Autowired
@@ -70,11 +76,13 @@ public class AdminController {
 		if(files != null) {//첨부파일(이미지) 있을 때만 작업
 			String savepath = root+"tourItemImg/";
 			for(int i = 0; i < files.size(); i++) {
-				String tourItemImgPath = fileUtils.upload(savepath, files.get(i));
+				String fileName = fileUtils.upload(savepath, files.get(i));
 				
 				//이미지 경로 저장
 				TourItemImg tourItemImg = new TourItemImg();
-				tourItemImg.setTourItemImgPath(tourItemImgPath);
+				
+				String fullPath = urlPrefix + "tourItemImg/" + fileName;
+                tourItemImg.setTourItemImgPath(fullPath);
 				
 				//이미지 순서 세팅
 				if(tourItemImgOrder != null && tourItemImgOrder.size() > i) {
@@ -115,11 +123,18 @@ public class AdminController {
 		return ResponseEntity.ok(tourItem);
 	}
 	//상품 수정 -----------------------------------------------------------------
-	@PutMapping(value="/{tourItemNo}")
+	@PostMapping(value="/{tourItemNo}/update")
 	public ResponseEntity<?> updateTourItem(@PathVariable Integer tourItemNo,
 											@ModelAttribute TourItem tourItem,
+											BindingResult bindingResult,
 											@RequestParam(value = "files",required = false) 
 											List<MultipartFile> files){
+		//에러 확인용(임시)
+		if(bindingResult.hasErrors()){
+	        System.out.println("검증 에러 발생: " + bindingResult.getAllErrors());
+	        return ResponseEntity.badRequest().body("데이터 형식이 잘못되었습니다.");
+	    }
+		
 		//경로로 들어온 tourItemNo를 tourItem객체에 대입
 		tourItem.setTourItemNo(tourItemNo);
 		
@@ -127,12 +142,19 @@ public class AdminController {
 		List<TourItemImg> addImgList = new ArrayList<>();
 		if(files != null) {
 			String savepath = root + "tourItemImg/";
-			for(MultipartFile file : files) {
+			for(int i = 0; i < files.size(); i++) {
+				MultipartFile file = files.get(i);
 				if(!file.isEmpty()) {
-					String tourItemImgPath = fileUtils.upload(savepath, file);
+					String fileName = fileUtils.upload(savepath, file);
+					
 					TourItemImg img = new TourItemImg();
-					img.setTourItemImgPath(tourItemImgPath);
+					
+					String fullPath = urlPrefix + "tourItemImg/" + fileName;
+					img.setTourItemImgPath(fullPath);
+					
 					img.setTourItemNo(tourItemNo);
+					
+					img.setTourItemImgOrder(i + 1);
 					addImgList.add(img);
 				}
 			}
@@ -143,7 +165,13 @@ public class AdminController {
 		if(result > 0 && tourItem.getDeleteFilePath() != null) {
 			String savepath = root + "tourItemImg/";
 			for(String deletePath : tourItem.getDeleteFilePath()) {
-				File deleteFile = new File(savepath + deletePath);
+				// 파일명만 추출
+                String fileNameOnly = deletePath;
+                if(deletePath.contains("/")) {
+                    fileNameOnly = deletePath.substring(deletePath.lastIndexOf("/") + 1);
+                }
+				
+				File deleteFile = new File(savepath + fileNameOnly);
 				if (deleteFile.exists()) {
 					deleteFile.delete();
 				}
