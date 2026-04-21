@@ -271,7 +271,8 @@ const MyTourList = ({
                   <div className={styles.item_info_wrap}>
                     <div className={styles.item_name}>{item.tourItemName}</div>
                     <div className={styles.item_period}>
-                      📅 {item.startPeriod} ~ {item.endPeriod}
+                      📅 {item.startPeriod.split(" ")[0]} ~{" "}
+                      {item.endPeriod.split(" ")[0]}
                     </div>
                   </div>
 
