@@ -63,10 +63,7 @@ const TourCartList = ({
                 onChange={() => toggleSelect(item.tourCartNo)}
               />
               <div className={styles.img_box}>
-                <img
-                  src={`${import.meta.env.VITE_BACKSERVER}/tourItemImg/${item.tourItemImgPath}`}
-                  alt="tour"
-                />
+                <img src={`${item.tourItemImgPath}`} alt="tour" />
               </div>
               <div className={styles.info_box}>
                 <div className={styles.item_name}>{item.tourItemName}</div>
