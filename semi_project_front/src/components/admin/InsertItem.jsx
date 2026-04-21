@@ -82,12 +82,39 @@ const InsertItem = ({
     });
   };
 
-  //이용 가능 기간 종료는 오늘 이전을 선택 불가
-  const now = new Date();
-  // 2. 오늘 날짜에 +1일을 해서 내일로 만듦
-  const tomorrowDate = new Date(now.setDate(now.getDate() + 1));
-  // 3. YYYY-MM-DD 형식으로 변환
-  const tomorrow = tomorrowDate.toISOString().split("T")[0];
+  //종료일 제한
+  const getMinEndPeriod = () => {
+    if (!tourItem.startPeriod) {
+      // 시작일이 아직 선택되지 않았다면 기본적으로 내일부터 선택 가능
+      const now = new Date();
+      const tomorrowDate = new Date(now.setDate(now.getDate() + 1));
+      return tomorrowDate.toISOString().split("T")[0];
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // 시간 정보를 0으로 초기화하여 날짜만 비교
+
+    const startDate = new Date(tourItem.startPeriod);
+    startDate.setHours(0, 0, 0, 0);
+
+    // 1. 시작일이 오늘보다 미래(오늘 이후)인 경우
+    if (startDate > today) {
+      // 종료일은 시작일과 같을 수 없으므로 시작일 + 1일
+      const nextDayOfStart = new Date(startDate);
+      nextDayOfStart.setDate(startDate.getDate() + 1);
+      return nextDayOfStart.toISOString().split("T")[0];
+    }
+
+    // 2. 시작일이 오늘이거나 오늘 이전인 경우
+    else {
+      // 종료일은 내일(오늘 + 1일)부터 선택 가능
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+      return tomorrow.toISOString().split("T")[0];
+    }
+  };
+
+  const minEndDay = getMinEndPeriod();
 
   return (
     <div className={styles.insert_wrap}>
@@ -224,7 +251,7 @@ const InsertItem = ({
               name="endPeriod"
               id="endPeriod"
               //이용 가능 기간(종료)는 시작일 이전은 선택 불가능하다.
-              min={tomorrow}
+              min={minEndDay}
               value={tourItem.endPeriod}
               onChange={inputTourItem}
             />

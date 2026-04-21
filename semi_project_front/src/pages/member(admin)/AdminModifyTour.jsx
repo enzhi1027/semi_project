@@ -139,12 +139,19 @@ const AdminModifyTour = () => {
       if (result.isConfirmed) {
         //Multipart 전송용 FormData 객체 생성
         const form = new FormData();
+
+        const adultPrice = String(tourItem.tourItemAdultPrice).replace(
+          /,/g,
+          "",
+        );
+        const kidPrice = String(tourItem.tourItemKidPrice).replace(/,/g, "");
+
         //기존 상품 정보 데이터 추가
         form.append("tourItemNo", tourItem.tourItemNo);
         form.append("tourItemName", tourItem.tourItemName);
         form.append("tourItemDays", tourItem.tourItemDays);
-        form.append("tourItemAdultPrice", tourItem.tourItemAdultPrice);
-        form.append("tourItemKidPrice", tourItem.tourItemKidPrice);
+        form.append("tourItemAdultPrice", adultPrice);
+        form.append("tourItemKidPrice", kidPrice);
         form.append("startPeriod", tourItem.startPeriod);
         form.append("endPeriod", tourItem.endPeriod);
 
@@ -180,11 +187,15 @@ const AdminModifyTour = () => {
           form.append("deleteFilePath", tourItemImgPath);
         });
         axios
-          .put(`${import.meta.env.VITE_BACKSERVER}/admin/${tourItemNo}`, form, {
-            headers: {
-              "Content-Type": "multipart/form-data",
+          .post(
+            `${import.meta.env.VITE_BACKSERVER}/admin/${tourItemNo}/update`,
+            form,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
             },
-          })
+          )
           .then((res) => {
             if (res.data > 0) {
               Swal.fire({

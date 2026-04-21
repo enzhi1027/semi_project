@@ -285,7 +285,14 @@ const TourDetailPage = () => {
                   {imgs.map((img, index) => {
                     return (
                       <SwiperSlide key={"img-" + index}>
-                        <img src={`${img.tourItemImgPath}`} />
+                        <img
+                          src={
+                            img.tourItemImgPath
+                              ? `${img.tourItemImgPath}`
+                              : "기본이미지주소"
+                          }
+                          alt={item.tourItemName}
+                        />
                       </SwiperSlide>
                     );
                   })}
