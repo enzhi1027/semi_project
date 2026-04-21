@@ -267,8 +267,15 @@ const InsertItem = ({
           name="tourItemDays"
           id="tourItemDays"
           value={tourItem.tourItemDays}
-          min="1" //최소값 1
           onChange={handleNumberChange}
+          onBlur={(e) => {
+            // 포커스가 나갈 때 값이 비어있거나 0이면 강제로 1로 변경
+            if (!e.target.value || parseInt(e.target.value) < 1) {
+              inputTourItem({
+                target: { name: "tourItemDays", value: "1" },
+              });
+            }
+          }}
         ></Input>
       </div>
 
