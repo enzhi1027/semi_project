@@ -125,7 +125,14 @@ const CourseUpdatePage = () => {
 
   //추가하기 버튼 눌렀을때 밑에 코스 출력
   const addCourseList = () => {
-    setCreateAttractionList((prev) => [...prev, ...addAttractionList]);
+    setCreateAttractionList((prev) => {
+      const merged = [...prev, ...addAttractionList];
+      const unique = merged.filter(
+        (item, index, self) =>
+          index === self.findIndex((t) => t.attractionNo === item.attractionNo),
+      );
+      return unique;
+    });
     setAddAttractionList([]);
   };
 
