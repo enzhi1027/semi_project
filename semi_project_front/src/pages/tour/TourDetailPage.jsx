@@ -9,6 +9,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import groupBy from "lodash/groupBy";
 import PanoramaFishEyeIcon from "@mui/icons-material/PanoramaFishEye";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,6 +18,9 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { entries } from "lodash";
 import OwnCalendar from "../../components/tour/Calender";
 import MyTourListPopup from "../../components/tour/MyTourListPopup";
 
@@ -49,21 +53,15 @@ const TourDetailPage = () => {
   const heartRef = useRef(null);
 
   const onToggle = () => {
-    if (isReady && memberId == null) {
-      Swal.fire({
-        title: "로그인 후 이용 가능합니다.",
-        icon: "warning",
+    if (!isOpen && heartRef.current) {
+      const rect = heartRef.current.getBoundingClientRect();
+      // 아이콘 위치 기준으로 팝업 위치 계산 (수치는 CSS에 따라 조정 필요)
+      setCoords({
+        top: rect.top + window.scrollY + 40,
+        left: rect.left + window.scrollX - 218,
       });
-    } else {
-      if (!isOpen && heartRef.current) {
-        const rect = heartRef.current.getBoundingClientRect();
-        setCoords({
-          top: rect.top + window.scrollY + 40,
-          left: rect.left + window.scrollX - 218,
-        });
-      }
-      setIsOpen(!isOpen);
     }
+    setIsOpen(!isOpen);
   };
 
   const checkReservationDeadline = () => {
@@ -86,6 +84,11 @@ const TourDetailPage = () => {
     const prettyDate = `${year}.${month}.${day}(${dayOfWeek})`;
 
     return prettyDate;
+  };
+
+  const removeTags = (str) => {
+    if (!str) return "";
+    return str.replace(/<[^>]*>?/gm, "");
   };
 
   const handleAddToCart = () => {
@@ -304,7 +307,7 @@ const TourDetailPage = () => {
                     <div
                       className={styles.header_icons_heart}
                       ref={heartRef}
-                      onClick={onToggle}
+                      onClick={onToggle} // 클릭 시 팝업 토글
                       style={{ cursor: "pointer" }}
                     >
                       {clickedList.length > 0 ? (
