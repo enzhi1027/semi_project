@@ -92,7 +92,7 @@ const SearchId = () => {
 
         Swal.fire({
           title: "아이디 찾기",
-          html: "아이디를 찾을 수 없습니다.<br><br>입력하신 정보를<br>다시 확인해주세요",
+          html: "입력된 전화번호 혹은, 이메일을 찾을 수 없습니다.<br><br>입력하신 정보를<br>다시 확인해주세요",
           confirmButtonColor: "var(--color1)",
           confirmButtonText: "회원가입",
           showCancelButton: true,
@@ -159,6 +159,21 @@ const SearchId = () => {
             navigate("/login");
           } else if (res.isDenied) {
             navigate("/searchPw");
+          }
+        });
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "아이디 찾기",
+          html: "조회된 아이디가 없습니다.<br><br>입력하신 정보를<br>다시 확인해주세요",
+          confirmButtonColor: "var(--color1)",
+          confirmButtonText: "회원가입",
+          showCancelButton: true,
+          cancelButtonColor: "var(--color5)",
+          cancelButtonText: "닫기",
+        }).then((res) => {
+          if (res.isConfirmed) {
+            navigate("/join");
           }
         });
       });

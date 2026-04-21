@@ -6,6 +6,8 @@
 		select * from member_tbl where member_id = #{memberId}
 	</select>
 	
+	<!-- jdbcType=VARCHAR <= 에러 방지용 -->
+	
 	<insert id="insertMember">
 		insert into member_tbl values(
 			#{memberId},
@@ -14,7 +16,7 @@
 			#{memberEmail},
 			#{memberPhone},
 			#{memberAddr},
-			#{memberAddrDetail},
+			#{memberAddrDetail, jdbcType=VARCHAR},
 			null,
 			0,
 			sysdate
@@ -32,7 +34,7 @@
 			member_name = #{memberName},
 			member_email = #{memberEmail},
 			member_phone = #{memberPhone},
-			member_addr_detail = #{memberAddrDetail}
+			member_addr_detail = #{memberAddrDetail, jdbcType=VARCHAR}
 		where member_id = #{memberId}
 	</update>
 	
