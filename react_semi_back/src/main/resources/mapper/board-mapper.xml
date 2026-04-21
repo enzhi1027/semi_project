@@ -16,13 +16,13 @@
     join member_tbl on (board_writer = member_id)
     <where>
         <choose>
-            <when test="memberGrade == 1">
-            <if test="status != 2">
-                board_status = #{status}            
-            </if>
+            <when test="status == 1 or status == 2">
+                and board_status = #{status}
             </when>
             <otherwise>
-                board_status = 1
+                <if test="memberGrade != 1">
+                    and board_status = 1
+                </if>
             </otherwise>
         </choose>
 
