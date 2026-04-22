@@ -298,6 +298,7 @@ const InsertItem = ({
                   placeholder={`${item.day}일차 장소를 입력하세요`}
                   value={item.tourItemPlace || ""}
                   onChange={(e) => inputTourItemPlace(index, e)}
+                  maxLength={150} //장소 글자수 150자 제한
                 ></Input>
                 <img
                   src={addBox}
@@ -319,10 +320,19 @@ const InsertItem = ({
                   type="text"
                   data={item.tourItemPlan}
                   setData={(val) => {
-                    inputTourItemPlan(index, val);
+                    if (val.length <= 1200) {
+                      inputTourItemPlan(index, val);
+                    } else {
+                      //1200자 초과 시 알림
+                      alert("상세 계획은 1200자 이내로 작성 가능합니다.");
+                    }
                   }}
                   placeholder={`${item.day}일차 상세 일정을 입력하세요`}
                 ></TourItemTextEditor>
+                {/* 글자수 표시 */}
+                <div className={styles.char_count}>
+                  {item.tourItemPlan ? item.tourItemPlan.length : 0} / 1200
+                </div>
               </div>
             </div>
           </div>

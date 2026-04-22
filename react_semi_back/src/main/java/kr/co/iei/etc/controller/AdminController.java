@@ -47,6 +47,7 @@ public class AdminController {
 	@Value("${file.root}")
     private String root;
 	
+	//이미지 파일 경로
 	@Value("${file.url-prefix}")
 	private String urlPrefix;
 	
