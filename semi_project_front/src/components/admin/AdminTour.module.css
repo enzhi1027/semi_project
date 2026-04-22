@@ -104,6 +104,8 @@
   font-weight: 600;
 }
 .item_name:hover {
+  font-weight: 700;
+  text-decoration: underline;
   cursor: pointer;
 }
 .thumb_and_info_wrap {

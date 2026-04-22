@@ -62,7 +62,10 @@ const Footer = () => {
               <p>주소 : 서울시 종로구 우정국로2길 21 대왕빌딩</p>
             </div>
             <div className={styles.site_copyright}>
-              <p>이용약관 개인정보취급방침</p>
+              <div className={styles.copyright_top}>
+                <p>이용약관 </p>
+                <p>개인정보취급방침</p>
+              </div>
               <p>무단복제를 허용하지 않습니다</p>
             </div>
           </div>

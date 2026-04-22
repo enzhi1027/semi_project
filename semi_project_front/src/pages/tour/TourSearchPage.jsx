@@ -77,7 +77,6 @@ const TourSearchPage = () => {
 
     if (!isInitialState) {
       setIsSearched(true);
-
       axios
         .get(`${import.meta.env.VITE_BACKSERVER}/tours/searchItem`, {
           params: { searchWhere, searchPriceMin, searchPriceMax, startDate },

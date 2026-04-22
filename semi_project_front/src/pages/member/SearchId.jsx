@@ -59,6 +59,8 @@ const SearchId = () => {
       formatted = value.replace(/(\d{3})(\d{3,4})(\d{4})/, "$1-$2-$3");
     }
     setMemberPhone(formatted);
+
+    updateError("phone", "");
   };
 
   const sendMail = () => {
@@ -182,7 +184,7 @@ const SearchId = () => {
   //에러 메시지 공통
   const errorStyle = {
     color: "red",
-    fontSize: "0.85rem",
+    fontSize: "12px",
     marginTop: "5px",
     paddingLeft: "5px",
   };
@@ -244,9 +246,7 @@ const SearchId = () => {
                 인증메일 발송
               </Button>
             </div>
-            {errorMsg.email && (
-              <div className={styles.error}>{errorMsg.email}</div>
-            )}
+            {errorMsg.email && <div style={errorStyle}>{errorMsg.email}</div>}
           </div>
 
           {/* 인증번호 (mailAuthStatus가 2 이상일 때만 표시) */}
