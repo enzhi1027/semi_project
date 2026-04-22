@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import kr.co.iei.board.controller.BoardController;
 import kr.co.iei.tour.model.vo.DeleteCartItem;
 import kr.co.iei.tour.model.vo.Emoji;
 import kr.co.iei.tour.model.vo.TourCartItem;
@@ -34,8 +34,14 @@ import kr.co.iei.touritem.model.vo.TourItemInfo;
 @RestController
 @RequestMapping(value = "/tours")
 public class TourController {
+
+    private final BoardController boardController;
 	@Autowired
 	private TourService service;
+
+    TourController(BoardController boardController) {
+        this.boardController = boardController;
+    }
 
 	@GetMapping(value = "/emojiList")
 	public ResponseEntity<?> selectEmojiList() {
@@ -98,12 +104,12 @@ public class TourController {
 	        @RequestParam(required = false) Integer searchPriceMax,
 	        // @DateTimeFormat을 붙여주면 문자열을 자동으로 날짜 객체로 변환해줍니다.
 	        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate startDate) {
-
 	    LocalDate targetDate = (startDate == null) ? LocalDate.now() : startDate;
 
 	    Date sqlDate = Date.valueOf(targetDate);
 
 	    List<TourItem> list = service.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, sqlDate);
+	    
 	    return ResponseEntity.ok(list);
 	}
 	
