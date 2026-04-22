@@ -228,6 +228,19 @@
   flex-direction: column;
   gap: 4px;
 }
+.copyright_top {
+  display: flex;
+  gap: 4px;
+  justify-content: space-between;
+}
+.copyright_top > p {
+  font-weight: 200;
+  color: var(--gray4);
+  cursor: pointer;
+}
+.copyright_top > p:hover {
+  font-weight: 500;
+}
 .site_copyright > p {
   text-align: end;
   font-weight: 200;
@@ -281,21 +294,21 @@
 }
 .content_title {
   color: var(--gray8);
-  font-size: 54px;
+  font-size: 62px;
   font-weight: 600;
 }
 .content > p {
   color: var(--gray8);
-  font-size: 28px;
+  font-size: 36px;
   font-weight: 400;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 .attraction_btn {
   text-align: center;
   font-weight: 400;
-  width: 170px;
+  width: 180px;
   color: var(--gray8);
-  font-size: 20px;
+  font-size: 22px;
   padding: 8px 14px;
   background-color: var(--color5);
   border-radius: 16px;
