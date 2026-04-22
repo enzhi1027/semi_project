@@ -28,6 +28,7 @@ import TourDetailPage from "./pages/tour/TourDetailPage";
 import SearchId from "./pages/member/SearchId";
 import SearchPw from "./pages/member/SearchPw";
 import TourCartPage from "./pages/tour/TourCartPage";
+import TourBookingPage from "./pages/tour/TourBookingPage";
 
 function App() {
   const { endTime, token } = useAuthStore();
@@ -114,6 +115,7 @@ function App() {
               element={<TourDetailPage />}
             ></Route>
             <Route path="/tour/cart" element={<TourCartPage />}></Route>
+            <Route path="/tour/booking" element={<TourBookingPage />} />
           </Routes>
         </div>
         <Footer />

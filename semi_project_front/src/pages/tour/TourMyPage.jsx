@@ -31,6 +31,7 @@ import Filter6Icon from "@mui/icons-material/Filter6"; // 6
 import Filter7Icon from "@mui/icons-material/Filter7"; // 7
 import Filter8Icon from "@mui/icons-material/Filter8"; // 8
 import Filter9Icon from "@mui/icons-material/Filter9"; // 9
+import MyPaymentList from "./MyPayment";
 
 const TourMyPage = () => {
   const [tourMyPageTap, setTourMyPageTap] = useState(0); // 0: 찜목록, 1: 결제 내역
@@ -117,7 +118,7 @@ const TourMyPage = () => {
       </div>
       <div className={styles.tour_mypage}>
         {tourMyPageTap ? (
-          <>결제</>
+          <MyPaymentList />
         ) : (
           <>
             {wishlistList && emojiList ? (
