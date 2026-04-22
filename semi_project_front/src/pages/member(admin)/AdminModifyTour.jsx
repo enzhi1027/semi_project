@@ -1,18 +1,45 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import styles from "./AdminModifyTour.module.css";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import InsertItem from "../../components/admin/InsertItem";
 import Button from "../../components/ui/Button";
 import Swal from "sweetalert2";
+import useAuthStore from "../../components/utils/useAuthStore";
 
 const AdminModifyTour = () => {
+  const { memberId, memberGrade, isReady } = useAuthStore();
+  //경로 객체 접근 / 현재 경로의 정보 사용하기 위해 필요
+  const location = useLocation();
   const navigate = useNavigate();
   const params = useParams();
   const tourItemNo = params.tourItemNo; //주소에서 상품 번호 가져오기
 
   const [tourItem, setTourItem] = useState(null); //기본 정보(이름, 가격 등등)
   const [tourItemInfo, setTourItemInfo] = useState([]); //일정 리스트
+
+  //로그인 했을 때만 사용 가능
+  useEffect(() => {
+    // isReady가 true인데 memberId가 없다면 로그인이 안 된 상태
+    if (isReady && memberId == null) {
+      Swal.fire({ title: "로그인 후 이용 가능합니다.", icon: "warning" }).then(
+        () => {
+          navigate("/login");
+        },
+      );
+      //객체 주소에 admin 포함 + 회원 등급 1 아닐 때 접근 제한
+    } else if (location.pathname.includes("admin") && memberGrade !== 1) {
+      Swal.fire({
+        title: "관리자만 접근 가능합니다.",
+        text: "관리자 아이디로 접속해주세요.",
+        icon: "error",
+        confirmButtonColor: "var(--color1)",
+        //마이페이지/내 정보로 이동
+      }).then(() => {
+        navigate("/mypage/myinfo");
+      });
+    }
+  }, [isReady, memberId, memberGrade, navigate]);
 
   useEffect(() => {
     axios
