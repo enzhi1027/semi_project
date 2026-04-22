@@ -98,10 +98,12 @@ public class TourController {
 	        @RequestParam(required = false) Integer searchPriceMax,
 	        // @DateTimeFormat을 붙여주면 문자열을 자동으로 날짜 객체로 변환해줍니다.
 	        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDate startDate) {
-
-	    LocalDate targetDate = (startDate == null) ? LocalDate.now() : startDate;
-
-	    Date sqlDate = Date.valueOf(targetDate);
+		
+		Date sqlDate = null;
+		
+		if (startDate != null) {
+			sqlDate = Date.valueOf(startDate);
+		}
 
 	    List<TourItem> list = service.searchTourItemList(searchWhere, searchPriceMin, searchPriceMax, sqlDate);
 	    return ResponseEntity.ok(list);
