@@ -137,6 +137,9 @@ const InsertItem = ({
           <Button className="btn" onClick={imgbuttonClick}>
             상품 이미지 추가
           </Button>
+          <span className={styles.file_count}>
+            ({(tourItem.fileList?.length || 0) + files.length} / 6)
+          </span>
         </div>
         <input
           type="file"
@@ -145,6 +148,19 @@ const InsertItem = ({
           ref={inputRef}
           onChange={(e) => {
             const fileList = Array.from(e.target.files);
+            // 기존 파일 + 새로 추가된 파일 + 지금 선택한 파일 합계 계산
+            const currentTotal =
+              (tourItem.fileList?.length || 0) + files.length;
+            const limit = 6;
+
+            if (currentTotal + fileList.length > limit) {
+              alert(
+                `이미지는 최대 ${limit}개까지만 등록 가능합니다. (현재: ${currentTotal}개)`,
+              );
+              e.target.value = ""; // 인풋 비우기
+              return;
+            }
+
             if (fileList.length > 0) {
               addFiles(fileList);
               //그냥 사용 시 이전 목록이 사라짐. 방지 목적으로 배열로  넣음
