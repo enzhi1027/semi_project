@@ -145,8 +145,11 @@ const InsertItem = ({
           ref={inputRef}
           onChange={(e) => {
             const fileList = Array.from(e.target.files);
-            addFiles(fileList);
-            //그냥 사용 시 이전 목록이 사라짐. 방지 목적으로 배열로  넣음
+            if (fileList.length > 0) {
+              addFiles(fileList);
+              //그냥 사용 시 이전 목록이 사라짐. 방지 목적으로 배열로  넣음
+              e.target.value = "";
+            }
           }}
           multiple //파일 다중 선택
           style={{ display: "none" }} //숨김
