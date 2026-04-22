@@ -481,7 +481,18 @@ const TourDetailPage = () => {
                       icon: "warning",
                     });
                   } else {
-                    /* 예약 페이지 이동 */
+                    navigate("/tour/booking", {
+                      state: {
+                        item,
+                        startDate,
+                        adultCount,
+                        kidCount,
+                        img: imgs[0].tourItemImgPath,
+                        totalPrice:
+                          item.tourItemAdultPrice * adultCount +
+                          item.tourItemKidPrice * kidCount,
+                      },
+                    });
                   }
                 }}
               >

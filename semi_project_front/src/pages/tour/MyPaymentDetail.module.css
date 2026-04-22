@@ -1,0 +1,111 @@
+.detail_wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  min-height: 80vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.header h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.back_btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text1);
+}
+
+.section {
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--gray7);
+  padding-bottom: 20px;
+}
+
+.section h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: var(--color1);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.total {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--gray6);
+  font-size: 18px;
+}
+
+.product_box {
+  display: flex;
+  gap: 15px;
+  background-color: var(--gray7);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.product_box img {
+  width: 60px;
+  height: 60px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.p_name {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.p_option {
+  font-size: 12px;
+  color: var(--gray3);
+}
+
+.txt_done {
+  color: var(--color1);
+  font-weight: 600;
+}
+.txt_cancel {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.bottom_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 40px;
+}
+
+.cancel_request {
+  padding: 15px;
+  background: none;
+  border: 1px solid var(--danger);
+  color: var(--danger);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.list_btn {
+  padding: 15px;
+  background: var(--color1);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
