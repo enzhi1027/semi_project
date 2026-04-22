@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './NaverSearch.css';
 import Swal from 'sweetalert2';
 
 const NaverSearch = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [query, setQuery] = useState('');
   const [places, setPlaces] = useState([]);
   const mapRef = useRef(null);
@@ -110,8 +111,14 @@ const NaverSearch = () => {
         cancelButtonText: '취소',
       }).then((result) => {
         if (result.isConfirmed) {
+          // 돌아갈 때 아까 받았던 데이터를 다시 가져감
           navigate('/board/write', {
-            state: { selectedPlace: cleanTitle, category: 2 },
+            state: {
+              selectedPlace: cleanTitle,
+              category: 2,
+              // WritePage에서 넘어왔던 데이터를 그대로 반송
+              prevBoard: location.state?.prevBoard,
+            },
           });
         }
       });

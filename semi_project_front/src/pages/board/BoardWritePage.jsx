@@ -48,14 +48,19 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
   useEffect(() => {
     if (location.state && location.state.selectedPlace) {
       setBoard((prev) => ({
-        ...prev,
-        category: location.state.category || prev.category,
+        ...(location.state.prevBoard || prev),
+        category:
+          location.state.category ||
+          location.state.prevBoard?.category ||
+          prev.category,
         locationName: location.state.selectedPlace,
-
-        placeName: location.state.selectedPlace, // 자유 관광지명
-        attractionNo: location.state.attractionNo || null, // 리뷰 게시글용 PK
-        addressName: location.state.addressName || prev.addressName, // 자유 관광지 주소
-        locationNo: location.state.locationNo || null, // 자유 게시글용 위치 번호
+        placeName: location.state.selectedPlace,
+        attractionNo: location.state.attractionNo || null,
+        addressName:
+          location.state.addressName ||
+          location.state.prevBoard?.addressName ||
+          prev.addressName,
+        locationNo: location.state.locationNo || null,
       }));
     }
   }, [location.state]);
@@ -71,10 +76,18 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
 
   // 지도 아이콘 클릭 시 카테고리에 맞는 검색 페이지로 이동
   const handleMapClick = () => {
+    // 현재 입력된 제목, 본문이 담긴 board 객체를 state에 담음
+    const dataToPass = {
+      fromWrite: true,
+      prevBoard: board,
+    };
+
     if (board.category === 2) {
-      navigate('/boardNavermap');
+      // 네이버 검색 페이지로 이동할 때도 데이터를 보냄
+      navigate('/boardNavermap', { state: dataToPass });
     } else if (board.category === 1) {
-      navigate('/attraction/list', { state: { fromWrite: true } });
+      // 관광지 리스트 페이지로 이동할 때 데이터를 보냄
+      navigate('/attraction/list', { state: dataToPass });
     }
   };
 
@@ -101,6 +114,17 @@ const BoardWritePage = ({ categoryTest, setCategoryTest }) => {
         icon: 'warning',
         confirmButtonColor: 'var(--color1)',
         width: '600px',
+      });
+      return;
+    }
+
+    //카테고리가 Review(1)인데 attractionNo가 없는 경우 (자유에서 선택 후 카테고리만 바꾼 경우 방지)
+    if (Number(board.category) === 1 && !board.attractionNo) {
+      Swal.fire({
+        title: '장소 재선택 필요',
+        text: '리뷰 게시글은 정식 등록된 관광지만 선택 가능합니다. 지도 버튼을 눌러 관광지를 다시 선택해주세요.',
+        icon: 'error',
+        confirmButtonColor: 'var(--color1)',
       });
       return;
     }
